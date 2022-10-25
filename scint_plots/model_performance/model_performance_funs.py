@@ -39,6 +39,7 @@ def plot_difference(DOY_dict):
         DOY_df_dict[DOY] = df
 
     # Make plot
+    plt.close('all')
     plt.figure(figsize=(10, 8))
     ax = plt.subplot(1, 1, 1)
 

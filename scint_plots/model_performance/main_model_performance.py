@@ -1,7 +1,7 @@
 from scint_flux.functions import read_calculated_fluxes
 from scint_flux import look_up
 from scint_eval.functions import retrieve_model_fluxes
-
+from scint_plots.model_performance import model_performance_funs
 
 scint_path = 12
 DOY_list = [2016126, 2016123]
@@ -26,7 +26,5 @@ for DOY in DOY_list:
     UKV_df_QH = retrieve_model_fluxes.UKV_df(ukv_data_dict_QH)
     DOY_dict[DOY] = {'obs': df, 'UKV_QH': UKV_df_QH}
 
-model_performance_plot.plot_difference(DOY_dict)
+model_performance_funs.plot_difference(DOY_dict)
 print('end')
-
-
