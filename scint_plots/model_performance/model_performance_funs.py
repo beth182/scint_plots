@@ -74,4 +74,6 @@ def plot_difference(DOY_dict):
 
     plt.legend(fontsize=15)
 
+    # save plot
+    plt.savefig('./' + 'model_performance.png', bbox_inches='tight', dpi=300)
     print('end')
