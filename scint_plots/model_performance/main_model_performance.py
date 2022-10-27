@@ -19,8 +19,6 @@ for DOY in DOY_list:
                                              var_list=var_list,
                                              time_res=time_res)
 
-    DOY_dict[DOY] = {time_res: df}
-
     # get model sensible heat
     ukv_data_dict_QH = retrieve_model_fluxes.retrieve_UKV(scint_path, DOY, DOY, variable='H')
     UKV_df_QH = retrieve_model_fluxes.UKV_df(ukv_data_dict_QH)
