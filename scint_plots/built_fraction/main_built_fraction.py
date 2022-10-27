@@ -22,22 +22,29 @@ for DOY in DOY_list:
                                              var_list=var_list,
                                              time_res=time_res)
 
+    # combine obs with land cover csv obtained using the SAs
+    df = built_fraction_funs.add_lc_to_df(df)
+
+
+    DOY_dict[DOY] = {'obs': df}
+
     # get model sensible heat
     ukv_data_dict_QH = retrieve_model_fluxes.retrieve_UKV(scint_path, DOY, DOY, variable='H')
     UKV_df_QH = retrieve_model_fluxes.UKV_df(ukv_data_dict_QH)
-    DOY_dict[DOY] = {'obs': df, 'UKV_QH': UKV_df_QH}
+    DOY_dict[DOY]['UKV_QH'] = UKV_df_QH
 
     # get model kdown
+    ukv_data_dict_kdown = retrieve_model_fluxes.retrieve_UKV(scint_path, DOY, DOY, variable='kdown')
+    UKV_df_kdown = retrieve_model_fluxes.UKV_df(ukv_data_dict_kdown)
+    DOY_dict[DOY]['UKV_kdown'] = UKV_df_kdown
+
+    # get model land cover
+    # ToDo: Sort a script to handle retrieving and weighting lc data from the UKV
+    lc_df = ukv_landuse.weight_lc_fractions(model_site_dict, percentage_vals_dict, DOY)
 
 
-    # resample the observations
-    """
-    # resample the obs into 10 min averages
-    QH_obs_avs = read_calculated_fluxes.time_averages_of_obs(df, 'QH', on_hour=True).rename(
-        columns={'obs_1': 'QH_1', 'obs_5': 'QH_5', 'obs_10': 'QH_10', 'obs_60': 'QH_60'})
 
-    kdown_obs_avs = read_calculated_fluxes.time_averages_of_obs(df, 'kdown', on_hour=True, for_model=True).rename(
-        columns={'obs_1': 'kdown_1', 'obs_5': 'kdown_5', 'obs_10': 'kdown_10', 'obs_60': 'kdown_60'})
-    """
+
+built_fraction_funs.plot_built_fraction(DOY_dict)
 
 print('end')
