@@ -46,8 +46,19 @@ def times_series_line_QH_KDOWN(df, pair_id, model_df=False):
         plt.title('Cloudy')
         ax.set_ylim(0, 1000)
 
+
     # save plot
     date_string = df['QH'].dropna().index[0].strftime('%Y%j')
-    plt.savefig('./' + pair_id + '_' + date_string + '_line_plot.png', bbox_inches='tight', dpi=300)
+
+    if model_df == False:
+        dir_name = './'
+
+    else:
+        main_dir = 'C:/Users/beths/OneDrive - University of Reading/Paper 2/categorize_days/FLUX_PLOTS/'
+        dir_name = main_dir + date_string + '/'
+        if not os.path.exists(dir_name):
+            os.makedirs(dir_name)
+
+    plt.savefig(dir_name + pair_id + '_' + date_string + '_line_plot.png', bbox_inches='tight', dpi=300)
 
     print('end')
