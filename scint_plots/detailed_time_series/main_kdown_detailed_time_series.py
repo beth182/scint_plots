@@ -21,7 +21,7 @@ for DOY in DOY_list:
 
     DOY_dict[DOY] = {time_res: df}
 
-    # get model sensible heat
+    # get model kdown
     # retrieve UKV data
     ukv_data_dict_kdown = retrieve_model_fluxes.retrieve_UKV(scint_path, DOY, DOY, variable='kdown')
     UKV_df_kdown_all_grids = retrieve_model_fluxes.UKV_df(ukv_data_dict_kdown['all_grids_kdown_dict'],
