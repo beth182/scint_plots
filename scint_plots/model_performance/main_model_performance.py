@@ -1,6 +1,8 @@
 from scint_flux.functions import read_calculated_fluxes
 from scint_flux import look_up
-from scint_eval.functions import retrieve_model_fluxes
+
+from model_eval_tools.retrieve_UKV import retrieve_ukv_vars
+
 from scint_plots.model_performance import model_performance_funs
 
 scint_path = 12
@@ -20,8 +22,8 @@ for DOY in DOY_list:
                                              time_res=time_res)
 
     # get model sensible heat
-    ukv_data_dict_QH = retrieve_model_fluxes.retrieve_UKV(scint_path, DOY, DOY, variable='H')
-    UKV_df_QH = retrieve_model_fluxes.UKV_df(ukv_data_dict_QH)
+    ukv_data_dict_QH = retrieve_ukv_vars.retrieve_UKV(scint_path, DOY, DOY, variable='H')
+    UKV_df_QH = retrieve_ukv_vars.UKV_df(ukv_data_dict_QH)
     DOY_dict[DOY] = {'obs': df, 'UKV_QH': UKV_df_QH}
 
 model_performance_funs.plot_difference(DOY_dict)

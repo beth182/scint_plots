@@ -1,7 +1,8 @@
 from scint_flux.functions import read_calculated_fluxes
 from scint_flux import look_up
 
-from scint_eval.functions import retrieve_model_fluxes
+from model_eval_tools.retrieve_UKV import retrieve_ukv_vars
+
 from scint_plots.built_fraction import built_fraction_funs
 
 
@@ -29,13 +30,13 @@ for DOY in DOY_list:
     DOY_dict[DOY] = {'obs': df}
 
     # get model sensible heat
-    ukv_data_dict_QH = retrieve_model_fluxes.retrieve_UKV(scint_path, DOY, DOY, variable='H')
-    UKV_df_QH = retrieve_model_fluxes.UKV_df(ukv_data_dict_QH)
+    ukv_data_dict_QH = retrieve_ukv_vars.retrieve_UKV(scint_path, DOY, DOY, variable='H')
+    UKV_df_QH = retrieve_ukv_vars.UKV_df(ukv_data_dict_QH)
     DOY_dict[DOY]['UKV_QH'] = UKV_df_QH
 
     # get model kdown
-    ukv_data_dict_kdown = retrieve_model_fluxes.retrieve_UKV(scint_path, DOY, DOY, variable='kdown')
-    UKV_df_kdown = retrieve_model_fluxes.UKV_df(ukv_data_dict_kdown)
+    ukv_data_dict_kdown = retrieve_ukv_vars.retrieve_UKV(scint_path, DOY, DOY, variable='kdown')
+    UKV_df_kdown = retrieve_ukv_vars.UKV_df(ukv_data_dict_kdown)
     DOY_dict[DOY]['UKV_kdown'] = UKV_df_kdown
 
     # get model land cover

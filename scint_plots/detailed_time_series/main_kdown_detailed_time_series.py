@@ -1,6 +1,8 @@
 from scint_flux.functions import read_calculated_fluxes
 from scint_flux import look_up
-from scint_eval.functions import retrieve_model_fluxes
+
+from model_eval_tools.retrieve_UKV import retrieve_ukv_vars
+
 from scint_plots.detailed_time_series import detailed_time_series_funs
 
 scint_path = 12
@@ -23,12 +25,12 @@ for DOY in DOY_list:
 
     # get model kdown
     # retrieve UKV data
-    ukv_data_dict_kdown = retrieve_model_fluxes.retrieve_UKV(scint_path, DOY, DOY, variable='kdown')
-    UKV_df_kdown_all_grids = retrieve_model_fluxes.UKV_df(ukv_data_dict_kdown['all_grids_kdown_dict'],
+    ukv_data_dict_kdown = retrieve_ukv_vars.retrieve_UKV(scint_path, DOY, DOY, variable='kdown')
+    UKV_df_kdown_all_grids = retrieve_ukv_vars.UKV_df(ukv_data_dict_kdown['all_grids_kdown_dict'],
                                                           time_key='model_grid_time_kdown_all',
                                                           val_key='model_grid_vals_kdown_all')
 
-    UKV_df_kdown = retrieve_model_fluxes.UKV_df(ukv_data_dict_kdown)
+    UKV_df_kdown = retrieve_ukv_vars.UKV_df(ukv_data_dict_kdown)
 
     DOY_dict[DOY] = {'obs': df, 'UKV_kdown': UKV_df_kdown}
 
