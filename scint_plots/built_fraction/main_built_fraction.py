@@ -1,11 +1,12 @@
+import os
+
 from scint_flux.functions import read_calculated_fluxes
 from scint_flux import look_up
 
 from model_eval_tools.retrieve_UKV import retrieve_ukv_vars
+from model_eval_tools.sa_analysis_grids import retrieve_weighted_ukv_lc
 
 from scint_plots.built_fraction import built_fraction_funs
-
-
 
 scint_path = 12
 DOY_list = [2016126, 2016123]
@@ -26,7 +27,6 @@ for DOY in DOY_list:
     # combine obs with land cover csv obtained using the SAs
     df = built_fraction_funs.add_lc_to_df(df)
 
-
     DOY_dict[DOY] = {'obs': df}
 
     # get model sensible heat
@@ -40,11 +40,13 @@ for DOY in DOY_list:
     DOY_dict[DOY]['UKV_kdown'] = UKV_df_kdown
 
     # get model land cover
-    # ToDo: Sort a script to handle retrieving and weighting lc data from the UKV
-    lc_df = ukv_landuse.weight_lc_fractions(model_site_dict, percentage_vals_dict, DOY)
+    ukv_lc_df = retrieve_weighted_ukv_lc.weight_lc_fractions(ukv_data_dict_QH['model_site_dict'],
+                                                             ukv_data_dict_QH['percentage_vals_dict'],
+                                                             DOY,
+                                                             save_csv=True,
+                                                             csv_path=os.getcwd().replace('\\', '/') + '/')
 
-
-
+    print('end')
 
 built_fraction_funs.plot_built_fraction(DOY_dict)
 

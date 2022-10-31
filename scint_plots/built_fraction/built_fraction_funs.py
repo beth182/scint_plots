@@ -3,14 +3,17 @@ import pandas as pd
 import numpy as np
 import datetime as dt
 
+
 def add_lc_to_df(df):
     """
-
+    Read landcover csv - with fractions in each timesteps SA - and combine with with the df of obs variables.
     :param df:
     :return:
     """
 
     # define csv path based on DOY
+    # ToDo: move csv to this location - in the same dir
+    # ToDo: check every instance of this csv - to make sure the move doesn't effect something else
     lc_csv_path = 'C:/Users/beths/Desktop/LANDING/mask_tests/' + df.index[0].strftime('%j') + '_10_mins.csv'
 
     # make sure file exists
@@ -32,13 +35,15 @@ def add_lc_to_df(df):
     group_times_lc = lc_df.groupby(pd.Grouper(freq=freq_string, label='left')).first()
 
     lc_outputs_df = pd.DataFrame({'Building': [], 'Impervious': [], 'Water': [], 'Grass': [],
-                                   'Deciduous': [], 'Evergreen': [], 'Shrub': []})
+                                  'Deciduous': [], 'Evergreen': [], 'Shrub': []})
 
     for i, row in group_times_lc.iterrows():
         time = i
 
         # time_array = np.array([time + dt.timedelta(minutes=i) for i in range(minutes)])
-        time_array = np.array([(time + dt.timedelta(minutes=1) - dt.timedelta(minutes=minutes)) + dt.timedelta(minutes=i) for i in range(minutes)])
+        time_array = np.array(
+            [(time + dt.timedelta(minutes=1) - dt.timedelta(minutes=minutes)) + dt.timedelta(minutes=i) for i in
+             range(minutes)])
 
         Building = lc_df['Building'][np.where(lc_df.index == time)[0]]
         Impervious = lc_df['Impervious'][np.where(lc_df.index == time)[0]]
@@ -87,21 +92,11 @@ def plot_built_fraction(DOY_dict):
     :return:
     """
 
-
     # assert 2016126 in DOY_dict.keys() and 2016123 in DOY_dict.keys()
 
-
-
-
     for DOY in DOY_dict.keys():
-
         UKV_kdown_df = DOY_dict[DOY]['UKV_kdown']
         UKV_QH_df = DOY_dict[DOY]['UKV_QH']
         obs_df = DOY_dict[DOY]['obs']
-
-
-
-
-
 
     print('end')
