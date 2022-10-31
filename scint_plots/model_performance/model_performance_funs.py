@@ -1,6 +1,9 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+import matplotlib as mpl
+
+mpl.rcParams.update({'font.size': 15})
 
 from scint_flux.functions import read_calculated_fluxes
 
