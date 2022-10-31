@@ -98,5 +98,12 @@ def plot_built_fraction(DOY_dict):
         UKV_kdown_df = DOY_dict[DOY]['UKV_kdown']
         UKV_QH_df = DOY_dict[DOY]['UKV_QH']
         obs_df = DOY_dict[DOY]['obs']
+        ukv_lc_df = DOY_dict[DOY]['ukv_lc']
 
-    print('end')
+        # convert ukv lc df to datetime index
+        ukv_lc_df.index = pd.to_datetime(ukv_lc_df.index, format='%y%m%d%H')
+        # add urban column to ukv lc df
+        ukv_lc_df['Urban'] = ukv_lc_df['roof'] + ukv_lc_df['canyon']
+
+        # ToDo: got to here
+        print('end')

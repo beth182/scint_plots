@@ -46,8 +46,9 @@ for DOY in DOY_list:
                                                              save_csv=True,
                                                              csv_path=os.getcwd().replace('\\', '/') + '/')
 
-    print('end')
+    DOY_dict[DOY]['ukv_lc'] = ukv_lc_df
 
+# ToDo: got to creating the plot - using guide from scint_eval quick_look
 built_fraction_funs.plot_built_fraction(DOY_dict)
 
 print('end')
