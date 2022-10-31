@@ -9,7 +9,7 @@ import matplotlib as mpl
 
 mpl.rcParams.update({'font.size': 15})
 
-from scint_eval import look_up
+from model_eval_tools import look_up
 
 
 def variation_in_grids(model_df, model_site_dict):

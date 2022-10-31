@@ -1,6 +1,8 @@
 from scint_flux.functions import read_calculated_fluxes
 from scint_flux import look_up
-from scint_eval.functions import retrieve_model_fluxes
+
+from model_eval_tools.retrieve_UKV import retrieve_ukv_vars
+
 from scint_plots.detailed_time_series import detailed_time_series_funs
 
 scint_path = 12
@@ -23,8 +25,8 @@ for DOY in DOY_list:
 
     # get model sensible heat
     # retrieve UKV data
-    ukv_data_dict_QH = retrieve_model_fluxes.retrieve_UKV(scint_path, DOY, DOY, variable='H')
-    UKV_df_QH = retrieve_model_fluxes.UKV_df(ukv_data_dict_QH)
+    ukv_data_dict_QH = retrieve_ukv_vars.retrieve_UKV(scint_path, DOY, DOY, variable='H')
+    UKV_df_QH = retrieve_ukv_vars.UKV_df(ukv_data_dict_QH)
     DOY_dict[DOY] = {'obs': df, 'UKV_QH': UKV_df_QH}
 
     detailed_time_series_funs.detailed_time_series(obs_df=df,
