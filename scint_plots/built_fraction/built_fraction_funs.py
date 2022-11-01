@@ -7,6 +7,8 @@ from matplotlib import cm
 import matplotlib as mpl
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 
+mpl.rcParams.update({'font.size': 15})
+
 
 def add_lc_to_df(df):
     """
@@ -216,7 +218,7 @@ def plot_function_built_fraction(output_dict):
     :return:
     """
 
-    fig, ax = plt.subplots(figsize=(10, 10))
+    fig, ax = plt.subplots(figsize=(7, 7))
     cmap = cm.get_cmap('rainbow')
 
     smallest_kdown = min(min(output_dict[2016123]['mean_kdown_select']), min(output_dict[2016126]['mean_kdown_select']),
@@ -265,7 +267,7 @@ def plot_function_built_fraction(output_dict):
 
     divider = make_axes_locatable(ax)
     cax = divider.append_axes("right", size="5%", pad=0.1)
-    cbar = fig.colorbar(mappable=s, cax=cax, orientation="vertical")
+    cbar = fig.colorbar(mappable=s, cax=cax, orientation="vertical", format='%.0f')
     cax.set_ylabel('$K_{\downarrow}$', rotation=270, labelpad=20)
 
     ax.set_xlabel('Built Fraction (%)')
