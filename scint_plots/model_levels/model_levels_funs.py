@@ -161,6 +161,14 @@ def create_model_height_plot(model_times,
     plt.ylabel("Height above $z_{ES}$ (m)")
     plt.xlabel('$Q_{H}$ (W m$^{-2}$)')
 
+    # set title
+    if obs_df.index[0].strftime('%j') == '126':
+        title_string = 'Clear'
+    else:
+        assert obs_df.index[0].strftime('%j') == '123'
+        title_string = 'Cloudy'
+    plt.title(title_string)
+
     plt.tight_layout()
 
     # save plot
