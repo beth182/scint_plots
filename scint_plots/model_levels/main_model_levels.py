@@ -4,9 +4,9 @@ from scint_flux import look_up
 from scint_plots.model_levels import model_levels_funs
 
 scint_path = 12
-DOY_list = [2016126, 2016123]
+DOY_list = [2016123, 2016126]
 var_list = []
-time_res = '1min_sa10min'
+time_res = '1min'
 
 pair_id = look_up.scint_path_numbers[scint_path]
 
@@ -20,7 +20,5 @@ for DOY in DOY_list:
                                              time_res=time_res)
 
     model_levels_funs.model_data_at_heights(DOY, df)
-
-    print('end')
 
 print('end')

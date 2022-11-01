@@ -77,8 +77,6 @@ def model_data_at_heights(DOY,
     # create plot
     create_model_height_plot(model_time, var_grid, var_surf_grid, model_heights, obs_df)
 
-    print('end')
-
 
 def retrieve_model_filepath(DOY,
                             variable,
@@ -144,7 +142,6 @@ def create_model_height_plot(model_times,
         colour_list.append(color_choice)
         count += colour_intervals
 
-
     plt.figure(figsize=(10, 10))
 
     for i in range(len(model_times)):
@@ -164,5 +161,9 @@ def create_model_height_plot(model_times,
     plt.ylabel("Height above $z_{ES}$ (m)")
     plt.xlabel('$Q_{H}$ (W m$^{-2}$)')
 
+    plt.tight_layout()
 
+    # save plot
+    plt.savefig('./' + obs_df.index[0].strftime('%Y%j') + '_model_levels.png', bbox_inches='tight', dpi=300)
+    print('Saved here:' + './' + obs_df.index[0].strftime('%Y%j') + '_model_levels.png')
     print('end')
