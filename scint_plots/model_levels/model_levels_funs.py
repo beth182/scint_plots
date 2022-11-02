@@ -1,6 +1,9 @@
 import netCDF4 as nc
 import matplotlib.pyplot as plt
 import numpy as np
+import matplotlib as mpl
+
+mpl.rcParams.update({'font.size': 15})
 
 from model_eval_tools.retrieve_UKV import find_model_files
 from model_eval_tools import look_up
