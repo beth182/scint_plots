@@ -8,7 +8,7 @@ from matplotlib import cm
 import matplotlib as mpl
 from scipy import stats
 
-mpl.rcParams.update({'font.size': 15})
+mpl.rcParams.update({'font.size': 13})
 
 
 def setup_sa_frequency(DOY_dict):
@@ -118,7 +118,7 @@ def plot_sa_freq(DOY_df_dict):
     combine_df = pd.concat([DOY_df_dict[2016123]['df'], DOY_df_dict[2016126]['df']], axis=1)
 
     # plot
-    fig, ax = plt.subplots(figsize=(12, 12))
+    fig, ax = plt.subplots(figsize=(7, 7))
 
     # identity line
     plt.plot((DOY_df_dict[2016126]['df']['z_f_10'] - DOY_df_dict[2016126]['df']['z_f_60']) / DOY_df_dict[2016126]['df'][
@@ -174,7 +174,7 @@ def plot_sa_freq(DOY_df_dict):
     y_vals_both = DOY_df_dict[2016123]['y_vals'] + DOY_df_dict[2016126]['y_vals']
     gradient, intercept, r_value, p_value, std_err = stats.linregress(x_vals_both, y_vals_both)
 
-    string_for_label = 'm = ' + '%s' % float('%.5g' % gradient) + '\n c = ' + '%s' % float('%.5g' % intercept)
+    string_for_label = 'm = ' + '%s' % float('{0:.5f}'.format(gradient)) + '\n c = ' + '%s' % float('{0:.5f}'.format(intercept))
     mn = np.min(x_vals_both)
     mx = np.max(x_vals_both)
     x1 = np.linspace(mn, mx, 500)
@@ -190,7 +190,7 @@ def plot_sa_freq(DOY_df_dict):
 
     cbar.ax.set_yticklabels(
         [mdates.num2date(i).strftime('%H') for i in cbar.get_ticks()])  # set ticks of your format
-    cbar.set_label('Time (H)')
+    cbar.set_label('Time (h, UTC)')
 
     ax.set_ylabel('($Q_{H}^{10min}$ - $Q_{H}^{hour}$) / $Q_{H}^{hour}$')
     ax.set_xlabel('($z_{f}^{10min}$ - $z_{f}^{hour}$) / $z_{f}^{hour}$')
