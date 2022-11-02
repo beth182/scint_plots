@@ -10,7 +10,7 @@ import matplotlib as mpl
 mpl.rcParams.update({'font.size': 15})
 
 
-def find_SA_rasters(sa_main_dir='C:/Users/beths/Desktop/LANDING/combine_rasters/',
+def find_SA_rasters(sa_main_dir,
                     given_list=False,
                     **kwargs):
     """
@@ -69,7 +69,7 @@ def plot_sa_lines(file_list,
                   save_path,
                   landcover_raster_filepath='C:/Users/beths/OneDrive - University of Reading/Model_Eval/QGIS/Elliott/LandUseMM_7classes_32631.tif'):
     """
-
+    ToDo: move landcover_raster_filepath
     :return:
     """
 
@@ -130,6 +130,7 @@ def plot_sa_lines(file_list,
     ax.set_ylim(5707118.9139011325, 5716431.904868875)
 
     # plot paths
+    # ToDo: move this
     df_12 = gpd.read_file('C:/Users/beths/Desktop/LANDING/scint_path_shp/BCT_IMU.shp')
     df_12.plot(edgecolor='green', ax=ax, linewidth=3.0)
 
