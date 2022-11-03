@@ -8,7 +8,7 @@ import geopandas as gpd
 import matplotlib as mpl
 
 
-def run_panel_figs(panel_number):
+def run_panel_figs(panel_number, save_path):
     """
     Main function to call one of 3 panel plots
     :param panel_number:
@@ -19,20 +19,20 @@ def run_panel_figs(panel_number):
         # ToDo: move this
         sa_dir = 'C:/Users/beths/Desktop/LANDING/fp_output/demonstration_figure/point_fp/'
         file_list = collect_obs_sa(sa_dir)
-        panel_one(file_list)
+        panel_one(file_list, save_path)
     elif panel_number == 2:
         # ToDo: move this
         sa_dir = 'C:/Users/beths/Desktop/LANDING/fp_output/demonstration_figure/'
         sa_file_list = collect_obs_sa(sa_dir)
         ukv_file_list = collect_UKV_grid_shp()
-        panel_two(sa_file_list, ukv_file_list)
+        panel_two(sa_file_list, ukv_file_list, save_path)
 
     elif panel_number == 3:
         # ToDo: move this
         sa_dir = 'C:/Users/beths/Desktop/LANDING/fp_output/demonstration_figure/'
         sa_file_list = collect_obs_sa(sa_dir)
         ukv_file_list = collect_UKV_grid_shp()
-        panel_three(sa_file_list, ukv_file_list)
+        panel_three(sa_file_list, ukv_file_list, save_path)
 
     else:
         raise ValueError('Only panel numbers 1-3')
@@ -116,7 +116,7 @@ def init_map(file_list, panel_number):
     return fig, ax
 
 
-def panel_one(file_list):
+def panel_one(file_list, save_path):
     """
     Show individually calculated point footprints
     :param file_list: list of filepaths for individual EC footprints
@@ -162,11 +162,13 @@ def panel_one(file_list):
     colour_list_cmap = mpl.colors.LinearSegmentedColormap.from_list("", colour_list)
     df_points.plot(ax=ax, cmap=colour_list_cmap, zorder=2)
 
+    plt.savefig(save_path + 'panel_1.png', bbox_inches='tight', dpi=300)
     print('end')
 
 
 def panel_two(sa_file_list,
-              ukv_file_list):
+              ukv_file_list,
+              save_path):
     """
     Show a path footprint with colourbar, and UKV grids.
     :param sa_file_list: List (len=1) of filepath of one path footprint raster
@@ -201,11 +203,13 @@ def panel_two(sa_file_list,
         df_grid = gpd.read_file(file)
         df_grid.plot(ax=ax, zorder=0)
 
+    plt.savefig(save_path + 'panel_2.png', bbox_inches='tight', dpi=300)
     print('end')
 
 
 def panel_three(sa_file_list,
-                ukv_file_list):
+                ukv_file_list,
+                save_path):
     """
 
     :return:
@@ -235,4 +239,5 @@ def panel_three(sa_file_list,
         df_grid = gpd.read_file(file)
         df_grid.plot(ax=ax, zorder=0)
 
+    plt.savefig(save_path + 'panel_3.png', bbox_inches='tight', dpi=300)
     print('end')
