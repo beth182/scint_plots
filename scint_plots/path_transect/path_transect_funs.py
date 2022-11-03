@@ -1,4 +1,8 @@
 import matplotlib.pyplot as plt
+import matplotlib as mpl
+
+mpl.rcParams.update({'font.size': 13})
+
 from scintools.utils import path_weight
 from scintools.utils import constant
 
@@ -6,7 +10,7 @@ from scintools.utils import constant
 def transect_plot(pt, pw_fun=None):
     """Plot the transect, beam and (optional) path weighting function."""
 
-    fig, ax = plt.subplots(constrained_layout=True)
+    fig, ax = plt.subplots(figsize=(10, 7))
 
     # plot the path weighting curve
     if pw_fun is not None:
@@ -42,7 +46,7 @@ def transect_plot(pt, pw_fun=None):
 
     # add effective beam height label
     ebh = pt.effective_beam_height()
-    plt.text(0.7, 0.83, '$z_{fb}$ = %d.2 m agl' % ebh,
+    plt.text(0.7, 0.79, '$z_{fb}$ = %d.2 m agl' % ebh,
              transform=ax.transAxes)
 
     # added these three lines
@@ -50,6 +54,8 @@ def transect_plot(pt, pw_fun=None):
     if pw_fun:
         lns = lns + lns1
     labs = [ln.get_label() for ln in lns]
-    ax.legend(lns, labs, frameon=False, prop={'size': 8})
+    ax.legend(lns, labs, frameon=False)
+
+    plt.show()
 
     return (fig, ax)
