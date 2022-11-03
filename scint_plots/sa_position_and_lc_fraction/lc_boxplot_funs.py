@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 
 
-def lc_in_sa_stacked_bar(sas_df_in):
+def lc_in_sa_stacked_bar(sas_df_in, save_path):
     """
     Takes a dataframe of the land cover fractions present in the peropd's source areas
         And produces a stacked bar chart of them
@@ -107,14 +107,10 @@ def lc_in_sa_stacked_bar(sas_df_in):
     ukv_lake = ax.scatter(ukv_df.index.hour - (ukv_df.index.hour[0] - 1), ukv_df.lake * 100, marker='x',
                           color='deepskyblue', s=50)
 
-    # leg_obs = plt.legend(handles=[bld_patch, imp_patch, water_patch, grass_patch], framealpha=1, loc='center left', bbox_to_anchor=(1, 0.6), title="Obs")
-    # leg_mod = plt.legend([ukv_can, ukv_roof, ukv_c3, ukv_lake], ["Canyon", "Roof", "C3", "Lake"], framealpha=1 , loc='center left', bbox_to_anchor=(1, 0.4), title="UKV")
-    # plt.gca().add_artist(leg_obs)
-
-    # plt.legend(handles=[bld_patch, imp_patch, water_patch, grass_patch], framealpha=1)
+    if sas_df.index[0].strftime('%j') == '123':
+        plt.legend(handles=[bld_patch, imp_patch, water_patch, grass_patch], framealpha=1)
 
     ax.set_ylim(0, 60)
 
-    plt.savefig('C:/Users/beths/Desktop/LANDING/mask_tests/boxplot.png', bbox_inches='tight')
-
+    plt.savefig(save_path + sas_df.index[0].strftime('%j') + '_boxplot.png', bbox_inches='tight')
     print('end')

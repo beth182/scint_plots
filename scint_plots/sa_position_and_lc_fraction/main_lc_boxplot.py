@@ -5,7 +5,7 @@ from scint_plots.sa_position_and_lc_fraction import lc_boxplot_funs
 from scint_plots.sa_position_and_lc_fraction import create_sa_lc_csv
 
 # CHOICES
-doy_choice = 126
+doy_choice = 123
 av_period = '10_mins'
 
 save_path = os.getcwd().replace('\\', '/') + '/'
@@ -29,5 +29,5 @@ else:
     # save the df as a csv
     sas_df.to_csv(save_path + csv_file_name)
 
-lc_boxplot_funs.lc_in_sa_stacked_bar(sas_df)
+lc_boxplot_funs.lc_in_sa_stacked_bar(sas_df, save_path=save_path)
 print('end')
