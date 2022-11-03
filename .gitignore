@@ -134,3 +134,5 @@ dmypy.json
 /scint_flux/DOY_in.csv
 /scint_flux/legacy/
 /scint_flux/beth_temp/
+
+/scint_plots/sa_position_and_lc_fraction/output.tif
