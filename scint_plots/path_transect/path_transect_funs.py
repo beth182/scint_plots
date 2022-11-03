@@ -136,7 +136,8 @@ def transect_plot(pt, pw_fun=None):
     bld_line = ax.plot(pt.gdf.index * pt.point_res, pt.gdf["z_asl_max_bdsm"], color='dimgrey', label='Building heights')
     ground_line = ax.plot(pt.gdf.index * pt.point_res, pt.gdf["z_asl_max_dem"], color='sienna', label='Ground height')
 
-    ax.fill_between(pt.gdf.index * pt.point_res, pt.gdf["z_asl_max_bdsm"], pt.gdf["z_asl_max_dem"], color='grey', alpha=0.5)
+    ax.fill_between(pt.gdf.index * pt.point_res, pt.gdf["z_asl_max_bdsm"], pt.gdf["z_asl_max_dem"], color='grey',
+                    alpha=0.5)
     ax.fill_between(pt.gdf.index * pt.point_res, 0, pt.gdf["z_asl_max_dem"], color='sienna', alpha=0.5)
 
     # plot the path
@@ -162,4 +163,3 @@ def transect_plot(pt, pw_fun=None):
 
     plt.show()
     print('end')
-
