@@ -112,7 +112,7 @@ def path_transect(pair, dsm_file, dem_file, point_res):
     return ScintillometerTransect(path_transect, path_buffer_df, point_res, dsm_file)
 
 
-def transect_plot(pt, pw_fun=None):
+def transect_plot(pt, save_path, pw_fun=None):
     """Plot the transect, beam and (optional) path weighting function."""
 
     fig, ax = plt.subplots(figsize=(10, 7))
@@ -161,5 +161,5 @@ def transect_plot(pt, pw_fun=None):
     labs = [ln.get_label() for ln in lns]
     ax.legend(lns, labs, frameon=False)
 
-    plt.show()
+    plt.savefig(save_path + 'path_transect.png', bbox_inches='tight', dpi=300)
     print('end')
