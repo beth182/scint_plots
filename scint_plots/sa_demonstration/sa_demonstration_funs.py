@@ -156,7 +156,7 @@ def panel_one(file_list, save_path):
     # plot points
     df_points = gpd.read_file(save_path + 'sa_files_used/points/weighted.shp')
     colour_list_cmap = mpl.colors.LinearSegmentedColormap.from_list("", colour_list)
-    df_points.plot(ax=ax, cmap=colour_list_cmap, zorder=2)
+    df_points.plot(ax=ax, cmap=colour_list_cmap, zorder=2, markersize=100, edgecolors='black')
 
     plt.savefig(save_path + 'panel_1.png', bbox_inches='tight', dpi=300)
     print('end')
@@ -191,7 +191,7 @@ def panel_two(sa_file_list,
 
     # plot equal points
     df_points = gpd.read_file(save_path + 'sa_files_used/points/equal.shp')
-    df_points.plot(ax=ax, color='white', zorder=2, marker='.', markersize=10)
+    df_points.plot(ax=ax, color='yellow', zorder=2, marker='.', markersize=120, edgecolors='black')
 
     # plot UKV grid boxes
     for file in ukv_file_list:
