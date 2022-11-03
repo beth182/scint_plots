@@ -246,7 +246,7 @@ def panel_three(sa_file_list,
     # plot UKV grid boxes
     for file in ukv_file_list:
         df_grid = gpd.read_file(file)
-        df_grid.plot(ax=ax, zorder=0)
+        df_grid.plot(ax=ax)
 
     plt.savefig(save_path + 'panel_3.png', bbox_inches='tight', dpi=300)
     print('end')
