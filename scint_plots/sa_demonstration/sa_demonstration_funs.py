@@ -1,4 +1,3 @@
-import contextily as cx
 import rasterio.plot
 import numpy as np
 import matplotlib.pyplot as plt
@@ -6,6 +5,7 @@ import glob
 import os
 import geopandas as gpd
 import matplotlib as mpl
+import matplotlib.colors as colors
 
 mpl.rcParams.update({'font.size': 15})
 
@@ -99,7 +99,17 @@ def init_map(file_list, panel_number):
     fig, ax = plt.subplots(figsize=(12, 12))
     # hide this one with alpha 0
     rasterio.plot.show(raster0, ax=ax, alpha=0.0)
-    cx.add_basemap(ax, crs=raster0.crs, alpha=0.5)
+
+    # plot the land cover map
+    # ToDo: move this
+    landcover_raster_filepath = 'C:/Users/beths/OneDrive - University of Reading/Model_Eval/QGIS/Elliott/LandUseMM_7classes_32631.tif'
+    landcover_raster = rasterio.open(landcover_raster_filepath)
+    color_list_lc = ["white", "dimgrey", "lightgrey", "deepskyblue", "lawngreen", "darkgreen", "limegreen", "olive"]
+    # make a color map of fixed colors
+    cmap_lc = colors.ListedColormap(color_list_lc)
+    bounds_lc = [0, 1, 2, 3, 4, 5, 6, 7, 8]
+    norm_lc = colors.BoundaryNorm(bounds_lc, cmap_lc.N)
+    rasterio.plot.show(landcover_raster, ax=ax, cmap=cmap_lc, norm=norm_lc, interpolation='nearest', alpha=0.3)
 
     # sex ax lims
     ax.set_xlim(281314.7269919119, 285676.31545750913)
