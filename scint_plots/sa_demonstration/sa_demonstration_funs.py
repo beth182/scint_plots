@@ -16,20 +16,17 @@ def run_panel_figs(panel_number, save_path):
     """
 
     if panel_number == 1:
-        # ToDo: move this
-        sa_dir = 'C:/Users/beths/Desktop/LANDING/fp_output/demonstration_figure/point_fp/'
+        sa_dir = save_path + 'sa_files_used/point_fp/'
         file_list = collect_obs_sa(sa_dir)
         panel_one(file_list, save_path)
     elif panel_number == 2:
-        # ToDo: move this
-        sa_dir = 'C:/Users/beths/Desktop/LANDING/fp_output/demonstration_figure/'
+        sa_dir = save_path + 'sa_files_used/'
         sa_file_list = collect_obs_sa(sa_dir)
         ukv_file_list = collect_UKV_grid_shp()
         panel_two(sa_file_list, ukv_file_list, save_path)
 
     elif panel_number == 3:
-        # ToDo: move this
-        sa_dir = 'C:/Users/beths/Desktop/LANDING/fp_output/demonstration_figure/'
+        sa_dir = save_path + 'sa_files_used/'
         sa_file_list = collect_obs_sa(sa_dir)
         ukv_file_list = collect_UKV_grid_shp()
         panel_three(sa_file_list, ukv_file_list, save_path)
@@ -157,8 +154,7 @@ def panel_one(file_list, save_path):
     df.plot(edgecolor='green', ax=ax, linewidth=4.0, zorder=1)
 
     # plot points
-    # ToDo: move these
-    df_points = gpd.read_file('C:/Users/beths/Desktop/LANDING/fp_output/demonstration_figure/points/weighted.shp')
+    df_points = gpd.read_file(save_path + 'sa_files_used/points/weighted.shp')
     colour_list_cmap = mpl.colors.LinearSegmentedColormap.from_list("", colour_list)
     df_points.plot(ax=ax, cmap=colour_list_cmap, zorder=2)
 
@@ -194,8 +190,7 @@ def panel_two(sa_file_list,
     df.plot(edgecolor='green', ax=ax, linewidth=4.0, zorder=1)
 
     # plot equal points
-    # ToDo: move this
-    df_points = gpd.read_file('C:/Users/beths/Desktop/LANDING/fp_output/demonstration_figure/points/equal.shp')
+    df_points = gpd.read_file(save_path + 'sa_files_used/points/equal.shp')
     df_points.plot(ax=ax, color='white', zorder=2, marker='.', markersize=10)
 
     # plot UKV grid boxes
