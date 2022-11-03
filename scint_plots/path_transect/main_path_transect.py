@@ -18,6 +18,9 @@ pair_raw = sct.ScintillometerPair(x=[285440.6056, 284562.3107],
 
 pair = copy.deepcopy(pair_raw)
 
-pt = pair_raw.path_transect(bdsm_path, 10)
+
+pt = path_transect_funs.path_transect(pair, bdsm_path, dem_path, 10)
+
+
 path_transect_funs.transect_plot(pt, pw_fun=sct.path_weight.bessel_approx)
 print('end')
