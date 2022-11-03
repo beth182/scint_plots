@@ -7,6 +7,8 @@ import os
 import geopandas as gpd
 import matplotlib as mpl
 
+mpl.rcParams.update({'font.size': 15})
+
 
 def run_panel_figs(panel_number, save_path):
     """
@@ -102,6 +104,8 @@ def init_map(file_list, panel_number):
     # sex ax lims
     ax.set_xlim(281314.7269919119, 285676.31545750913)
     ax.set_ylim(5709795.207536185, 5713837.796845389)
+
+    plt.yticks(rotation=90)
 
     if panel_number == 2:
         image_hidden = ax.imshow(raster0.read(1))
