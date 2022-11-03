@@ -99,18 +99,18 @@ def lc_in_sa_stacked_bar(sas_df_in, save_path):
     grass_patch = mpatches.Patch(color='#7CFC00', label='Grass', alpha=0.6)
 
     ukv_can = ax.scatter(ukv_df.index.hour - (ukv_df.index.hour[0] - 1), ukv_df.canyon * 100, marker='x',
-                         color='darkgrey', s=50)
+                         color='darkgrey', s=100)
     ukv_roof = ax.scatter(ukv_df.index.hour - (ukv_df.index.hour[0] - 1), ukv_df.roof * 100, marker='x',
-                          color='dimgrey', s=50)
+                          color='dimgrey', s=100)
     ukv_c3 = ax.scatter(ukv_df.index.hour - (ukv_df.index.hour[0] - 1), ukv_df.C3 * 100, marker='x', color='lawngreen',
-                        s=50)
+                        s=100)
     ukv_lake = ax.scatter(ukv_df.index.hour - (ukv_df.index.hour[0] - 1), ukv_df.lake * 100, marker='x',
-                          color='deepskyblue', s=50)
+                          color='deepskyblue', s=100)
 
     if sas_df.index[0].strftime('%j') == '123':
         plt.legend(handles=[bld_patch, imp_patch, water_patch, grass_patch], framealpha=1)
 
     ax.set_ylim(0, 60)
 
-    plt.savefig(save_path + sas_df.index[0].strftime('%j') + '_boxplot.png', bbox_inches='tight')
+    plt.savefig(save_path + sas_df.index[0].strftime('%j') + '_boxplot.png', bbox_inches='tight', dpi=300)
     print('end')
