@@ -1,6 +1,9 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
+import matplotlib as mpl
+
+mpl.rcParams.update({'font.size': 15})
 
 
 def lc_in_sa_stacked_bar(sas_df_in, save_path):
