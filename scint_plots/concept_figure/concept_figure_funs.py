@@ -256,5 +256,5 @@ def plot_concept_axis(in_dict, save_path):
     ax.set_xlim(0, max_lon - min_lon)
     ax2.set_xlim(0, max_lat - min_lat)
 
-    plt.savefig(save_path + 'fake_path_transect_Vertical' + '.png', bbox_inches='tight', dpi=500)
+    plt.savefig(save_path + 'sa_axis' + '.png', bbox_inches='tight', dpi=500)
     print('end')
