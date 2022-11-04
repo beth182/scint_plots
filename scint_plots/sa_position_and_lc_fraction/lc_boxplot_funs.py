@@ -102,16 +102,20 @@ def lc_in_sa_stacked_bar(sas_df_in, save_path):
     grass_patch = mpatches.Patch(color='#7CFC00', label='Grass', alpha=0.6)
 
     ukv_can = ax.scatter(ukv_df.index.hour - (ukv_df.index.hour[0] - 1), ukv_df.canyon * 100, marker='x',
-                         color='darkgrey', s=100)
+                         color='darkgrey', s=100, label='Canyon')
     ukv_roof = ax.scatter(ukv_df.index.hour - (ukv_df.index.hour[0] - 1), ukv_df.roof * 100, marker='x',
-                          color='dimgrey', s=100)
+                          color='dimgrey', s=100, label='Roof')
     ukv_c3 = ax.scatter(ukv_df.index.hour - (ukv_df.index.hour[0] - 1), ukv_df.C3 * 100, marker='x', color='lawngreen',
-                        s=100)
+                        s=100, label='C3 grass')
     ukv_lake = ax.scatter(ukv_df.index.hour - (ukv_df.index.hour[0] - 1), ukv_df.lake * 100, marker='x',
-                          color='deepskyblue', s=100)
+                          color='deepskyblue', s=100, label='Inland water')
 
     if sas_df.index[0].strftime('%j') == '123':
-        plt.legend(handles=[bld_patch, imp_patch, water_patch, grass_patch], framealpha=1, title='Obs')
+        plt.legend(handles=[bld_patch, imp_patch, water_patch, grass_patch], framealpha=1, title='Obs', loc=(0.03, 0.43))
+    else:
+        assert sas_df.index[0].strftime('%j') == '126'
+        plt.legend(handles=[ukv_can, ukv_roof, ukv_c3, ukv_lake], framealpha=1, title='Model', loc=(0.75, 0.3))
+
 
     ax.set_ylim(0, 60)
 
