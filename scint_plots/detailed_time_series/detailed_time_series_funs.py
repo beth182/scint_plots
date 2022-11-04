@@ -9,8 +9,6 @@ import matplotlib as mpl
 
 mpl.rcParams.update({'font.size': 15})
 
-from model_eval_tools import look_up
-
 
 def variation_in_grids(model_df, model_site_dict):
     """
@@ -75,8 +73,12 @@ def detailed_time_series(obs_df,
 
     if variable == 'H':
         df_col = 'QH'
+        label_string = '$Q_{H}$ (W m$^{-2})$'
     elif variable == 'kdown':
         df_col = 'kdown'
+        label_string = '$K_{\downarrow}$ (W m$^{-2}$)'
+    else:
+        raise ValueError('variable chosen not an option')
 
     mpl.rcParams.update({'font.size': 22})
     plt.close('all')
@@ -93,8 +95,6 @@ def detailed_time_series(obs_df,
         spec = gridspec.GridSpec(ncols=1, nrows=1)
 
     ax1 = fig.add_subplot(spec[0])
-
-    label_string = look_up.variable_info[variable][0]
 
     obs_df = obs_df.dropna()
 
