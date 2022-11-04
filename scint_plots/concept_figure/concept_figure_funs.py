@@ -1,10 +1,10 @@
 import rasterio.plot
 import numpy as np
-import matplotlib.pyplot as plt
 import glob
 import os
-import matplotlib as mpl
 import pandas as pd
+import matplotlib as mpl
+import matplotlib.pyplot as plt
 
 mpl.rcParams.update({'font.size': 15})  # updating the matplotlib fontsize
 
@@ -211,18 +211,18 @@ def plot_concept_axis(in_dict, save_path):
     ax2 = ax.twiny()
     # east to west
     las_lat = ax2.plot(df_las_lat.index - min_lat, df_las_lat.x_crosssec_to1_path, label='LAS cross-wind',
-                       color='green',
+                       color='red',
                        linestyle='-')
-    ec_lat = ax2.plot(df_ec_lat.index - min_lat, df_ec_lat.x_crosssec_to1_point, label='EC cross-wind', color='green',
-                      linestyle='--')
+    ec_lat = ax2.plot(df_ec_lat.index - min_lat, df_ec_lat.x_crosssec_to1_point, label='EC cross-wind', color='blue',
+                      linestyle='-')
     ax2.set_xlabel('Latitudinal Distance (m)')
     ax2.set_ylabel('SA Weight')
 
     # north to south
     las_lon = ax.plot(df_las_lon.index - min_lon, df_las_lon.y_crosssec_to1_path, label='LAS along-wind',
-                      color='magenta',
-                      linestyle='-')
-    ec_lon = ax.plot(df_ec_lon.index - min_lon, df_ec_lon.y_crosssec_to1_point, label='EC along-wind', color='magenta',
+                      color='red',
+                      linestyle='--')
+    ec_lon = ax.plot(df_ec_lon.index - min_lon, df_ec_lon.y_crosssec_to1_point, label='EC along-wind', color='blue',
                      linestyle='--')
     ax.set_xlabel('Longitudinal Distance (m)')
     ax.ticklabel_format(style='plain')
@@ -242,6 +242,10 @@ def plot_concept_axis(in_dict, save_path):
     ax2.spines['bottom'].set_color('magenta')
     ax.tick_params(axis='x', colors='magenta')
     ax.xaxis.label.set_color('magenta')
+
+    # line style
+    ax2.spines['bottom'].set_linestyle((0,(4,4)))
+    ax.spines['bottom'].set_visible(False)
 
     # CHANGE HERE
     ax.set_ylabel('SA Weight')
