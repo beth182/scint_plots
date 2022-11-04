@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import matplotlib as mpl
+from matplotlib.lines import Line2D
 
 mpl.rcParams.update({'font.size': 15})
 
@@ -47,25 +48,20 @@ def plot_difference(DOY_dict):
     ax = plt.subplot(1, 1, 1)
 
     # 1 mins
-    plt.plot(DOY_df_dict[2016123].index.hour, DOY_df_dict[2016123].diff_1, marker='x', label='Cloudy 1', color='black',
-             linestyle='dotted')
-    plt.plot(DOY_df_dict[2016126].index.hour, DOY_df_dict[2016126].diff_1, marker='o', label='Clear 1', color='black')
+    plt.plot(DOY_df_dict[2016123].index.hour, DOY_df_dict[2016123].diff_1, marker='x', color='blue', linestyle='dotted')
+    plt.plot(DOY_df_dict[2016126].index.hour, DOY_df_dict[2016126].diff_1, marker='o', color='blue')
 
     # 5 mins
-    plt.plot(DOY_df_dict[2016123].index.hour, DOY_df_dict[2016123].diff_5, marker='x', label='Cloudy 5', color='green',
-             linestyle='dotted')
-    plt.plot(DOY_df_dict[2016126].index.hour, DOY_df_dict[2016126].diff_5, marker='o', label='Clear 5', color='green')
+    plt.plot(DOY_df_dict[2016123].index.hour, DOY_df_dict[2016123].diff_5, marker='x', color='green', linestyle='dotted')
+    plt.plot(DOY_df_dict[2016126].index.hour, DOY_df_dict[2016126].diff_5, marker='o', color='green')
 
     # 10 mins
-    plt.plot(DOY_df_dict[2016123].index.hour, DOY_df_dict[2016123].diff_10, marker='x', label='Cloudy 10', color='red',
-             linestyle='dotted')
-    plt.plot(DOY_df_dict[2016126].index.hour, DOY_df_dict[2016126].diff_10, marker='o', label='Clear 10', color='red')
+    plt.plot(DOY_df_dict[2016123].index.hour, DOY_df_dict[2016123].diff_10, marker='x', color='red', linestyle='dotted')
+    plt.plot(DOY_df_dict[2016126].index.hour, DOY_df_dict[2016126].diff_10, marker='o', color='red')
 
     # 60 mins
-    plt.plot(DOY_df_dict[2016123].index.hour, DOY_df_dict[2016123].diff_60, marker='x', label='Cloudy 60',
-             color='purple', linestyle='dotted')
-    plt.plot(DOY_df_dict[2016126].index.hour, DOY_df_dict[2016126].diff_60, marker='o', label='Clear 60',
-             color='purple')
+    plt.plot(DOY_df_dict[2016123].index.hour, DOY_df_dict[2016123].diff_60, marker='x', color='purple', linestyle='dotted')
+    plt.plot(DOY_df_dict[2016126].index.hour, DOY_df_dict[2016126].diff_60, marker='o', color='purple')
 
     # plt.gcf().autofmt_xdate()
     # ax.xaxis.set_major_formatter(DateFormatter('%H'))
@@ -75,7 +71,17 @@ def plot_difference(DOY_dict):
 
     plt.axhline(y=0, color='k', linestyle='-', linewidth=0.8)
 
-    plt.legend(fontsize=15)
+    # construct legend manually
+    handles, labels = plt.gca().get_legend_handles_labels()
+    cloudy_line = Line2D([0], [0], label='Cloudy', color='black', linestyle='dotted', marker='x')
+    clear_line = Line2D([0], [0], label='Clear', color='black', marker='o')
+    av1_line = Line2D([0], [0], label='1 min', color='blue')
+    av5_line = Line2D([0], [0], label='5 min', color='green')
+    av10_line = Line2D([0], [0], label='10 min', color='red')
+    av60_line = Line2D([0], [0], label='60 min', color='purple')
+    handles.extend([cloudy_line, clear_line, av1_line, av5_line, av10_line, av60_line])
+
+    plt.legend(handles=handles, fontsize=15)
 
     # save plot
     plt.savefig('./' + 'model_performance.png', bbox_inches='tight', dpi=300)
