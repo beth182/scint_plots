@@ -116,8 +116,9 @@ def lc_in_sa_stacked_bar(sas_df_in, save_path):
         assert sas_df.index[0].strftime('%j') == '126'
         plt.legend(handles=[ukv_can, ukv_roof, ukv_c3, ukv_lake], framealpha=1, title='Model', loc=(0.75, 0.3))
 
-
     ax.set_ylim(0, 60)
+
+    plt.xlabel('Time (h, UTC)')
 
     plt.savefig(save_path + sas_df.index[0].strftime('%j') + '_boxplot.png', bbox_inches='tight', dpi=300)
     print('end')
