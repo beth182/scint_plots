@@ -145,7 +145,7 @@ def create_model_height_plot(model_times,
         colour_list.append(color_choice)
         count += colour_intervals
 
-    plt.figure(figsize=(10, 10))
+    fig, ax = plt.subplots(figsize=(10, 10))
 
     for i in range(len(model_times)):
         qh_at_1_time = var_grid[i, :]
@@ -163,6 +163,15 @@ def create_model_height_plot(model_times,
     plt.xlim(-50, max(var_surf_grid) + 10)
     plt.ylabel("Height above $z_{ES}$ (m)")
     plt.xlabel('$Q_{H}$ (W m$^{-2}$)')
+
+    # manually set the first x tick
+    # We need to draw the canvas, otherwise the labels won't be positioned and won't have values yet.
+    fig.canvas.draw()
+
+    labels = [item.get_text() for item in ax.get_yticklabels()]
+    labels[1] = '$z_{ES}$'
+
+    ax.set_yticklabels(labels)
 
     # set title
     if obs_df.index[0].strftime('%j') == '126':
