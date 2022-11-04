@@ -268,9 +268,9 @@ def plot_function_built_fraction(output_dict):
     divider = make_axes_locatable(ax)
     cax = divider.append_axes("right", size="5%", pad=0.1)
     cbar = fig.colorbar(mappable=s, cax=cax, orientation="vertical", format='%.0f')
-    cax.set_ylabel('$K_{\downarrow}$', rotation=270, labelpad=20)
+    cax.set_ylabel('$K_{\downarrow}$ (W m$^{-2}$)', rotation=270, labelpad=20)
 
-    ax.set_xlabel('Built Fraction (%)')
+    ax.set_xlabel('Built Fraction')
     ax.set_ylabel('$Q_{H}$ / $K_{\downarrow}$')
 
     # save fig
