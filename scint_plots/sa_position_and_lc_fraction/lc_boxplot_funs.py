@@ -111,7 +111,7 @@ def lc_in_sa_stacked_bar(sas_df_in, save_path):
                           color='deepskyblue', s=100)
 
     if sas_df.index[0].strftime('%j') == '123':
-        plt.legend(handles=[bld_patch, imp_patch, water_patch, grass_patch], framealpha=1)
+        plt.legend(handles=[bld_patch, imp_patch, water_patch, grass_patch], framealpha=1, title='Obs')
 
     ax.set_ylim(0, 60)
 
