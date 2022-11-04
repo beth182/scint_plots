@@ -8,7 +8,7 @@ import pandas as pd
 
 mpl.rcParams.update({'font.size': 15})  # updating the matplotlib fontsize
 
-sa_dir = 'C:/Users/beths/Desktop/LANDING/fp_output/transect_fig/'
+sa_dir = './sa_files_used/'
 
 # deal with files
 file_list = []
@@ -191,7 +191,7 @@ ax.set_ylabel('SA Weight')
 ax.set_xlim(0, max_lon - min_lon)
 ax2.set_xlim(0, max_lat - min_lat)
 
-plt.savefig('C:/Users/beths/Desktop/LANDING/' + 'fake_path_transect_Vertical' + '.png', bbox_inches='tight', dpi = 500)
+plt.savefig('./' + 'fake_path_transect_Vertical' + '.png', bbox_inches='tight', dpi = 500)
 
 print('end')
 
