@@ -226,6 +226,10 @@ def detailed_time_series(obs_df,
         ax1.set_xlabel('Time (h, UTC)')
         # plt.gcf().autofmt_xdate()
 
+    if variable == 'kdown':
+        from matplotlib.ticker import MaxNLocator
+        ax1.yaxis.set_major_locator(MaxNLocator(prune='upper'))
+
     plt.tight_layout()
 
     plt.savefig('./' + obs_df.index[0].strftime('%Y%j') + '_' + str(variable) + '_detail_time_series.png',
