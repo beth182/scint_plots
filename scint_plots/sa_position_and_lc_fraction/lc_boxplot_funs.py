@@ -80,13 +80,24 @@ def lc_in_sa_stacked_bar(sas_df_in, save_path):
     props_grass = dict(boxes="#7CFC00", whiskers="Black", medians="Black", caps="Black")
 
     bp_build = df_select.boxplot('Building', 'Hour', ax=ax, color=props_building, patch_artist=True, sym='#696969',
-                                 widths=0.95, return_type='dict')
+                                 widths=0.95, return_type='dict', whis=[0, 100],
+                                 whiskerprops=dict(color='dimgray', linewidth=2.0),
+                                 capprops=dict(color='dimgray', linewidth=2.0))
+
     bp_imp = df_select.boxplot('Impervious', 'Hour', ax=ax, color=props_imperv, patch_artist=True, sym='#BEBEBE',
-                               widths=0.95, return_type='dict')
+                               widths=0.95, return_type='dict', whis=[0, 100],
+                               whiskerprops=dict(color='silver', linewidth=2.0),
+                               capprops=dict(color='silver', linewidth=2.0))
+
     bp_wat = df_select.boxplot('Water', 'Hour', ax=ax, color=props_water, patch_artist=True, sym='#00BFFF', widths=0.95,
-                               return_type='dict')
+                               return_type='dict', whis=[0, 100],
+                               whiskerprops=dict(color='deepskyblue', linewidth=2.0),
+                               capprops=dict(color='deepskyblue', linewidth=2.0))
+
     bp_gra = df_select.boxplot('Grass', 'Hour', ax=ax, color=props_grass, patch_artist=True, sym='#7CFC00', widths=0.95,
-                               return_type='dict')
+                               return_type='dict', whis=[0, 100],
+                               whiskerprops=dict(color='lawngreen', linewidth=2.0),
+                               capprops=dict(color='lawngreen', linewidth=2.0))
 
     [patch.set(alpha=0.6) for patch in bp_build['Building']['boxes']]
     [patch.set(alpha=0.6) for patch in bp_imp['Impervious']['boxes']]
@@ -111,7 +122,8 @@ def lc_in_sa_stacked_bar(sas_df_in, save_path):
                           color='deepskyblue', s=100, label='Inland water')
 
     if sas_df.index[0].strftime('%j') == '123':
-        plt.legend(handles=[bld_patch, imp_patch, water_patch, grass_patch], framealpha=1, title='Obs', loc=(0.03, 0.43))
+        plt.legend(handles=[bld_patch, imp_patch, water_patch, grass_patch], framealpha=1, title='Obs',
+                   loc=(0.03, 0.43))
     else:
         assert sas_df.index[0].strftime('%j') == '126'
         plt.legend(handles=[ukv_can, ukv_roof, ukv_c3, ukv_lake], framealpha=1, title='Model', loc=(0.75, 0.3))
