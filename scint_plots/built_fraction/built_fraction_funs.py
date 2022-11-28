@@ -245,23 +245,35 @@ def plot_function_built_fraction(output_dict):
         list_of_rgba = smap.to_rgba(mean_kdown_select)
 
         for i in range(0, len(mean_kdown_select)):
-            ax.vlines(x_vals_select[i], IQR25_vals_select[i], IQR75_vals_select[i], color=list_of_rgba[i])
+            ax.vlines(x_vals_select[i], IQR25_vals_select[i], IQR75_vals_select[i], color=list_of_rgba[i], zorder=1)
 
         if obs_df.index[0].strftime('%j') == '126':
-            label_string = 'Clear'
-            obs_marker = 'o'
-            ukv_marker = '^'
+
+            # use white scatter marks - so lines don't appear through marker
+            # facecolor didn't work...
+            white_block = ax.scatter(x_vals_select, y_vals_select,
+                                     c='white', marker="$\u25B2$", s=80, zorder=2)
+
+            s = ax.scatter(x_vals_select, y_vals_select,
+                           c=mean_kdown_select, marker="$\u25B3$", cmap=cmap, norm=norm, label='Clear Obs', s=80,
+                           zorder=3)
+
+            white_block_UKV = ax.scatter(mod_select.Urban * 100, mod_select.QH / mod_select.kdown,
+                                         c='white', marker="$\u25A0$", s=80, zorder=2)
+
+            ax.scatter(mod_select.Urban * 100, mod_select.QH / mod_select.kdown,
+                       c=mod_select.kdown, marker="$\u25A1$", cmap=cmap, norm=norm, label='Clear UKV', s=80,
+                       zorder=3)
+
+
         else:
             assert obs_df.index[0].strftime('%j') == '123'
-            label_string = 'Cloudy'
-            obs_marker = 'x'
-            ukv_marker = 's'
 
-        s = ax.scatter(x_vals_select, y_vals_select, c=mean_kdown_select, marker=obs_marker, cmap=cmap, norm=norm,
-                       edgecolor='None', label=label_string)
+            s = ax.scatter(x_vals_select, y_vals_select, c=mean_kdown_select, marker='^', cmap=cmap, norm=norm,
+                           edgecolor='k', label='Cloudy Obs', s=80)
 
-        ax.scatter(mod_select.Urban * 100, mod_select.QH / mod_select.kdown, c=mod_select.kdown, marker=ukv_marker,
-                   cmap=cmap, norm=norm, edgecolor='k', label=label_string + ' UKV', s=80)
+            ax.scatter(mod_select.Urban * 100, mod_select.QH / mod_select.kdown, c=mod_select.kdown, marker='s',
+                       cmap=cmap, norm=norm, edgecolor='k', label='Cloudy UKV', s=80)
 
     plt.legend()
 
