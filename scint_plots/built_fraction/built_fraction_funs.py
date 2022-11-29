@@ -252,10 +252,10 @@ def plot_function_built_fraction(output_dict):
             # use white scatter marks - so lines don't appear through marker
             # facecolor didn't work...
             white_block = ax.scatter(x_vals_select, y_vals_select,
-                                     c='white', marker="$\u25B2$", s=80, zorder=2)
+                                     c='white', marker="$\u25cf$", s=80, zorder=2)
 
             s = ax.scatter(x_vals_select, y_vals_select,
-                           c=mean_kdown_select, marker="$\u25B3$", cmap=cmap, norm=norm, label='Clear Obs', s=80,
+                           c=mean_kdown_select, marker="$\u25cb$", cmap=cmap, norm=norm, label='Clear Obs', s=80,
                            zorder=3)
 
             white_block_UKV = ax.scatter(mod_select.Urban * 100, mod_select.QH / mod_select.kdown,
@@ -269,7 +269,7 @@ def plot_function_built_fraction(output_dict):
         else:
             assert obs_df.index[0].strftime('%j') == '123'
 
-            s = ax.scatter(x_vals_select, y_vals_select, c=mean_kdown_select, marker='^', cmap=cmap, norm=norm,
+            s = ax.scatter(x_vals_select, y_vals_select, c=mean_kdown_select, marker='$\u25cf$', cmap=cmap, norm=norm,
                            edgecolor='k', label='Cloudy Obs', s=80)
 
             ax.scatter(mod_select.Urban * 100, mod_select.QH / mod_select.kdown, c=mod_select.kdown, marker='s',
