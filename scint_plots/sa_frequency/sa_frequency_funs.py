@@ -130,15 +130,6 @@ def plot_sa_freq(DOY_df_dict):
     plt.axhline(y=0, color='grey', linestyle=':', linewidth=0.5)
     plt.axvline(x=0, color='grey', linestyle=':', linewidth=0.5)
 
-    ax.scatter(np.asarray(DOY_df_dict[2016123]['x_vals'])[DOY_df_dict[2016123]['bellow_75_index']],
-               np.asarray(DOY_df_dict[2016123]['y_vals'])[DOY_df_dict[2016123]['bellow_75_index']],
-               marker='o', facecolors='none', s=80, edgecolors='k', alpha=0.5,
-               label='$\overline{Q_{H}^{10 min}}$ < 75 $W$ $m^{-2}$')
-
-    ax.scatter(np.asarray(DOY_df_dict[2016126]['x_vals'])[DOY_df_dict[2016126]['bellow_75_index']],
-               np.asarray(DOY_df_dict[2016126]['y_vals'])[DOY_df_dict[2016126]['bellow_75_index']],
-               marker='o', facecolors='none', s=80, edgecolors='k', alpha=0.5)
-
     cmap = cm.get_cmap('rainbow')
 
     earliest_time = min([DOY_df_dict[2016123]['start_times'][0], DOY_df_dict[2016126]['start_times'][0]])
@@ -154,27 +145,50 @@ def plot_sa_freq(DOY_df_dict):
     list_of_rgba_126 = smap.to_rgba(mdates.date2num(DOY_df_dict[2016126]['start_times']))
     list_of_rgba_123 = smap.to_rgba(mdates.date2num(DOY_df_dict[2016123]['start_times']))
 
+    # IQR
     for i in range(0, len(DOY_df_dict[2016123]['start_times'])):
         ax.vlines(DOY_df_dict[2016123]['x_vals'][i], DOY_df_dict[2016123]['IQR25_vals'][i],
-                  DOY_df_dict[2016123]['IQR75_vals'][i], color=list_of_rgba_123[i])
+                  DOY_df_dict[2016123]['IQR75_vals'][i], color=list_of_rgba_123[i], zorder=1)
 
     for i in range(0, len(DOY_df_dict[2016126]['start_times'])):
         ax.vlines(DOY_df_dict[2016126]['x_vals'][i], DOY_df_dict[2016126]['IQR25_vals'][i],
-                  DOY_df_dict[2016126]['IQR75_vals'][i], color=list_of_rgba_126[i])
+                  DOY_df_dict[2016126]['IQR75_vals'][i], color=list_of_rgba_126[i], zorder=1)
 
+    # times where QH is larger than threshold value
+    # cloudy
+    # clear
+    ax.scatter(np.asarray(DOY_df_dict[2016126]['x_vals'])[DOY_df_dict[2016126]['bellow_75_index']],
+               np.asarray(DOY_df_dict[2016126]['y_vals'])[DOY_df_dict[2016126]['bellow_75_index']],
+               facecolors='none', edgecolors='k', marker='$\u25cf$', zorder=2, s=300,  alpha=0.7)
+
+    ax.scatter(np.asarray(DOY_df_dict[2016123]['x_vals'])[DOY_df_dict[2016123]['bellow_75_index']],
+               np.asarray(DOY_df_dict[2016123]['y_vals'])[DOY_df_dict[2016123]['bellow_75_index']],
+               facecolors='none', edgecolors='k', marker='$\u25cf$', zorder=2, s=300, alpha=0.7,
+               label='$\overline{Q_{H}^{10 min}}$ < 75 $W$ $m^{-2}$')
+
+
+    # markers
+    # cloudy
     s = ax.scatter(DOY_df_dict[2016123]['x_vals'], DOY_df_dict[2016123]['y_vals'],
-                   c=mdates.date2num(DOY_df_dict[2016123]['start_times']), marker='x', cmap=cmap, norm=norm,
-                   edgecolor='None', label='Cloudy')
+                   c=mdates.date2num(DOY_df_dict[2016123]['start_times']), marker='$\u25cf$', cmap=cmap, norm=norm,
+                   edgecolor='k', label='Cloudy', s=80, zorder=3)
 
+    # clear
     s2 = ax.scatter(DOY_df_dict[2016126]['x_vals'], DOY_df_dict[2016126]['y_vals'],
-                    c=mdates.date2num(DOY_df_dict[2016126]['start_times']), marker='o', cmap=cmap, norm=norm,
-                    edgecolor='None', label='Clear')
+                    c=mdates.date2num(DOY_df_dict[2016126]['start_times']), marker='$\u25cb$', cmap=cmap, norm=norm,
+                    label='Clear', zorder=5, s=80)
+
+    # use white scatter marks - so lines don't appear through marker
+    # facecolor didn't work...
+    white_block = ax.scatter(DOY_df_dict[2016126]['x_vals'], DOY_df_dict[2016126]['y_vals'],
+                             c='white', marker="$\u25cf$", zorder=4, s=70)
 
     x_vals_both = DOY_df_dict[2016123]['x_vals'] + DOY_df_dict[2016126]['x_vals']
     y_vals_both = DOY_df_dict[2016123]['y_vals'] + DOY_df_dict[2016126]['y_vals']
     gradient, intercept, r_value, p_value, std_err = stats.linregress(x_vals_both, y_vals_both)
 
-    string_for_label = 'm = ' + '%s' % float('{0:.5f}'.format(gradient)) + '\n c = ' + '%s' % float('{0:.5f}'.format(intercept))
+    string_for_label = 'm = ' + '%s' % float('{0:.5f}'.format(gradient)) + '\n c = ' + '%s' % float(
+        '{0:.5f}'.format(intercept))
     mn = np.min(x_vals_both)
     mx = np.max(x_vals_both)
     x1 = np.linspace(mn, mx, 500)
