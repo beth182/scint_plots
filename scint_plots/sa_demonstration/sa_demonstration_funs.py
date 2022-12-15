@@ -164,8 +164,8 @@ def panel_one(file_list, save_path):
                            colors=[colour_here])
 
     # plot path
-    # ToDo: move path shp file
-    df = gpd.read_file('C:/Users/beths/Desktop/LANDING/scint_path_shp/BCT_IMU.shp')
+    path_shp_file_path = save_path + '../sa_position_and_lc_fraction/scint_path_shp/'
+    df = gpd.read_file(path_shp_file_path + 'BCT_IMU.shp')
     df.plot(edgecolor='green', ax=ax, linewidth=4.0, zorder=1)
 
     # plot points
@@ -200,8 +200,8 @@ def panel_two(sa_file_list,
         rasterio.plot.show(raster_array, transform=raster.transform, ax=ax)
 
     # plot path
-    # ToDo: move path shp file
-    df = gpd.read_file('C:/Users/beths/Desktop/LANDING/scint_path_shp/BCT_IMU.shp')
+    path_shp_file_path = save_path + '../sa_position_and_lc_fraction/scint_path_shp/'
+    df = gpd.read_file(path_shp_file_path + 'BCT_IMU.shp')
     df.plot(edgecolor='green', ax=ax, linewidth=4.0, zorder=1)
 
     # plot equal points
@@ -240,8 +240,8 @@ def panel_three(sa_file_list,
                            colors=[colour_here])
 
     # plot path
-    # ToDo: move path shp file
-    df = gpd.read_file('C:/Users/beths/Desktop/LANDING/scint_path_shp/BCT_IMU.shp')
+    path_shp_file_path = save_path + '../sa_position_and_lc_fraction/scint_path_shp/'
+    df = gpd.read_file(path_shp_file_path + 'BCT_IMU.shp')
     df.plot(edgecolor='green', ax=ax, linewidth=4.0, zorder=1)
 
     # plot UKV grid boxes
