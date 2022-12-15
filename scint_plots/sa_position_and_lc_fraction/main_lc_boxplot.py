@@ -18,7 +18,7 @@ if os.path.isfile(csv_file_path):
 else:
     # create the dataframe
     # ToDo: move this: where the SA's are located
-    main_dir = 'C:/Users/beths/Desktop/LANDING/fp_output/' + str(doy_choice) + '/' + av_period + '/'
+    main_dir = 'C:/Users/beths/OneDrive - University of Reading/local_runs_data/fp_output/' + str(doy_choice) + '/' + av_period + '/'
     os.chdir(main_dir)
     file_list = []
     for file in glob.glob("*.tif"):

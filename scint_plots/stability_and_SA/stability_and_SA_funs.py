@@ -30,8 +30,8 @@ def stability_and_sa(obs_df):
     df_123_10 = df_123_10.resample('10T', closed='right', label='right').mean()
 
     # reading the sa csv files - for sig v
-    footprint_csv_path_126 = 'C:/Users/beths/Desktop/LANDING/fp_output/met_inputs_minutes_126.csv'
-    footprint_csv_path_123 = 'C:/Users/beths/Desktop/LANDING/fp_output/met_inputs_minutes_123.csv'
+    footprint_csv_path_126 = 'C:/Users/beths/OneDrive - University of Reading/local_runs_data/fp_output/met_inputs_minutes_126.csv'
+    footprint_csv_path_123 = 'C:/Users/beths/OneDrive - University of Reading/local_runs_data/fp_output/met_inputs_minutes_123.csv'
     csv_df_123 = pd.read_csv(footprint_csv_path_123)
     csv_df_126 = pd.read_csv(footprint_csv_path_126)
     try:

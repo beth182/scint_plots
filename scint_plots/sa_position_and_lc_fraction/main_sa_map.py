@@ -5,7 +5,7 @@ from scint_plots.sa_position_and_lc_fraction import sa_map_funs
 
 doy_choice = 123
 # ToDo: move these
-sa_dir = 'C:/Users/beths/Desktop/LANDING/fp_output/' + str(doy_choice) + '/hourly/'
+sa_dir = 'C:/Users/beths/OneDrive - University of Reading/local_runs_data/fp_output/' + str(doy_choice) + '/hourly/'
 
 save_path = os.getcwd().replace('\\', '/') + '/'
 

@@ -28,7 +28,7 @@ def lc_in_sa_stacked_bar(sas_df_in, save_path):
 
     # reading model weighted lc fraction csv file
     # made from scint_eval ukv_landuse functions file
-    csv_path = 'C:/Users/beths/Desktop/LANDING/weighted_lc_ukv_' + sas_df.index[0].strftime('%Y') + sas_df.index[
+    csv_path = 'C:/Users/beths/OneDrive - University of Reading/local_runs_data/weighted_lc_ukv_' + sas_df.index[0].strftime('%Y') + sas_df.index[
         0].strftime('%j') + '.csv'
     ukv_df = pd.read_csv(csv_path)
 
