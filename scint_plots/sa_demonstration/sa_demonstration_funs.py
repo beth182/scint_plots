@@ -23,14 +23,16 @@ def run_panel_figs(panel_number, save_path):
         panel_one(file_list, save_path)
     elif panel_number == 2:
         sa_dir = save_path + 'sa_files_used/'
+        ukv_dir = save_path + 'UKV_shapefiles/'
         sa_file_list = collect_obs_sa(sa_dir)
-        ukv_file_list = collect_UKV_grid_shp()
+        ukv_file_list = collect_UKV_grid_shp(ukv_dir)
         panel_two(sa_file_list, ukv_file_list, save_path)
 
     elif panel_number == 3:
         sa_dir = save_path + 'sa_files_used/'
+        ukv_dir = save_path + 'UKV_shapefiles/'
         sa_file_list = collect_obs_sa(sa_dir)
-        ukv_file_list = collect_UKV_grid_shp()
+        ukv_file_list = collect_UKV_grid_shp(ukv_dir)
         panel_three(sa_file_list, ukv_file_list, save_path)
 
     else:
@@ -51,10 +53,9 @@ def collect_obs_sa(sa_dir):
     return file_list
 
 
-def collect_UKV_grid_shp(grid_dir='C:/Users/beths/Desktop/LANDING/UKV_shapefiles/'):
+def collect_UKV_grid_shp(grid_dir):
     """
     Collects all UKV gridboxes avail into a list
-    ToDo: move grid_dir to local
     :return:
     """
 
