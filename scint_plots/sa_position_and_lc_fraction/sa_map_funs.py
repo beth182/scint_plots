@@ -130,8 +130,8 @@ def plot_sa_lines(file_list,
     ax.set_ylim(5707118.9139011325, 5716431.904868875)
 
     # plot paths
-    # ToDo: move this
-    df_12 = gpd.read_file('C:/Users/beths/Desktop/LANDING/scint_path_shp/BCT_IMU.shp')
+    scint_shp_file_path = save_path + 'scint_path_shp/BCT_IMU.shp'
+    df_12 = gpd.read_file(scint_shp_file_path)
     df_12.plot(edgecolor='green', ax=ax, linewidth=3.0)
 
     # title
