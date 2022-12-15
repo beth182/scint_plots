@@ -20,7 +20,7 @@ def add_lc_to_df(df):
     # define csv path based on DOY
     # ToDo: move csv to this location - in the same dir
     # ToDo: check every instance of this csv - to make sure the move doesn't effect something else
-    lc_csv_path = 'C:/Users/beths/Desktop/LANDING/mask_tests/' + df.index[0].strftime('%j') + '_10_mins.csv'
+    lc_csv_path = 'C:/Users/beths/OneDrive - University of Reading/Paper 1/mask_tests/' + df.index[0].strftime('%j') + '_10_mins.csv'
 
     # make sure file exists
     assert os.path.isfile(lc_csv_path)
