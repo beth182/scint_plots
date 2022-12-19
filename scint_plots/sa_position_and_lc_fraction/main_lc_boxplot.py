@@ -18,16 +18,17 @@ if os.path.isfile(csv_file_path):
 else:
     # create the dataframe
     # ToDo: move this: where the SA's are located
-    main_dir = 'C:/Users/beths/OneDrive - University of Reading/local_runs_data/fp_output/' + str(doy_choice) + '/' + av_period + '/'
+    main_dir = 'C:/Users/beths/OneDrive - University of Reading/local_runs_data/fp_output/' + str(
+        doy_choice) + '/' + av_period + '/'
     os.chdir(main_dir)
     file_list = []
     for file in glob.glob("*.tif"):
         file_list.append(main_dir + file)
 
-    sas_df = create_sa_lc_csv.lc_fract_multiple_sas(sa_list=file_list, save_path=save_path)
-
-    # save the df as a csv
-    sas_df.to_csv(save_path + csv_file_name)
+    sas_df = create_sa_lc_csv.create_lc_fractions_in_sa_csv(doy_choice=doy_choice,
+                                                            av_period=av_period,
+                                                            file_list=file_list,
+                                                            save_path=save_path)
 
 lc_boxplot_funs.lc_in_sa_stacked_bar(sas_df, save_path=save_path)
 print('end')
