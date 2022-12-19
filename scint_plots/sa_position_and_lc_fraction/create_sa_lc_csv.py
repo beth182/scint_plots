@@ -92,10 +92,6 @@ def landcover_fractions_in_SA_weighted(sa_tif_path, save_path):
 
     color_list = ["white", "dimgrey", "lightgrey", "deepskyblue", "lawngreen", "darkgreen", "limegreen", "olive"]
 
-    # make a color map of fixed colors
-    cmap = colors.ListedColormap(color_list)
-    bounds = [0, 1, 2, 3, 4, 5, 6, 7, 8]
-
     # fill masked area with 0s
     masked_filled = mask.filled(0)
 
