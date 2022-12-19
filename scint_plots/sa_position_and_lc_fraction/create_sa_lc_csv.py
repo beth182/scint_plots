@@ -23,7 +23,6 @@ def lc_fract_multiple_sas(sa_list, save_path):
         # get the time from the path name
         time_string = sa_path[-18:-4]
         datetime_object = dt.datetime.strptime(time_string, '%Y_%j_%H_%M')
-        time_label = datetime_object.strftime('%j %H:%M')
 
         sa_df = landcover_fractions_in_SA_weighted(sa_path, save_path)
 
