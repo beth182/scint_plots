@@ -1,8 +1,7 @@
 import os
 import glob
 
-from scint_plots.sa_position_and_lc_fraction import lc_boxplot_funs
-from scint_plots.sa_position_and_lc_fraction import create_sa_lc_csv
+from scint_plots.sa_position_and_lc_fraction.sa_lc_boxplot import lc_boxplot_funs, create_sa_lc_csv
 
 # CHOICES
 doy_choice = 126
