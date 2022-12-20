@@ -1,7 +1,7 @@
 import os
 import matplotlib.pyplot as plt
 
-from scint_plots.sa_position_and_lc_fraction import sa_map_funs
+from scint_plots.sa_position_and_lc_fraction.sa_position import sa_map_funs
 
 doy_choice = 123
 # ToDo: move these
