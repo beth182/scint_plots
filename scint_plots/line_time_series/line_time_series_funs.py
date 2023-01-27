@@ -58,7 +58,7 @@ def times_series_line_QH_KDOWN(df, pair_id, model_df=False):
             raise ValueError('Type of model df has gone wrong.')
 
     else:
-        main_dir = 'C:/Users/beths/OneDrive - University of Reading/Paper 2/categorize_days/FLUX_PLOTS/'
+        main_dir = 'C:/Users/beths/OneDrive - University of Reading/Paper 2/FLUX_PLOTS/'
         dir_name = main_dir + date_string + '/'
         if not os.path.exists(dir_name):
             os.makedirs(dir_name)
