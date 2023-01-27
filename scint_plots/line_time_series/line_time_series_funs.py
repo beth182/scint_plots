@@ -51,8 +51,11 @@ def times_series_line_QH_KDOWN(df, pair_id, model_df=False):
     # save plot
     date_string = df['QH'].dropna().index[0].strftime('%Y%j')
 
-    if model_df == False:
-        dir_name = './'
+    if type(model_df) == bool:
+        if model_df == False:
+            dir_name = './'
+        else:
+            raise ValueError('Type of model df has gone wrong.')
 
     else:
         main_dir = 'C:/Users/beths/OneDrive - University of Reading/Paper 2/categorize_days/FLUX_PLOTS/'
