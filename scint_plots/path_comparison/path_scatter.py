@@ -63,59 +63,73 @@ def scatter_paths(df_combine):
     df_weekend = df_combine.iloc[weekend_index]
     df_weekday = df_combine.iloc[weekday_index]
 
-    # BCT_IMU VS BTT_BCT
-    # weekday
-    weekday_label_0 = 'Weekday\nn hours: ' + str(len(df_weekday[['QH_11', 'QH_12']].dropna())) + '\nn days: ' + str(len(
-        [group[1] for group in
-         df_weekday[['QH_11', 'QH_12']].dropna().groupby(df_weekday[['QH_11', 'QH_12']].dropna().index.date)]))
-    ax[0].scatter(df_weekday.QH_11, df_weekday.QH_12, marker='+', c=df_weekday.index.strftime('%j').astype(int),
-                       norm=norm, cmap=cmap, label=weekday_label_0, alpha=0.4)
-    # weekend
-    weekend_label_0 = 'Weekend\nn hours: ' + str(len(df_weekend[['QH_11', 'QH_12']].dropna())) + '\nn days: ' + str(len(
-        [group[1] for group in
-         df_weekend[['QH_11', 'QH_12']].dropna().groupby(df_weekend[['QH_11', 'QH_12']].dropna().index.date)]))
-    ye = ax[0].scatter(df_weekend.QH_11, df_weekend.QH_12, marker='.', c=df_weekend.index.strftime('%j').astype(int),
-                  norm=norm, cmap=cmap, label=weekend_label_0)
-
-    ax[0].legend(loc="lower right")
-
-    # BCT_IMU VS SCT_SWT
-    # weekday
-    weekday_label_1 = 'Weekday\nn hours: ' + str(len(df_weekday[['QH_15', 'QH_12']].dropna())) + '\nn days: ' + str(len(
-        [group[1] for group in
-         df_weekday[['QH_15', 'QH_12']].dropna().groupby(df_weekday[['QH_15', 'QH_12']].dropna().index.date)]))
-    ax[1].scatter(df_weekday.QH_15, df_weekday.QH_12, marker='+', c=df_weekday.index.strftime('%j').astype(int),
-                  norm=norm, cmap=cmap, label = weekday_label_1, alpha=0.4)
-    # weekend
-    weekend_label_1 = 'Weekend\nn hours: ' + str(len(df_weekend[['QH_15', 'QH_12']].dropna())) + '\nn days: ' + str(len(
-        [group[1] for group in
-         df_weekend[['QH_15', 'QH_12']].dropna().groupby(df_weekend[['QH_15', 'QH_12']].dropna().index.date)]))
-    ax[1].scatter(df_weekend.QH_15, df_weekend.QH_12, marker='.', c=df_weekend.index.strftime('%j').astype(int),
-                  norm=norm, cmap=cmap, label=weekend_label_1)
-
-    ax[1].legend(loc="lower right")
 
     # BCT_IMU VS IMU_BTT
     # weekday
-    weekday_label_2 = 'Weekday\nn hours: ' + str(len(df_weekday[['QH_13', 'QH_12']].dropna())) + '\nn days: ' + str(len(
+    weekday_label_0 = 'Weekday\nn hours: ' + str(len(df_weekday[['QH_13', 'QH_12']].dropna())) + '\nn days: ' + str(len(
         [group[1] for group in
          df_weekday[['QH_13', 'QH_12']].dropna().groupby(df_weekday[['QH_13', 'QH_12']].dropna().index.date)]))
-    ax[2].scatter(df_weekday.QH_13, df_weekday.QH_12, marker='+', c=df_weekday.index.strftime('%j').astype(int),
-                  norm=norm, cmap=cmap, label=weekday_label_2, alpha=0.4)
+    ax[0].scatter(df_weekday.QH_13, df_weekday.QH_12, marker='+', c=df_weekday.index.strftime('%j').astype(int),
+                  norm=norm, cmap=cmap, label=weekday_label_0, alpha=0.4)
     # weekend
-    weekend_label_2 = 'Weekend\nn hours: ' + str(len(df_weekend[['QH_13', 'QH_12']].dropna())) + '\nn days: ' + str(len(
+    weekend_label_0 = 'Weekend\nn hours: ' + str(len(df_weekend[['QH_13', 'QH_12']].dropna())) + '\nn days: ' + str(len(
         [group[1] for group in
          df_weekend[['QH_13', 'QH_12']].dropna().groupby(df_weekend[['QH_13', 'QH_12']].dropna().index.date)]))
-    ax[2].scatter(df_weekend.QH_13, df_weekend.QH_12, marker='.', c=df_weekend.index.strftime('%j').astype(int),
+    ax[0].scatter(df_weekend.QH_13, df_weekend.QH_12, marker='.', c=df_weekend.index.strftime('%j').astype(int),
+                  norm=norm, cmap=cmap, label=weekend_label_0)
+
+    ax[0].legend(loc="lower right")
+    ax[0].set_xlabel('IMU_BTT $Q_{H}$ ($W m^{-2}$)')
+
+
+
+
+    # BCT_IMU VS BTT_BCT
+    # weekday
+    weekday_label_1 = 'Weekday\nn hours: ' + str(len(df_weekday[['QH_11', 'QH_12']].dropna())) + '\nn days: ' + str(len(
+        [group[1] for group in
+         df_weekday[['QH_11', 'QH_12']].dropna().groupby(df_weekday[['QH_11', 'QH_12']].dropna().index.date)]))
+    ax[1].scatter(df_weekday.QH_11, df_weekday.QH_12, marker='+', c=df_weekday.index.strftime('%j').astype(int),
+                       norm=norm, cmap=cmap, label=weekday_label_1, alpha=0.4)
+    # weekend
+    weekend_label_1 = 'Weekend\nn hours: ' + str(len(df_weekend[['QH_11', 'QH_12']].dropna())) + '\nn days: ' + str(len(
+        [group[1] for group in
+         df_weekend[['QH_11', 'QH_12']].dropna().groupby(df_weekend[['QH_11', 'QH_12']].dropna().index.date)]))
+    ye = ax[1].scatter(df_weekend.QH_11, df_weekend.QH_12, marker='.', c=df_weekend.index.strftime('%j').astype(int),
+                  norm=norm, cmap=cmap, label=weekend_label_1)
+
+    ax[1].legend(loc="lower right")
+    ax[1].set_xlabel('BTT_BCT $Q_{H}$ ($W m^{-2}$)')
+
+
+
+
+
+    # BCT_IMU VS SCT_SWT
+    # weekday
+    weekday_label_2 = 'Weekday\nn hours: ' + str(len(df_weekday[['QH_15', 'QH_12']].dropna())) + '\nn days: ' + str(len(
+        [group[1] for group in
+         df_weekday[['QH_15', 'QH_12']].dropna().groupby(df_weekday[['QH_15', 'QH_12']].dropna().index.date)]))
+    ax[2].scatter(df_weekday.QH_15, df_weekday.QH_12, marker='+', c=df_weekday.index.strftime('%j').astype(int),
+                  norm=norm, cmap=cmap, label = weekday_label_2, alpha=0.4)
+    # weekend
+    weekend_label_2 = 'Weekend\nn hours: ' + str(len(df_weekend[['QH_15', 'QH_12']].dropna())) + '\nn days: ' + str(len(
+        [group[1] for group in
+         df_weekend[['QH_15', 'QH_12']].dropna().groupby(df_weekend[['QH_15', 'QH_12']].dropna().index.date)]))
+    ax[2].scatter(df_weekend.QH_15, df_weekend.QH_12, marker='.', c=df_weekend.index.strftime('%j').astype(int),
                   norm=norm, cmap=cmap, label=weekend_label_2)
 
     ax[2].legend(loc="lower right")
+    ax[2].set_xlabel('SCT_SWT $Q_{H}$ ($W m^{-2}$)')
+
+
+
+
+
+
 
 
     ax[0].set_ylabel('BCT_IMU $Q_{H}$ ($W m^{-2}$)')
-    ax[0].set_xlabel('BTT_BCT $Q_{H}$ ($W m^{-2}$)')
-    ax[1].set_xlabel('SCT_SWT $Q_{H}$ ($W m^{-2}$)')
-    ax[2].set_xlabel('IMU_BTT $Q_{H}$ ($W m^{-2}$)')
 
     ax_x_max = df_combine.max().max() + 10
     ax_y_max = df_combine.QH_12.max().max() + 10
