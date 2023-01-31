@@ -7,7 +7,7 @@ import matplotlib as mpl
 
 mpl.rcParams.update({'font.size': 15})
 
-from scint_fp.functions import wx_u_v_components
+from scint_fp.create_input_csvs import wx_u_v_components
 
 
 def plot_wind(df_dict):
