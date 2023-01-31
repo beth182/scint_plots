@@ -143,13 +143,6 @@ def scatter_paths(df_combine):
     plt.savefig('C:/Users/beths/Desktop/LANDING/scatter.png', bbox_inches='tight')
 
 df_combine = read_all_scint_data()
-
-# temp investigation
-for group in df_combine[['QH_11']].dropna().groupby(df_combine[['QH_11']].dropna().index.date):
-    print(group[0].strftime('%Y%j'))
-
-
-
 scatter_paths(df_combine)
 
 print('end')
