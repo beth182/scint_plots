@@ -7,6 +7,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib as mpl
 
+mpl.rcParams.update({'font.size': 15})
+
 
 def read_all_scint_data():
     """
@@ -36,12 +38,13 @@ def read_all_scint_data():
 
     return df_combine
 
+
 def scatter_paths(df_combine):
     """
 
     :return:
     """
-    fig, ax = plt.subplots(1, 4, figsize=(15, 5), gridspec_kw={'width_ratios': [1, 1, 1, 0.1]})
+    fig, ax = plt.subplots(1, 4, figsize=(20, 7), gridspec_kw={'width_ratios': [1, 1, 1, 0.1]})
 
     cmap = mpl.cm.get_cmap('viridis')
 
@@ -63,26 +66,26 @@ def scatter_paths(df_combine):
     df_weekend = df_combine.iloc[weekend_index]
     df_weekday = df_combine.iloc[weekday_index]
 
-
     # BCT_IMU VS IMU_BTT
     # weekday
     weekday_label_0 = 'Weekday\nn hours: ' + str(len(df_weekday[['QH_13', 'QH_12']].dropna())) + '\nn days: ' + str(len(
         [group[1] for group in
          df_weekday[['QH_13', 'QH_12']].dropna().groupby(df_weekday[['QH_13', 'QH_12']].dropna().index.date)]))
     ax[0].scatter(df_weekday.QH_13, df_weekday.QH_12, marker='+', c=df_weekday.index.strftime('%j').astype(int),
-                  norm=norm, cmap=cmap, label=weekday_label_0, alpha=0.4)
+                  norm=norm, cmap=cmap, label=weekday_label_0, alpha=0.6, zorder=2)
     # weekend
     weekend_label_0 = 'Weekend\nn hours: ' + str(len(df_weekend[['QH_13', 'QH_12']].dropna())) + '\nn days: ' + str(len(
         [group[1] for group in
          df_weekend[['QH_13', 'QH_12']].dropna().groupby(df_weekend[['QH_13', 'QH_12']].dropna().index.date)]))
     ax[0].scatter(df_weekend.QH_13, df_weekend.QH_12, marker='.', c=df_weekend.index.strftime('%j').astype(int),
-                  norm=norm, cmap=cmap, label=weekend_label_0)
+                  norm=norm, cmap=cmap, label=weekend_label_0, zorder=3)
 
     ax[0].legend(loc="lower right")
     ax[0].set_xlabel('IMU_BTT $Q_{H}$ ($W m^{-2}$)')
 
-
-
+    ax[0].spines['bottom'].set_color('green')
+    ax[0].tick_params(axis='x', colors='green')
+    ax[0].xaxis.label.set_color('green')
 
     # BCT_IMU VS BTT_BCT
     # weekday
@@ -90,20 +93,20 @@ def scatter_paths(df_combine):
         [group[1] for group in
          df_weekday[['QH_11', 'QH_12']].dropna().groupby(df_weekday[['QH_11', 'QH_12']].dropna().index.date)]))
     ax[1].scatter(df_weekday.QH_11, df_weekday.QH_12, marker='+', c=df_weekday.index.strftime('%j').astype(int),
-                       norm=norm, cmap=cmap, label=weekday_label_1, alpha=0.4)
+                  norm=norm, cmap=cmap, label=weekday_label_1, alpha=0.6, zorder=2)
     # weekend
     weekend_label_1 = 'Weekend\nn hours: ' + str(len(df_weekend[['QH_11', 'QH_12']].dropna())) + '\nn days: ' + str(len(
         [group[1] for group in
          df_weekend[['QH_11', 'QH_12']].dropna().groupby(df_weekend[['QH_11', 'QH_12']].dropna().index.date)]))
     ye = ax[1].scatter(df_weekend.QH_11, df_weekend.QH_12, marker='.', c=df_weekend.index.strftime('%j').astype(int),
-                  norm=norm, cmap=cmap, label=weekend_label_1)
+                       norm=norm, cmap=cmap, label=weekend_label_1, zorder=3)
 
     ax[1].legend(loc="lower right")
     ax[1].set_xlabel('BTT_BCT $Q_{H}$ ($W m^{-2}$)')
 
-
-
-
+    ax[1].spines['bottom'].set_color('blue')
+    ax[1].tick_params(axis='x', colors='blue')
+    ax[1].xaxis.label.set_color('blue')
 
     # BCT_IMU VS SCT_SWT
     # weekday
@@ -111,25 +114,30 @@ def scatter_paths(df_combine):
         [group[1] for group in
          df_weekday[['QH_15', 'QH_12']].dropna().groupby(df_weekday[['QH_15', 'QH_12']].dropna().index.date)]))
     ax[2].scatter(df_weekday.QH_15, df_weekday.QH_12, marker='+', c=df_weekday.index.strftime('%j').astype(int),
-                  norm=norm, cmap=cmap, label = weekday_label_2, alpha=0.4)
+                  norm=norm, cmap=cmap, label=weekday_label_2, alpha=0.6, zorder=2)
     # weekend
     weekend_label_2 = 'Weekend\nn hours: ' + str(len(df_weekend[['QH_15', 'QH_12']].dropna())) + '\nn days: ' + str(len(
         [group[1] for group in
          df_weekend[['QH_15', 'QH_12']].dropna().groupby(df_weekend[['QH_15', 'QH_12']].dropna().index.date)]))
     ax[2].scatter(df_weekend.QH_15, df_weekend.QH_12, marker='.', c=df_weekend.index.strftime('%j').astype(int),
-                  norm=norm, cmap=cmap, label=weekend_label_2)
+                  norm=norm, cmap=cmap, label=weekend_label_2, zorder=3)
 
     ax[2].legend(loc="lower right")
     ax[2].set_xlabel('SCT_SWT $Q_{H}$ ($W m^{-2}$)')
 
-
-
-
-
-
-
+    ax[2].spines['bottom'].set_color('mediumorchid')
+    ax[2].tick_params(axis='x', colors='mediumorchid')
+    ax[2].xaxis.label.set_color('mediumorchid')
 
     ax[0].set_ylabel('BCT_IMU $Q_{H}$ ($W m^{-2}$)')
+
+    ax[0].spines['left'].set_color('red')
+    ax[0].tick_params(axis='y', colors='red')
+    ax[0].yaxis.label.set_color('red')
+    ax[1].spines['left'].set_color('red')
+    ax[1].tick_params(axis='y', colors='red')
+    ax[2].spines['left'].set_color('red')
+    ax[2].tick_params(axis='y', colors='red')
 
     ax_x_max = df_combine.max().max() + 10
     ax_y_max = df_combine.QH_12.max().max() + 10
@@ -143,18 +151,21 @@ def scatter_paths(df_combine):
     ax[1].set_ylim(ax_min, ax_y_max)
     ax[2].set_ylim(ax_min, ax_y_max)
 
-    ax[0].plot((ax_min, ax_y_max), (ax_min, ax_y_max), color='k')
-    ax[1].plot((ax_min, ax_y_max), (ax_min, ax_y_max), color='k')
-    ax[2].plot((ax_min, ax_y_max), (ax_min, ax_y_max), color='k')
+    ax[0].plot((ax_min, ax_y_max), (ax_min, ax_y_max), color='k', zorder=1)
+    ax[1].plot((ax_min, ax_y_max), (ax_min, ax_y_max), color='k', zorder=1)
+    ax[2].plot((ax_min, ax_y_max), (ax_min, ax_y_max), color='k', zorder=1)
 
     cax = ax[3]
     cbar = fig.colorbar(mappable=ye, cax=cax, format='%.0f')
     cbar.ax.set_title('DOY')
 
     fig.tight_layout()
+    plt.subplots_adjust(wspace=0.15, hspace=0.15)
 
-    # plt.show()
-    plt.savefig('C:/Users/beths/Desktop/LANDING/scatter.png', bbox_inches='tight')
+    plt.show()
+
+    plt.savefig('C:/Users/beths/Desktop/LANDING/scatter.png', bbox_inches='tight', dpi=300)
+
 
 df_combine = read_all_scint_data()
 scatter_paths(df_combine)
