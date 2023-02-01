@@ -97,7 +97,8 @@ def scatter_paths(df_combine, save_path):
     rmse_0 = rmse(all_df_0.QH_13, all_df_0.QH_12)
 
     label_string_0 = line_string_0 + '\n' + '$r^{2}$: ' + str(round(r_squ_0, 2)) + '\n' + 'RMSE: ' + str(round(rmse_0, 2))
-    ax[0].text(.01, .99, label_string_0, ha='left', va='top', transform=ax[0].transAxes, color='grey', fontsize=14)
+    ax[0].text(.01, .95, label_string_0, ha='left', va='top', transform=ax[0].transAxes, color='grey', fontsize=14)
+    ax[0].text(.01, .99, '(a)', ha='left', va='top', transform=ax[0].transAxes, color='k', fontsize=14)
 
 
     # weekday
@@ -135,7 +136,8 @@ def scatter_paths(df_combine, save_path):
     rmse_1 = rmse(all_df_1.QH_11, all_df_1.QH_12)
 
     label_string_1 = line_string_1 + '\n' + '$r^{2}$: ' + str(round(r_squ_1, 2)) + '\n' + 'RMSE: ' + str(round(rmse_1, 2))
-    ax[1].text(.01, .99, label_string_1, ha='left', va='top', transform=ax[1].transAxes, color='grey', fontsize=14)
+    ax[1].text(.01, .95, label_string_1, ha='left', va='top', transform=ax[1].transAxes, color='grey', fontsize=14)
+    ax[1].text(.01, .99, '(b)', ha='left', va='top', transform=ax[1].transAxes, color='k', fontsize=14)
 
     # weekday
     weekday_label_1 = 'Weekday\nhours: ' + str(len(df_weekday[['QH_11', 'QH_12']].dropna())) + '\ndays: ' + str(len(
@@ -174,7 +176,8 @@ def scatter_paths(df_combine, save_path):
     rmse_2 = rmse(all_df_2.QH_15, all_df_2.QH_12)
 
     label_string_2 = line_string_2 + '\n' + '$r^{2}$: ' + str(round(r_squ_2, 2)) + '\n' + 'RMSE: ' + str(round(rmse_2, 2))
-    ax[2].text(.01, .99, label_string_2, ha='left', va='top', transform=ax[2].transAxes, color='grey', fontsize=14)
+    ax[2].text(.01, .95, label_string_2, ha='left', va='top', transform=ax[2].transAxes, color='grey', fontsize=14)
+    ax[2].text(.01, .99, '(c)', ha='left', va='top', transform=ax[2].transAxes, color='k', fontsize=14)
 
     # weekday
     weekday_label_2 = 'Weekday\nhours: ' + str(len(df_weekday[['QH_15', 'QH_12']].dropna())) + '\ndays: ' + str(len(
