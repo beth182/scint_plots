@@ -6,6 +6,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib as mpl
+import os
 
 mpl.rcParams.update({'font.size': 15})
 
@@ -39,7 +40,7 @@ def read_all_scint_data():
     return df_combine
 
 
-def scatter_paths(df_combine):
+def scatter_paths(df_combine, save_path):
     """
 
     :return:
@@ -162,12 +163,13 @@ def scatter_paths(df_combine):
     fig.tight_layout()
     plt.subplots_adjust(wspace=0.15, hspace=0.15)
 
-    plt.show()
-
-    plt.savefig('C:/Users/beths/Desktop/LANDING/scatter.png', bbox_inches='tight', dpi=300)
+    # plt.show()
+    plt.savefig(save_path + 'scatter.png', bbox_inches='tight', dpi=300)
 
 
 df_combine = read_all_scint_data()
-scatter_paths(df_combine)
+
+save_path = os.getcwd().replace('\\', '/') + '/'
+scatter_paths(df_combine, save_path)
 
 print('end')
