@@ -45,7 +45,7 @@ def scatter_paths(df_combine, save_path):
 
     :return:
     """
-    fig, ax = plt.subplots(1, 4, figsize=(20, 7), gridspec_kw={'width_ratios': [1, 1, 1, 0.1]})
+    fig, ax = plt.subplots(1, 4, figsize=(16, 6), gridspec_kw={'width_ratios': [1, 1, 1, 0.1]})
 
     cmap = mpl.cm.get_cmap('viridis')
 
@@ -69,19 +69,19 @@ def scatter_paths(df_combine, save_path):
 
     # BCT_IMU VS IMU_BTT
     # weekday
-    weekday_label_0 = 'Weekday\nn hours: ' + str(len(df_weekday[['QH_13', 'QH_12']].dropna())) + '\nn days: ' + str(len(
+    weekday_label_0 = 'Weekday\nhours: ' + str(len(df_weekday[['QH_13', 'QH_12']].dropna())) + '\ndays: ' + str(len(
         [group[1] for group in
          df_weekday[['QH_13', 'QH_12']].dropna().groupby(df_weekday[['QH_13', 'QH_12']].dropna().index.date)]))
     ax[0].scatter(df_weekday.QH_13, df_weekday.QH_12, marker='+', c=df_weekday.index.strftime('%j').astype(int),
                   norm=norm, cmap=cmap, label=weekday_label_0, alpha=0.6, zorder=2)
     # weekend
-    weekend_label_0 = 'Weekend\nn hours: ' + str(len(df_weekend[['QH_13', 'QH_12']].dropna())) + '\nn days: ' + str(len(
+    weekend_label_0 = 'Weekend\nhours: ' + str(len(df_weekend[['QH_13', 'QH_12']].dropna())) + '\ndays: ' + str(len(
         [group[1] for group in
          df_weekend[['QH_13', 'QH_12']].dropna().groupby(df_weekend[['QH_13', 'QH_12']].dropna().index.date)]))
     ax[0].scatter(df_weekend.QH_13, df_weekend.QH_12, marker='.', c=df_weekend.index.strftime('%j').astype(int),
                   norm=norm, cmap=cmap, label=weekend_label_0, zorder=3)
 
-    ax[0].legend(loc="lower right")
+    ax[0].legend(loc="lower right", frameon=False)
     ax[0].set_xlabel('IMU_BTT $Q_{H}$ ($W m^{-2}$)')
 
     ax[0].spines['bottom'].set_color('green')
@@ -90,20 +90,22 @@ def scatter_paths(df_combine, save_path):
 
     # BCT_IMU VS BTT_BCT
     # weekday
-    weekday_label_1 = 'Weekday\nn hours: ' + str(len(df_weekday[['QH_11', 'QH_12']].dropna())) + '\nn days: ' + str(len(
+    weekday_label_1 = 'Weekday\nhours: ' + str(len(df_weekday[['QH_11', 'QH_12']].dropna())) + '\ndays: ' + str(len(
         [group[1] for group in
          df_weekday[['QH_11', 'QH_12']].dropna().groupby(df_weekday[['QH_11', 'QH_12']].dropna().index.date)]))
     ax[1].scatter(df_weekday.QH_11, df_weekday.QH_12, marker='+', c=df_weekday.index.strftime('%j').astype(int),
                   norm=norm, cmap=cmap, label=weekday_label_1, alpha=0.6, zorder=2)
     # weekend
-    weekend_label_1 = 'Weekend\nn hours: ' + str(len(df_weekend[['QH_11', 'QH_12']].dropna())) + '\nn days: ' + str(len(
+    weekend_label_1 = 'Weekend\nhours: ' + str(len(df_weekend[['QH_11', 'QH_12']].dropna())) + '\ndays: ' + str(len(
         [group[1] for group in
          df_weekend[['QH_11', 'QH_12']].dropna().groupby(df_weekend[['QH_11', 'QH_12']].dropna().index.date)]))
     ye = ax[1].scatter(df_weekend.QH_11, df_weekend.QH_12, marker='.', c=df_weekend.index.strftime('%j').astype(int),
                        norm=norm, cmap=cmap, label=weekend_label_1, zorder=3)
 
-    ax[1].legend(loc="lower right")
+    ax[1].legend(loc="lower right", frameon=False)
     ax[1].set_xlabel('BTT_BCT $Q_{H}$ ($W m^{-2}$)')
+
+    ax[1].set_yticklabels([])
 
     ax[1].spines['bottom'].set_color('blue')
     ax[1].tick_params(axis='x', colors='blue')
@@ -111,20 +113,22 @@ def scatter_paths(df_combine, save_path):
 
     # BCT_IMU VS SCT_SWT
     # weekday
-    weekday_label_2 = 'Weekday\nn hours: ' + str(len(df_weekday[['QH_15', 'QH_12']].dropna())) + '\nn days: ' + str(len(
+    weekday_label_2 = 'Weekday\nhours: ' + str(len(df_weekday[['QH_15', 'QH_12']].dropna())) + '\ndays: ' + str(len(
         [group[1] for group in
          df_weekday[['QH_15', 'QH_12']].dropna().groupby(df_weekday[['QH_15', 'QH_12']].dropna().index.date)]))
     ax[2].scatter(df_weekday.QH_15, df_weekday.QH_12, marker='+', c=df_weekday.index.strftime('%j').astype(int),
                   norm=norm, cmap=cmap, label=weekday_label_2, alpha=0.6, zorder=2)
     # weekend
-    weekend_label_2 = 'Weekend\nn hours: ' + str(len(df_weekend[['QH_15', 'QH_12']].dropna())) + '\nn days: ' + str(len(
+    weekend_label_2 = 'Weekend\nhours: ' + str(len(df_weekend[['QH_15', 'QH_12']].dropna())) + '\ndays: ' + str(len(
         [group[1] for group in
          df_weekend[['QH_15', 'QH_12']].dropna().groupby(df_weekend[['QH_15', 'QH_12']].dropna().index.date)]))
     ax[2].scatter(df_weekend.QH_15, df_weekend.QH_12, marker='.', c=df_weekend.index.strftime('%j').astype(int),
                   norm=norm, cmap=cmap, label=weekend_label_2, zorder=3)
 
-    ax[2].legend(loc="lower right")
+    ax[2].legend(loc="lower right", frameon=False)
     ax[2].set_xlabel('SCT_SWT $Q_{H}$ ($W m^{-2}$)')
+
+    ax[2].set_yticklabels([])
 
     ax[2].spines['bottom'].set_color('mediumorchid')
     ax[2].tick_params(axis='x', colors='mediumorchid')
@@ -161,7 +165,7 @@ def scatter_paths(df_combine, save_path):
     cbar.ax.set_title('DOY')
 
     fig.tight_layout()
-    plt.subplots_adjust(wspace=0.15, hspace=0.15)
+    plt.subplots_adjust(wspace=0.02, hspace=0.02)
 
     # plt.show()
     plt.savefig(save_path + 'scatter.png', bbox_inches='tight', dpi=300)
