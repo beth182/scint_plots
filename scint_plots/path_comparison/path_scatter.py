@@ -284,7 +284,7 @@ def scatter_paths(df_combine, save_path):
     fig.tight_layout()
     plt.subplots_adjust(wspace=0.02, hspace=0.02)
 
-    plt.show()
+    # plt.show()
     plt.savefig(save_path + 'scatter.png', bbox_inches='tight', dpi=300)
 
 
