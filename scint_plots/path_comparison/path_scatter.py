@@ -41,13 +41,12 @@ def read_all_scint_data():
     return df_combine
 
 
-def rmse(obs, mod):
-    # ROOT MEAN SQUARE ERROR FUNCTION
-    differencesrmse = mod - obs
-    differences_squared = differencesrmse ** 2
-    mean_of_differences_squared = differences_squared.mean()
-    rmse_val = np.sqrt(mean_of_differences_squared)
-    return rmse_val
+def mae(obs, mod):
+    # MEAN ABSOLUTE ERROR
+    differences_mae = mod - obs
+    abs_diff = abs(differences_mae)
+    mae_val = abs_diff.mean()
+    return mae_val
 
 
 def scatter_paths(df_combine, save_path):
@@ -92,14 +91,14 @@ def scatter_paths(df_combine, save_path):
     ax[0].plot(x1_all, y10, linestyle='--', color='grey', zorder=4)
 
     # text
-    line_string_0 = 'y = ' + str(round(gradient0, 2)) + 'x + ' + str(round(intercept0, 2))
+    line_string_0 = 'y = ' + str(round(gradient0, 2)) + 'x + ' + str(round(intercept0, 1))
     r_squ_0 = r_value0 ** 2
-    rmse_0 = rmse(all_df_0.QH_13, all_df_0.QH_12)
+    mae_0 = mae(all_df_0.QH_13, all_df_0.QH_12)
 
-    label_string_0 = line_string_0 + '\n' + '$r^{2}$: ' + str(round(r_squ_0, 2)) + '\n' + 'RMSE: ' + str(round(rmse_0, 2))
+    label_string_0 = line_string_0 + '\n' + '$r^{2}$: ' + str(round(r_squ_0, 2)) + '\n' + 'MAE: ' + str(
+        round(mae_0, 1))
     ax[0].text(.01, .95, label_string_0, ha='left', va='top', transform=ax[0].transAxes, color='grey', fontsize=14)
     ax[0].text(.01, .99, '(a)', ha='left', va='top', transform=ax[0].transAxes, color='k', fontsize=14)
-
 
     # weekday
     weekday_label_0 = 'Weekday\nhours: ' + str(len(df_weekday[['QH_13', 'QH_12']].dropna())) + '\ndays: ' + str(len(
@@ -131,11 +130,13 @@ def scatter_paths(df_combine, save_path):
     ax[1].plot(x1_all, y11, linestyle='--', color='grey', zorder=4)
 
     # text
-    line_string_1 = 'y = ' + str(round(gradient1, 2)) + 'x + ' + str(round(intercept1, 2))
+    line_string_1 = 'y = ' + str(round(gradient1, 2)) + 'x + ' + str(round(intercept1, 1))
     r_squ_1 = r_value1 ** 2
-    rmse_1 = rmse(all_df_1.QH_11, all_df_1.QH_12)
+    mae_1 = mae(all_df_1.QH_11, all_df_1.QH_12)
 
-    label_string_1 = line_string_1 + '\n' + '$r^{2}$: ' + str(round(r_squ_1, 2)) + '\n' + 'RMSE: ' + str(round(rmse_1, 2))
+    label_string_1 = line_string_1 + '\n' + '$r^{2}$: ' + str(round(r_squ_1, 2)) + '\n' + 'MAE: ' + str(
+        round(mae_1, 1))
+
     ax[1].text(.01, .95, label_string_1, ha='left', va='top', transform=ax[1].transAxes, color='grey', fontsize=14)
     ax[1].text(.01, .99, '(b)', ha='left', va='top', transform=ax[1].transAxes, color='k', fontsize=14)
 
@@ -171,11 +172,13 @@ def scatter_paths(df_combine, save_path):
     ax[2].plot(x1_all, y12, linestyle='--', color='grey', zorder=4)
 
     # text
-    line_string_2 = 'y = ' + str(round(gradient2, 2)) + 'x + ' + str(round(intercept2, 2))
+    line_string_2 = 'y = ' + str(round(gradient2, 2)) + 'x + ' + str(round(intercept2, 1))
     r_squ_2 = r_value2 ** 2
-    rmse_2 = rmse(all_df_2.QH_15, all_df_2.QH_12)
+    mae_2 = mae(all_df_2.QH_15, all_df_2.QH_12)
 
-    label_string_2 = line_string_2 + '\n' + '$r^{2}$: ' + str(round(r_squ_2, 2)) + '\n' + 'RMSE: ' + str(round(rmse_2, 2))
+    label_string_2 = line_string_2 + '\n' + '$r^{2}$: ' + str(round(r_squ_2, 2)) + '\n' + 'MAE: ' + str(
+        round(mae_2, 1))
+
     ax[2].text(.01, .95, label_string_2, ha='left', va='top', transform=ax[2].transAxes, color='grey', fontsize=14)
     ax[2].text(.01, .99, '(c)', ha='left', va='top', transform=ax[2].transAxes, color='k', fontsize=14)
 
