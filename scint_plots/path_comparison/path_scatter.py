@@ -115,7 +115,7 @@ def scatter_paths(df_combine, save_path):
                   norm=norm, cmap=cmap, label=weekend_label_0, zorder=3)
 
     ax[0].legend(loc="lower right", frameon=False)
-    ax[0].set_xlabel('IMU_BTT $Q_{H}$ ($W m^{-2}$)')
+    ax[0].set_xlabel('IMU_BTT $Q_{H}$ (W m$^{-2}$)')
 
     ax[0].spines['bottom'].set_color('green')
     ax[0].tick_params(axis='x', colors='green')
@@ -153,7 +153,7 @@ def scatter_paths(df_combine, save_path):
                        norm=norm, cmap=cmap, label=weekend_label_1, zorder=3)
 
     ax[1].legend(loc="lower right", frameon=False)
-    ax[1].set_xlabel('BTT_BCT $Q_{H}$ ($W m^{-2}$)')
+    ax[1].set_xlabel('BTT_BCT $Q_{H}$ (W m$^{-2}$)')
 
     ax[1].set_yticklabels([])
 
@@ -193,7 +193,7 @@ def scatter_paths(df_combine, save_path):
                   norm=norm, cmap=cmap, label=weekend_label_2, zorder=3)
 
     ax[2].legend(loc="lower right", frameon=False)
-    ax[2].set_xlabel('SCT_SWT $Q_{H}$ ($W m^{-2}$)')
+    ax[2].set_xlabel('SCT_SWT $Q_{H}$ (W m$^{-2}$)')
 
     ax[2].set_yticklabels([])
 
@@ -201,7 +201,7 @@ def scatter_paths(df_combine, save_path):
     ax[2].tick_params(axis='x', colors='mediumorchid')
     ax[2].xaxis.label.set_color('mediumorchid')
 
-    ax[0].set_ylabel('BCT_IMU $Q_{H}$ ($W m^{-2}$)')
+    ax[0].set_ylabel('BCT_IMU $Q_{H}$ (W m$^{-2}$)')
 
     ax[0].spines['left'].set_color('red')
     ax[0].tick_params(axis='y', colors='red')
