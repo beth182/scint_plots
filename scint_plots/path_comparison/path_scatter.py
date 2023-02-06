@@ -403,7 +403,7 @@ def scatter_paths_wind_direction(df_combine, save_path):
         [group[1] for group in
          df_weekend[['QH_11', 'QH_12']].dropna().groupby(df_weekend[['QH_11', 'QH_12']].dropna().index.date)]))
     ye = ax[1].scatter(df_weekend.QH_11, df_weekend.QH_12, marker='.', c=df_weekend.WD_12, cmap=cmap,
-                  label=weekend_label_1, zorder=3, vmin=0, vmax=360)
+                       label=weekend_label_1, zorder=3, vmin=0, vmax=360)
 
     ax[1].legend(loc="lower right", frameon=False, markerscale=2, handletextpad=0.1, prop={'size': 13})
     leg1 = ax[1].get_legend()
@@ -499,10 +499,8 @@ def scatter_paths_wind_direction(df_combine, save_path):
     fig.tight_layout()
     plt.subplots_adjust(wspace=0.02, hspace=0.02)
 
-    plt.show()
+    # plt.show()
     plt.savefig(save_path + 'scatter_wind_dir.png', bbox_inches='tight', dpi=300)
-
-
 
 
 save_path = os.getcwd().replace('\\', '/') + '/'
