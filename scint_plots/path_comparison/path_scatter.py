@@ -67,10 +67,11 @@ def read_all_scint_data(list_of_vars=['QH']):
         df['time'] = pd.to_datetime(df['time'], format='%Y-%m-%d %H:%M:%S')
         df = df.set_index('time')
 
-        # just take the QH col
+        # just take the target cols
         df_qh = df[list_of_vars]
-        # rename QH col to be the path + QH
-        df_qh = df_qh.rename(columns={'QH': 'QH_' + str(path)})
+        # rename cols to be the path + var name
+        for var in list_of_vars:
+            df_qh = df_qh.rename(columns={var: var + '_' + str(path)})
 
         # append to dict
         path_df_dict[path] = df_qh
@@ -293,21 +294,33 @@ def scatter_paths_wind_direction(df_combine, save_path):
 
     :return:
     """
+
+    # fix stupid wind dir names
+    df_combine = df_combine.rename(columns={'wind_direction_corrected_12': 'WD_12',
+                                            'wind_direction_corrected_11': 'WD_11',
+                                            'wind_direction_corrected_13': 'WD_13',
+                                            'wind_direction_corrected_15': 'WD_15'})
+
     fig, ax = plt.subplots(1, 4, figsize=(16, 6), gridspec_kw={'width_ratios': [1, 1, 1, 0.1]})
+
+    cmap = mpl.cm.get_cmap('viridis')
+    # bounds = np.linspace(0, 360, 30)
+    # norm = mpl.colors.BoundaryNorm(bounds, cmap.N)
 
     # weekday or weekend?
     df_combine['weekday'] = df_combine.index.weekday
-
     weekend_index = np.where(df_combine.weekday > 5)[0]
     weekday_index = np.where(df_combine.weekday <= 5)[0]
-
     assert len(weekend_index) + len(weekday_index) == len(df_combine)
-
     df_weekend = df_combine.iloc[weekend_index]
     df_weekday = df_combine.iloc[weekday_index]
 
+    # limit of colorbar
+    WD_max = df_combine[['WD_11', 'WD_12', 'WD_13', 'WD_15']].max().max()
+    WD_min = df_combine[['WD_11', 'WD_12', 'WD_13', 'WD_15']].min().min()
+
     # limits of axis
-    ax_max = df_combine.max().max() + 10
+    ax_max = df_combine[['QH_11', 'QH_12', 'QH_13', 'QH_15']].max().max() + 10
     ax_min = 0
     x1_all = np.linspace(ax_min, ax_max, 500)
 
@@ -315,7 +328,11 @@ def scatter_paths_wind_direction(df_combine, save_path):
     # """
     # stats
     # all df
-    all_df_0 = df_combine[['QH_13', 'QH_12']].dropna()
+    all_df_0 = df_combine[['QH_13', 'QH_12', 'WD_13', 'WD_12']].dropna()
+
+    # check both path winds are the same
+    assert all_df_0['WD_13'].equals(all_df_0['WD_12'])
+
     gradient0, intercept0, r_value0, p_value0, std_err0 = stats.linregress(all_df_0.QH_13, all_df_0.QH_12)
     y10 = gradient0 * x1_all + intercept0
     ax[0].plot(x1_all, y10, linestyle='--', color='grey', zorder=4)
@@ -334,14 +351,14 @@ def scatter_paths_wind_direction(df_combine, save_path):
     weekday_label_0 = 'Weekday\nhours: ' + str(len(df_weekday[['QH_13', 'QH_12']].dropna())) + '\ndays: ' + str(len(
         [group[1] for group in
          df_weekday[['QH_13', 'QH_12']].dropna().groupby(df_weekday[['QH_13', 'QH_12']].dropna().index.date)]))
-    ax[0].scatter(df_weekday.QH_13, df_weekday.QH_12, marker='+', c=df_weekday.season, cmap=cmap, label=weekday_label_0,
-                  alpha=0.6, zorder=2, norm=norm)
+    ax[0].scatter(df_weekday.QH_13, df_weekday.QH_12, marker='+', c=df_weekday.WD_12, cmap=cmap, label=weekday_label_0,
+                  alpha=0.6, zorder=2, vmin=0, vmax=360)
     # weekend
     weekend_label_0 = 'Weekend\nhours: ' + str(len(df_weekend[['QH_13', 'QH_12']].dropna())) + '\ndays: ' + str(len(
         [group[1] for group in
          df_weekend[['QH_13', 'QH_12']].dropna().groupby(df_weekend[['QH_13', 'QH_12']].dropna().index.date)]))
-    ax[0].scatter(df_weekend.QH_13, df_weekend.QH_12, marker='.', c=df_weekend.season, cmap=cmap, label=weekend_label_0,
-                  zorder=3, norm=norm)
+    ax[0].scatter(df_weekend.QH_13, df_weekend.QH_12, marker='.', c=df_weekend.WD_12, cmap=cmap, label=weekend_label_0,
+                  zorder=3, vmin=0, vmax=360)
 
     ax[0].legend(loc="lower right", frameon=False, markerscale=2, handletextpad=0.1, prop={'size': 13})
     leg0 = ax[0].get_legend()
@@ -359,7 +376,11 @@ def scatter_paths_wind_direction(df_combine, save_path):
     # """
     # stats
     # all df
-    all_df_1 = df_combine[['QH_11', 'QH_12']].dropna()
+    all_df_1 = df_combine[['QH_11', 'QH_12', 'WD_11', 'WD_12']].dropna()
+
+    # check both path winds are the same
+    assert all_df_1['WD_11'].equals(all_df_1['WD_12'])
+
     gradient1, intercept1, r_value1, p_value1, std_err1 = stats.linregress(all_df_1.QH_11, all_df_1.QH_12)
     y11 = gradient1 * x1_all + intercept1
     ax[1].plot(x1_all, y11, linestyle='--', color='grey', zorder=4)
@@ -379,14 +400,14 @@ def scatter_paths_wind_direction(df_combine, save_path):
     weekday_label_1 = 'Weekday\nhours: ' + str(len(df_weekday[['QH_11', 'QH_12']].dropna())) + '\ndays: ' + str(len(
         [group[1] for group in
          df_weekday[['QH_11', 'QH_12']].dropna().groupby(df_weekday[['QH_11', 'QH_12']].dropna().index.date)]))
-    ax[1].scatter(df_weekday.QH_11, df_weekday.QH_12, marker='+', c=df_weekday.season, cmap=cmap, label=weekday_label_1,
-                  alpha=0.6, zorder=2, norm=norm)
+    ax[1].scatter(df_weekday.QH_11, df_weekday.QH_12, marker='+', c=df_weekday.WD_12, cmap=cmap, label=weekday_label_1,
+                  alpha=0.6, zorder=2, vmin=0, vmax=360)
     # weekend
     weekend_label_1 = 'Weekend\nhours: ' + str(len(df_weekend[['QH_11', 'QH_12']].dropna())) + '\ndays: ' + str(len(
         [group[1] for group in
          df_weekend[['QH_11', 'QH_12']].dropna().groupby(df_weekend[['QH_11', 'QH_12']].dropna().index.date)]))
-    ax[1].scatter(df_weekend.QH_11, df_weekend.QH_12, marker='.', c=df_weekend.season, cmap=cmap,
-                  label=weekend_label_1, zorder=3, norm=norm)
+    ye = ax[1].scatter(df_weekend.QH_11, df_weekend.QH_12, marker='.', c=df_weekend.WD_12, cmap=cmap,
+                  label=weekend_label_1, zorder=3, vmin=0, vmax=360)
 
     ax[1].legend(loc="lower right", frameon=False, markerscale=2, handletextpad=0.1, prop={'size': 13})
     leg1 = ax[1].get_legend()
@@ -406,7 +427,11 @@ def scatter_paths_wind_direction(df_combine, save_path):
     # """
     # stats
     # all df
-    all_df_2 = df_combine[['QH_15', 'QH_12']].dropna()
+    all_df_2 = df_combine[['QH_15', 'QH_12', 'WD_15', 'WD_12']].dropna()
+
+    # check both path winds are the same
+    assert all_df_2['WD_15'].equals(all_df_2['WD_12'])
+
     gradient2, intercept2, r_value2, p_value2, std_err2 = stats.linregress(all_df_2.QH_15, all_df_2.QH_12)
     y12 = gradient2 * x1_all + intercept2
     ax[2].plot(x1_all, y12, linestyle='--', color='grey', zorder=4)
@@ -426,14 +451,14 @@ def scatter_paths_wind_direction(df_combine, save_path):
     weekday_label_2 = 'Weekday\nhours: ' + str(len(df_weekday[['QH_15', 'QH_12']].dropna())) + '\ndays: ' + str(len(
         [group[1] for group in
          df_weekday[['QH_15', 'QH_12']].dropna().groupby(df_weekday[['QH_15', 'QH_12']].dropna().index.date)]))
-    ax[2].scatter(df_weekday.QH_15, df_weekday.QH_12, marker='+', c=df_weekday.season, cmap=cmap, label=weekday_label_2,
-                  alpha=0.6, zorder=2, norm=norm)
+    ax[2].scatter(df_weekday.QH_15, df_weekday.QH_12, marker='+', c=df_weekday.WD_12, cmap=cmap, label=weekday_label_2,
+                  alpha=0.6, zorder=2, vmin=0, vmax=360)
     # weekend
     weekend_label_2 = 'Weekend\nhours: ' + str(len(df_weekend[['QH_15', 'QH_12']].dropna())) + '\ndays: ' + str(len(
         [group[1] for group in
          df_weekend[['QH_15', 'QH_12']].dropna().groupby(df_weekend[['QH_15', 'QH_12']].dropna().index.date)]))
-    ax[2].scatter(df_weekend.QH_15, df_weekend.QH_12, marker='.', c=df_weekend.season, cmap=cmap, label=weekend_label_2,
-                  zorder=3, norm=norm)
+    ax[2].scatter(df_weekend.QH_15, df_weekend.QH_12, marker='.', c=df_weekend.WD_12, cmap=cmap, label=weekend_label_2,
+                  zorder=3, vmin=0, vmax=360)
 
     ax[2].legend(loc="lower right", frameon=False, markerscale=2, handletextpad=0.1, prop={'size': 13})
     leg2 = ax[2].get_legend()
@@ -471,12 +496,14 @@ def scatter_paths_wind_direction(df_combine, save_path):
     ax[1].plot((ax_min, ax_max), (ax_min, ax_max), color='k', zorder=1)
     ax[2].plot((ax_min, ax_max), (ax_min, ax_max), color='k', zorder=1)
 
-    colorbar_index(ncolors=4, cmap=cmap, ticklabels=['DJF', 'MAM', 'JJA', 'SON'], cax=ax[3], title='Season')
+    cax = ax[3]
+    cbar = fig.colorbar(mappable=ye, cax=cax, format='%.0f')
+    cbar.ax.set_title('WD')
 
     fig.tight_layout()
     plt.subplots_adjust(wspace=0.02, hspace=0.02)
 
-    # plt.show()
+    plt.show()
     plt.savefig(save_path + 'scatter.png', bbox_inches='tight', dpi=300)
 
 
@@ -487,7 +514,7 @@ save_path = os.getcwd().replace('\\', '/') + '/'
 # df_combine = read_all_scint_data()
 # scatter_paths(df_combine, save_path)
 
-df_combine = read_all_scint_data(['QH'])
+df_combine = read_all_scint_data(['QH', 'wind_direction_corrected'])
 scatter_paths_wind_direction(df_combine, save_path)
 
 print('end')
