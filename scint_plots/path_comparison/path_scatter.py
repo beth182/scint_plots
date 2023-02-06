@@ -113,7 +113,11 @@ def scatter_paths(df_combine, save_path):
     ax[0].scatter(df_weekend.QH_13, df_weekend.QH_12, marker='.', c=df_weekend.index.strftime('%j').astype(int),
                   norm=norm, cmap=cmap, label=weekend_label_0, zorder=3)
 
-    ax[0].legend(loc="lower right", frameon=False)
+    ax[0].legend(loc="lower right", frameon=False, markerscale=2, handletextpad=0.1, prop={'size': 13})
+    leg0 = ax[0].get_legend()
+    leg0.legendHandles[0].set_color('k')
+    leg0.legendHandles[1].set_color('k')
+
     ax[0].set_xlabel('IMU_BTT $Q_{H}$ (W m$^{-2}$)')
 
     ax[0].spines['bottom'].set_color('green')
@@ -153,7 +157,11 @@ def scatter_paths(df_combine, save_path):
     ye = ax[1].scatter(df_weekend.QH_11, df_weekend.QH_12, marker='.', c=df_weekend.index.strftime('%j').astype(int),
                        norm=norm, cmap=cmap, label=weekend_label_1, zorder=3)
 
-    ax[1].legend(loc="lower right", frameon=False)
+    ax[1].legend(loc="lower right", frameon=False, markerscale=2, handletextpad=0.1, prop={'size': 13})
+    leg1 = ax[1].get_legend()
+    leg1.legendHandles[0].set_color('k')
+    leg1.legendHandles[1].set_color('k')
+
     ax[1].set_xlabel('BTT_BCT $Q_{H}$ (W m$^{-2}$)')
 
     ax[1].set_yticklabels([])
@@ -195,7 +203,12 @@ def scatter_paths(df_combine, save_path):
     ax[2].scatter(df_weekend.QH_15, df_weekend.QH_12, marker='.', c=df_weekend.index.strftime('%j').astype(int),
                   norm=norm, cmap=cmap, label=weekend_label_2, zorder=3)
 
-    ax[2].legend(loc="lower right", frameon=False)
+    ax[2].legend(loc="lower right", frameon=False, markerscale=2, handletextpad=0.1, prop={'size': 13})
+    leg2 = ax[2].get_legend()
+    leg2.legendHandles[0].set_color('k')
+    leg2.legendHandles[1].set_color('k')
+
+
     ax[2].set_xlabel('SCT_SWT $Q_{H}$ (W m$^{-2}$)')
 
     ax[2].set_yticklabels([])
