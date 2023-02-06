@@ -52,7 +52,7 @@ def cmap_discretize(cmap, N):
     return mcolors.LinearSegmentedColormap(cmap.name + "_%d" % N, cdict, 1024)
 
 
-def read_all_scint_data():
+def read_all_scint_data(list_of_vars=['QH']):
     """
 
     :return:
@@ -68,7 +68,7 @@ def read_all_scint_data():
         df = df.set_index('time')
 
         # just take the QH col
-        df_qh = df[['QH']]
+        df_qh = df[list_of_vars]
         # rename QH col to be the path + QH
         df_qh = df_qh.rename(columns={'QH': 'QH_' + str(path)})
 
@@ -480,12 +480,14 @@ def scatter_paths_wind_direction(df_combine, save_path):
     plt.savefig(save_path + 'scatter.png', bbox_inches='tight', dpi=300)
 
 
-df_combine = read_all_scint_data()
+
 
 save_path = os.getcwd().replace('\\', '/') + '/'
 
+# df_combine = read_all_scint_data()
 # scatter_paths(df_combine, save_path)
 
+df_combine = read_all_scint_data(['QH'])
 scatter_paths_wind_direction(df_combine, save_path)
 
 print('end')
