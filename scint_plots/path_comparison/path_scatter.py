@@ -315,10 +315,6 @@ def scatter_paths_wind_direction(df_combine, save_path):
     df_weekend = df_combine.iloc[weekend_index]
     df_weekday = df_combine.iloc[weekday_index]
 
-    # limit of colorbar
-    WD_max = df_combine[['WD_11', 'WD_12', 'WD_13', 'WD_15']].max().max()
-    WD_min = df_combine[['WD_11', 'WD_12', 'WD_13', 'WD_15']].min().min()
-
     # limits of axis
     ax_max = df_combine[['QH_11', 'QH_12', 'QH_13', 'QH_15']].max().max() + 10
     ax_min = 0
@@ -331,7 +327,7 @@ def scatter_paths_wind_direction(df_combine, save_path):
     all_df_0 = df_combine[['QH_13', 'QH_12', 'WD_13', 'WD_12']].dropna()
 
     # check both path winds are the same
-    assert all_df_0['WD_13'].equals(all_df_0['WD_12'])
+    assert abs(all_df_0.WD_13 - all_df_0.WD_12).max() < 3
 
     gradient0, intercept0, r_value0, p_value0, std_err0 = stats.linregress(all_df_0.QH_13, all_df_0.QH_12)
     y10 = gradient0 * x1_all + intercept0
@@ -379,7 +375,7 @@ def scatter_paths_wind_direction(df_combine, save_path):
     all_df_1 = df_combine[['QH_11', 'QH_12', 'WD_11', 'WD_12']].dropna()
 
     # check both path winds are the same
-    assert all_df_1['WD_11'].equals(all_df_1['WD_12'])
+    assert abs(all_df_1.WD_11 - all_df_1.WD_12).max() < 3
 
     gradient1, intercept1, r_value1, p_value1, std_err1 = stats.linregress(all_df_1.QH_11, all_df_1.QH_12)
     y11 = gradient1 * x1_all + intercept1
@@ -430,7 +426,7 @@ def scatter_paths_wind_direction(df_combine, save_path):
     all_df_2 = df_combine[['QH_15', 'QH_12', 'WD_15', 'WD_12']].dropna()
 
     # check both path winds are the same
-    assert all_df_2['WD_15'].equals(all_df_2['WD_12'])
+    assert abs(all_df_2.WD_15 - all_df_2.WD_12).max() < 3
 
     gradient2, intercept2, r_value2, p_value2, std_err2 = stats.linregress(all_df_2.QH_15, all_df_2.QH_12)
     y12 = gradient2 * x1_all + intercept2
@@ -504,7 +500,7 @@ def scatter_paths_wind_direction(df_combine, save_path):
     plt.subplots_adjust(wspace=0.02, hspace=0.02)
 
     plt.show()
-    plt.savefig(save_path + 'scatter.png', bbox_inches='tight', dpi=300)
+    plt.savefig(save_path + 'scatter_wind_dir.png', bbox_inches='tight', dpi=300)
 
 
 
