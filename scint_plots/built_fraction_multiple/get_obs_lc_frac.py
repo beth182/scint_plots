@@ -32,7 +32,13 @@ base_sa_dir = '//rdg-home.ad.rdg.ac.uk/research-nfs/basic/micromet/Tier_processi
 # get DOY list into directory format for the SA location
 for year_DOY in DOY_list:
 
-    dir_path = base_sa_dir + str(year_DOY) + '/'
+    # split into year and doy - as zfill on doy's with less than 3 digits is an issue
+    dt_obj = dt.datetime.strptime(str(year_DOY), '%Y%j')
+
+    DOY_str = dt_obj.strftime('%j')
+    year_str = dt_obj.strftime('%Y')
+
+    dir_path = base_sa_dir + year_str + DOY_str + '/'
 
     DOY_sa_files = [dir_path + filename for filename in os.listdir(dir_path) if
                     filename.startswith(pair_id) and filename.endswith('.tif')]
@@ -44,7 +50,7 @@ for year_DOY in DOY_list:
     save_dir_csv = save_path + 'sa_lc_fractions/' + str(pair_id) + '/'
     if not os.path.exists(save_dir_csv):
         os.makedirs(save_dir_csv)
-    csv_file_name = pair_id + '_' + str(year_DOY) + '_weighted_sa_lc.csv'
+    csv_file_name = pair_id + '_' + year_str + DOY_str + '_weighted_sa_lc.csv'
     file_path_out = save_dir_csv + csv_file_name
 
     df_doy.to_csv(file_path_out)
