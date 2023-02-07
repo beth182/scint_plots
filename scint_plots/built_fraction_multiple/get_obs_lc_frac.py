@@ -11,11 +11,12 @@ from scint_flux import look_up
 from scint_fp.functions.sa_lc_fractions import lc_fractions_in_sa
 
 # user choices
-scint_path = 15
+scint_path = 12
 
 # read in all files
 # read in csv with days
-DOY_df = pd.read_csv('C:/Users/beths/OneDrive - University of Reading/Paper 2/all_days.csv')
+DOY_df = pd.read_csv('C:/Users/beths/OneDrive - University of Reading/Paper 2/days_to_be_read_in.csv')
+# DOY_df = pd.read_csv('C:/Users/beths/OneDrive - University of Reading/Paper 2/all_days.csv')
 # take only days of the target path
 scint_path_string = 'P' + str(scint_path)
 df_subset = DOY_df.iloc[np.where(DOY_df[scint_path_string] == 1)[0]]
