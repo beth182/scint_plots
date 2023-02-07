@@ -128,7 +128,28 @@ def plot_built_fraction(df):
     :return:
     """
 
+    print('end')
+
+    groups = df.groupby(df.index.map(lambda t: t.day))
+
+    for i, group in groups:
+
+        middle_of_day_df = group.loc[group.index.hour.isin([10,11,12,13,14])]
+
+        print('end')
+
+    # take times between 10 and 2
+
+    # get individual days
+    test = df.groupby([df['Date_Time'].dt.date]).mean()
+
+
+
+
+
     # plt.scatter(df.Urban, df.QH/ df.kdown)
+    # plt.xlabel('Built frac')
+    # plt.ylabel('QH/Kdn')
 
     print('end')
 
