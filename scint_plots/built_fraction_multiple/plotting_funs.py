@@ -24,38 +24,48 @@ def plot_built_fraction_3(df):
     # make sure df is in chronological order
     target_df = target_df.sort_index()
 
-    # get individual days
-    groups = target_df.groupby([target_df.index.date])
-
-    # smallest DOY
-    smallest_doy = target_df.index.strftime('%j').astype(int).min()
-    # largest DOY
-    largest_doy = target_df.index.strftime('%j').astype(int).max()
-
     # set up figure
-    cmap = cm.get_cmap('rainbow')
-    bounds = np.linspace(smallest_doy, largest_doy, len(groups) + 1)
-    norm = mpl.colors.BoundaryNorm(bounds, cmap.N)
-
-    smap = mpl.cm.ScalarMappable(norm=norm, cmap=cmap)
-    # list_of_rgba = smap.to_rgba(target_df.index.strftime('%j').astype(int))
-
     fig, ax = plt.subplots(figsize=(7, 7))
 
-    # ste up colourbar
+    # get individual days into groups
+    groups = target_df.groupby([target_df.index.date])
+
+    # set up colourbar: DOY
+    smallest_doy = target_df.index.strftime('%j').astype(int).min()  # smallest DOY
+    largest_doy = target_df.index.strftime('%j').astype(int).max()  # largest DOY
+    cmap_DOY = cm.get_cmap('rainbow')
+    bounds_DOY = np.linspace(smallest_doy, largest_doy, len(groups) + 1)
+    norm_DOY = mpl.colors.BoundaryNorm(bounds_DOY, cmap_DOY.N)
+
+    smap_DOY = mpl.cm.ScalarMappable(norm=norm_DOY, cmap=cmap_DOY)
     # invisable plot
-    s = ax.scatter(target_df.Urban, target_df.QH / target_df.kdown, c=target_df.index.strftime('%j').astype(int),
-                   cmap=cmap, norm=norm, zorder=0, alpha=0)
-    divider = make_axes_locatable(ax)
-    cax = divider.append_axes("right", size="5%", pad=0.1)
-    cbar = fig.colorbar(mappable=s, cax=cax, orientation="vertical", format='%.0f')
-    cbar.set_alpha(1)
-    cbar.draw_all()
-    cax.set_ylabel('DOY', rotation=270, labelpad=20)
+    s_DOY = ax.scatter(target_df.Urban, target_df.QH / target_df.kdown, c=target_df.index.strftime('%j').astype(int),
+                       cmap=cmap_DOY, norm=norm_DOY, zorder=0, alpha=0)
+    cbar_DOY = fig.colorbar(mappable=s_DOY, orientation="vertical", format='%.0f')
+    cbar_DOY.set_label('DOY')
+    cbar_DOY.set_alpha(1)
+    cbar_DOY.draw_all()
+
+    # set up colourbar: radiation
+    smallest_kdown = target_df.kdown.min()  # largest radiation value
+    largest_kdown = target_df.kdown.max()  # smallest radiation value
+    cmap_kdown = cm.get_cmap('viridis')
+    bounds_kdown = np.linspace(smallest_kdown, largest_kdown, 256)
+    norm_kdown = mpl.colors.BoundaryNorm(bounds_kdown, cmap_kdown.N)
+
+    # invisable plot
+    s_kdown = ax.scatter(target_df.Urban, target_df.QH / target_df.kdown, c=target_df.kdown,
+                         cmap=cmap_kdown, norm=norm_kdown, zorder=0, alpha=0)
+
+    cbar_kdown = fig.colorbar(mappable=s_kdown, orientation="vertical", format='%.0f')
+    cbar_kdown.set_label('$K_{\downarrow}$ (W m$^{-2}$)')
+
+    cbar_kdown.set_alpha(1)
+    cbar_kdown.draw_all()
 
     for i, group in groups:
         # set group's colour
-        colour = smap.to_rgba(int(i.strftime('%j')))
+        colour = smap_DOY.to_rgba(int(i.strftime('%j')))
 
         # set centre point (daily average)
         av_qh = group.QH.mean()
@@ -63,21 +73,19 @@ def plot_built_fraction_3(df):
         av_built = group.Urban.mean()
 
         # plot daily average
-        ax.scatter(av_built, av_qh / av_kdown, c=colour, zorder=3, marker='o',
+        ax.scatter(av_built, av_qh / av_kdown, c=av_kdown, cmap=cmap_kdown, norm=norm_kdown, zorder=3, marker='o',
                    edgecolor='k')
 
         for index, row in group.iterrows():
             x = [av_built, row.Urban]
             y = [av_qh / av_kdown, row.QH / row.kdown]
-            ax.plot(x, y, c=colour, alpha=0.3, zorder=1)
+            ax.plot(x, y, c=colour, alpha=0.4, zorder=1)
 
             print('end')
 
-        # ax.plot(group.Urban, group.QH / group.kdown,
-        #            c=colour, zorder=1, alpha=0.5)
-
-        ax.scatter(group.Urban, group.QH / group.kdown,
-                   c=colour, zorder=2, marker='.', alpha=0.8)
+        # each individual hour
+        ax.scatter(group.Urban, group.QH / group.kdown, c=group.kdown, cmap=cmap_kdown, norm=norm_kdown,
+                   zorder=2, marker='.', alpha=1)
 
     ax.set_xlabel('Built frac')
     ax.set_ylabel('QH/Kdn')
