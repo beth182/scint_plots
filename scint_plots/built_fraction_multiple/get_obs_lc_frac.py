@@ -47,7 +47,7 @@ for year_DOY in DOY_list:
                     filename.startswith(pair_id) and filename.endswith('.tif')]
 
     # read each and extract fractions for this day
-    df_doy = lc_fractions_in_sa.lc_fract_multiple_sas(sa_list=DOY_sa_files, save_path=save_path)
+    df_doy = lc_fractions_in_sa.lc_fract_multiple_sas(sa_list=DOY_sa_files, save_path=save_path, landcover_location=save_path+'LandUseMM_7classes_32631.tif')
 
     # save csv for given day
     save_dir_csv = save_path + 'sa_lc_fractions/' + str(pair_id) + '/'
