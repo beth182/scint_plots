@@ -9,7 +9,7 @@ from scint_plots.built_fraction_multiple import lc_fraction_funs
 from scint_plots.built_fraction_multiple import plotting_funs
 
 # user choice
-path_list = [15,11]
+path_list = [11,12,13,15]
 
 save_path = os.getcwd().replace('\\', '/') + '/'
 
