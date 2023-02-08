@@ -25,14 +25,17 @@ def plot_built_fraction_3(df):
     target_df = target_df.sort_index()
 
     # set up figure
-    fig, ax = plt.subplots(figsize=(7, 7))
+    fig, ax = plt.subplots(figsize=(15, 8))
 
     # get individual days into groups
     groups = target_df.groupby([target_df.index.date])
 
     # set up colourbar: DOY
-    smallest_doy = target_df.index.strftime('%j').astype(int).min()  # smallest DOY
-    largest_doy = target_df.index.strftime('%j').astype(int).max()  # largest DOY
+    # smallest_doy = target_df.index.strftime('%j').astype(int).min()  # smallest DOY
+    # largest_doy = target_df.index.strftime('%j').astype(int).max()  # largest DOY
+    smallest_doy = 1  # smallest DOY
+    largest_doy = 366  # largest DOY
+
     cmap_DOY = cm.get_cmap('rainbow')
     bounds_DOY = np.linspace(smallest_doy, largest_doy, len(groups) + 1)
     norm_DOY = mpl.colors.BoundaryNorm(bounds_DOY, cmap_DOY.N)
@@ -41,7 +44,7 @@ def plot_built_fraction_3(df):
     # invisable plot
     s_DOY = ax.scatter(target_df.Urban, target_df.QH / target_df.kdown, c=target_df.index.strftime('%j').astype(int),
                        cmap=cmap_DOY, norm=norm_DOY, zorder=0, alpha=0)
-    cbar_DOY = fig.colorbar(mappable=s_DOY, orientation="vertical", format='%.0f')
+    cbar_DOY = fig.colorbar(mappable=s_DOY, orientation="vertical", format='%.0f', pad=-0.03)
     cbar_DOY.set_label('DOY')
     cbar_DOY.set_alpha(1)
     cbar_DOY.draw_all()
@@ -49,7 +52,7 @@ def plot_built_fraction_3(df):
     # set up colourbar: radiation
     smallest_kdown = target_df.kdown.min()  # largest radiation value
     largest_kdown = target_df.kdown.max()  # smallest radiation value
-    cmap_kdown = cm.get_cmap('viridis')
+    cmap_kdown = cm.get_cmap('gnuplot')
     bounds_kdown = np.linspace(smallest_kdown, largest_kdown, 256)
     norm_kdown = mpl.colors.BoundaryNorm(bounds_kdown, cmap_kdown.N)
 
@@ -57,7 +60,7 @@ def plot_built_fraction_3(df):
     s_kdown = ax.scatter(target_df.Urban, target_df.QH / target_df.kdown, c=target_df.kdown,
                          cmap=cmap_kdown, norm=norm_kdown, zorder=0, alpha=0)
 
-    cbar_kdown = fig.colorbar(mappable=s_kdown, orientation="vertical", format='%.0f')
+    cbar_kdown = fig.colorbar(mappable=s_kdown, orientation="vertical", format='%.0f', pad=0.01)
     cbar_kdown.set_label('$K_{\downarrow}$ (W m$^{-2}$)')
 
     cbar_kdown.set_alpha(1)
@@ -89,6 +92,8 @@ def plot_built_fraction_3(df):
 
     ax.set_xlabel('Built frac')
     ax.set_ylabel('QH/Kdn')
+
+    plt.tight_layout
 
     plt.show()
 
