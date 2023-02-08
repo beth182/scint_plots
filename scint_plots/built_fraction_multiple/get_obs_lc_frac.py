@@ -13,10 +13,13 @@ from scint_fp.functions.sa_lc_fractions import lc_fractions_in_sa
 # user choices
 scint_path = 12
 
+save_path = os.getcwd().replace('\\', '/') + '/'
 # read in all files
 # read in csv with days
-DOY_df = pd.read_csv('C:/Users/beths/OneDrive - University of Reading/Paper 2/days_to_be_read_in.csv')
+DOY_df = pd.read_csv(save_path + 'days_to_be_read_in.csv')
+# DOY_df = pd.read_csv('C:/Users/beths/OneDrive - University of Reading/Paper 2/days_to_be_read_in.csv')
 # DOY_df = pd.read_csv('C:/Users/beths/OneDrive - University of Reading/Paper 2/all_days.csv')
+
 # take only days of the target path
 scint_path_string = 'P' + str(scint_path)
 df_subset = DOY_df.iloc[np.where(DOY_df[scint_path_string] == 1)[0]]
@@ -24,10 +27,10 @@ df_subset['DOY_string'] = df_subset.year.astype(str) + df_subset.DOY.astype(str)
 df_subset['DOY_string'] = df_subset['DOY_string'].astype(int)
 DOY_list = df_subset.DOY_string.to_list()
 
-save_path = os.getcwd().replace('\\', '/') + '/'
 pair_id = look_up.scint_path_numbers[scint_path]
 
-base_sa_dir = '//rdg-home.ad.rdg.ac.uk/research-nfs/basic/micromet/Tier_processing/rv006011/PycharmProjects/scintillometer_footprints/scint_fp/test_outputs/10_mins_ending/'
+# base_sa_dir = '//rdg-home.ad.rdg.ac.uk/research-nfs/basic/micromet/Tier_processing/rv006011/PycharmProjects/scintillometer_footprints/scint_fp/test_outputs/10_mins_ending/'
+base_sa_dir = '/storage/basic/micromet/Tier_processing/rv006011/PycharmProjects/scintillometer_footprints/scint_fp/test_outputs/10_mins_ending/'
 
 # get DOY list into directory format for the SA location
 for year_DOY in DOY_list:
