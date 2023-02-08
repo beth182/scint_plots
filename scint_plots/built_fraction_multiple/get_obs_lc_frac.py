@@ -11,7 +11,7 @@ from scint_flux import look_up
 from scint_fp.functions.sa_lc_fractions import lc_fractions_in_sa
 
 # user choices
-scint_path = 12
+scint_path = 11
 
 save_path = os.getcwd().replace('\\', '/') + '/'
 # read in all files
