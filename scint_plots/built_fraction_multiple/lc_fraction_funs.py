@@ -3,12 +3,6 @@ import pandas as pd
 import numpy as np
 import os
 import datetime as dt
-import matplotlib.pyplot as plt
-from matplotlib import cm
-import matplotlib as mpl
-from mpl_toolkits.axes_grid1 import make_axes_locatable
-
-mpl.rcParams.update({'font.size': 15})
 
 from scint_flux import look_up
 
@@ -125,95 +119,3 @@ def read_preprocessed_scint_csv(scint_path,
     df = pd.concat(df_DOY_list)
 
     return df
-
-
-def plot_built_fraction(df):
-    """
-
-    :return:
-    """
-
-    # values just between 10 and two - one point per day
-
-    # get individual days
-    groups = df.groupby([df.index.date])
-
-    qh_list = []
-    kdwn_list = []
-    urban_list = []
-
-    for i, group in groups:
-        # take times between 10 and 2
-        middle_of_day_df = group.loc[group.index.hour.isin([10, 11, 12, 13, 14])]
-
-        av_qh = middle_of_day_df.QH.mean()
-        av_kdown = middle_of_day_df.kdown.mean()
-        av_built = middle_of_day_df.Urban.mean()
-
-        qh_list.append(av_qh)
-        kdwn_list.append(av_kdown)
-        urban_list.append(av_built)
-
-    kdown = np.array(kdwn_list)
-    qh = np.array(qh_list)
-
-    fig, ax = plt.subplots(figsize=(7, 7))
-    cmap = cm.get_cmap('rainbow')
-
-    smallest_kdown = kdown.min()
-
-    largest_kdown = kdown.max()
-
-    bounds = np.linspace(smallest_kdown, largest_kdown, len(qh) + 1)
-    norm = mpl.colors.BoundaryNorm(bounds, cmap.N)
-
-    s = ax.scatter(urban_list, qh / kdown,
-                   c=kdown, cmap=cmap, norm=norm, label='Clear Obs', s=80,
-                   zorder=3)
-
-    divider = make_axes_locatable(ax)
-    cax = divider.append_axes("right", size="5%", pad=0.1)
-    cbar = fig.colorbar(mappable=s, cax=cax, orientation="vertical", format='%.0f')
-    cax.set_ylabel('$K_{\downarrow}$ (W m$^{-2}$)', rotation=270, labelpad=20)
-
-    ax.set_xlabel('Built frac')
-    ax.set_ylabel('QH/kdn')
-
-    plt.show()
-
-    print('end')
-
-    # plt.scatter(df.Urban, df.QH/ df.kdown)
-    # plt.xlabel('Built frac')
-    # plt.ylabel('QH/Kdn')
-
-    print('end')
-
-
-# user choice
-scint_path = 15
-
-save_path = os.getcwd().replace('\\', '/') + '/'
-
-# read in all files
-# read in csv with days
-# DOY_df = pd.read_csv('C:/Users/beths/OneDrive - University of Reading/Paper 2/days_to_be_read_in.csv')
-DOY_df = pd.read_csv('C:/Users/beths/OneDrive - University of Reading/Paper 2/all_days.csv')
-# take only days of the target path
-scint_path_string = 'P' + str(scint_path)
-df_subset = DOY_df.iloc[np.where(DOY_df[scint_path_string] == 1)[0]]
-df_subset['DOY_string'] = df_subset.year.astype(str) + df_subset.DOY.astype(str)
-df_subset['DOY_string'] = df_subset['DOY_string'].astype(int)
-DOY_list = df_subset.DOY_string.to_list()
-
-# ToDo: replace this temp line to take whole dataset
-# DOY_list = DOY_list[:2]
-
-lc_df = read_preprocessed_lc_csv(scint_path=scint_path, DOY_list=DOY_list, save_path=save_path)
-scint_df = read_preprocessed_scint_csv(scint_path=scint_path, DOY_list=DOY_list, save_path=save_path)
-
-# combine lc fraction csv's and pre-read hourly data csvs
-df = pd.concat([scint_df, lc_df], axis=1)
-
-plot_built_fraction(df)
-print('end')
