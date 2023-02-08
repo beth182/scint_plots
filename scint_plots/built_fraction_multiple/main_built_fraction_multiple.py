@@ -3,12 +3,15 @@ import pandas as pd
 import os
 import numpy as np
 
+from scint_flux import look_up
+
 from scint_plots.built_fraction_multiple import lc_fraction_funs
 from scint_plots.built_fraction_multiple import plotting_funs
 
 # user choice
-scint_path = 15
+scint_path = 13
 
+pair_id = look_up.scint_path_numbers[scint_path]
 save_path = os.getcwd().replace('\\', '/') + '/'
 
 # read in all files
@@ -31,5 +34,5 @@ scint_df = lc_fraction_funs.read_preprocessed_scint_csv(scint_path=scint_path, D
 # combine lc fraction csv's and pre-read hourly data csvs
 df = pd.concat([scint_df, lc_df], axis=1)
 
-plotting_funs.plot_built_fraction_3(df)
+plotting_funs.plot_built_fraction_3(df, pair_id, save_path)
 print('end')

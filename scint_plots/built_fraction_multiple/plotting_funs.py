@@ -11,7 +11,7 @@ from mpl_toolkits.axes_grid1 import make_axes_locatable
 mpl.rcParams.update({'font.size': 15})
 
 
-def plot_built_fraction_3(df):
+def plot_built_fraction_3(df, pair_id, save_path):
     """
 
     :param df:
@@ -84,8 +84,6 @@ def plot_built_fraction_3(df):
             y = [av_qh / av_kdown, row.QH / row.kdown]
             ax.plot(x, y, c=colour, alpha=0.4, zorder=1)
 
-            print('end')
-
         # each individual hour
         ax.scatter(group.Urban, group.QH / group.kdown, c=group.kdown, cmap=cmap_kdown, norm=norm_kdown,
                    zorder=2, marker='.', alpha=1)
@@ -93,11 +91,10 @@ def plot_built_fraction_3(df):
     ax.set_xlabel('Built frac')
     ax.set_ylabel('QH/Kdn')
 
-    plt.tight_layout
+    plt.tight_layout()
 
-    plt.show()
-
-    print('end')
+    # plt.show()
+    plt.savefig(save_path + pair_id + '_built_fraction.png', bbox_inches='tight', dpi=300)
 
     print('end')
 
