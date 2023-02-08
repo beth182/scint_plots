@@ -11,9 +11,72 @@ from mpl_toolkits.axes_grid1 import make_axes_locatable
 mpl.rcParams.update({'font.size': 15})
 
 
-def plot_built_fraction(df):
+def plot_built_fraction_2(df):
     """
 
+    :param df:
+    :return:
+    """
+
+    # subset df where kdown is bellow 100
+    target_df = df.iloc[np.where(df.kdown >=200)[0]][['QH', 'kdown', 'Urban']].dropna()
+
+
+    # get individual days
+    groups = target_df.groupby([target_df.index.date])
+
+    qh_list = []
+    kdwn_list = []
+    urban_list = []
+
+    for i, group in groups:
+        av_qh = group.QH.mean()
+        av_kdown = group.kdown.mean()
+        av_built = group.Urban.mean()
+
+        qh_list.append(av_qh)
+        kdwn_list.append(av_kdown)
+        urban_list.append(av_built)
+
+    day_kdowns = np.array(kdwn_list)
+    day_qhs = np.array(qh_list)
+
+
+    fig, ax = plt.subplots(figsize=(7, 7))
+
+    cmap = cm.get_cmap('rainbow')
+
+    smallest_kdown = target_df.kdown.min()
+    largest_kdown = target_df.kdown.max()
+
+    bounds = np.linspace(smallest_kdown, largest_kdown, 256)
+    norm = mpl.colors.BoundaryNorm(bounds, cmap.N)
+
+    s = ax.scatter(target_df.Urban, target_df.QH / target_df.kdown,
+                   c=target_df.kdown, cmap=cmap, norm=norm, zorder=1, marker='.', label='Individual hour')
+
+    ax.scatter(urban_list, day_qhs / day_kdowns, c=day_kdowns, cmap=cmap, norm=norm, zorder=2, marker='o',
+               edgecolor='k', label='Day av')
+
+    plt.legend()
+    divider = make_axes_locatable(ax)
+    cax = divider.append_axes("right", size="5%", pad=0.1)
+    cbar = fig.colorbar(mappable=s, cax=cax, orientation="vertical", format='%.0f')
+    cax.set_ylabel('$K_{\downarrow}$ (W m$^{-2}$)', rotation=270, labelpad=20)
+
+    ax.set_xlabel('Built frac')
+    ax.set_ylabel('QH/Kdn')
+
+    print('end')
+
+
+
+
+def plot_built_fraction_1(df):
+    """
+    # ToDo: rename these functions ocne one has been decided upon
+    ONE POINT FOR EACH DAY
+    HOURS JUST BETWEEN 10 AND TWO
     :return:
     """
 
@@ -64,11 +127,5 @@ def plot_built_fraction(df):
     ax.set_ylabel('QH/kdn')
 
     plt.show()
-
-    print('end')
-
-    # plt.scatter(df.Urban, df.QH/ df.kdown)
-    # plt.xlabel('Built frac')
-    # plt.ylabel('QH/Kdn')
 
     print('end')
