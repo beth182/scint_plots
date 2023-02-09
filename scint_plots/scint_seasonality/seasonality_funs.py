@@ -5,7 +5,7 @@ from matplotlib.ticker import MaxNLocator
 from scint_flux import look_up
 
 
-def plot_season(season_dict, variable='QH'):
+def plot_season(season_dict, save_path, variable='QH'):
     """
 
     :return:
@@ -67,7 +67,10 @@ def plot_season(season_dict, variable='QH'):
 
     plt.tight_layout()
 
-    plt.show()
+    # plt.show()
+    path_name_here = look_up.scint_path_numbers[int(season_dict[list(season_dict.keys())[0]].drop(columns=['QH_12']).columns[0].split('_')[-1])]
+    plt.savefig(save_path + path_name_here + '_seasonality.png', bbox_inches='tight', dpi=300)
+
     print('end')
 
 

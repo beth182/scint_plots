@@ -6,7 +6,7 @@ from scint_plots.scint_seasonality import seasonality_funs
 
 
 # user choices
-path_choice = 11
+path_choice = 15
 
 
 save_path = os.getcwd().replace('\\', '/') + '/'
@@ -32,6 +32,6 @@ df = df.dropna()
 season_dict = seasonality_funs.split_df_into_season(df)
 
 
-seasonality_funs.plot_season(season_dict)
+seasonality_funs.plot_season(season_dict, save_path)
 print('end')
 
