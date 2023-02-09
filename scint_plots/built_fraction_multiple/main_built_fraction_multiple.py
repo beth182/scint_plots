@@ -9,7 +9,7 @@ from scint_plots.built_fraction_multiple import lc_fraction_funs
 from scint_plots.built_fraction_multiple import plotting_funs
 
 # user choice
-path_list = [11,12,13,15]
+path_list = [11,12,13, 15]
 
 save_path = os.getcwd().replace('\\', '/') + '/'
 
@@ -37,7 +37,7 @@ for scint_path in path_list:
     # combine lc fraction csv's and pre-read hourly data csvs
     df = pd.concat([scint_df, lc_df], axis=1)
 
-    # plotting_funs.plot_built_fraction_3(df, pair_id, save_path)
+    plotting_funs.plot_built_fraction_3(df, pair_id, save_path)
 
     path_dict[pair_id] = df
 

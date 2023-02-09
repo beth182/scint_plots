@@ -181,10 +181,10 @@ def plot_built_fraction_3(df, pair_id, save_path):
     groups = target_df.groupby([target_df.index.date])
 
     # set up colourbar: DOY
-    # smallest_doy = target_df.index.strftime('%j').astype(int).min()  # smallest DOY
-    # largest_doy = target_df.index.strftime('%j').astype(int).max()  # largest DOY
-    smallest_doy = 1  # smallest DOY
-    largest_doy = 366  # largest DOY
+    smallest_doy = target_df.index.strftime('%j').astype(int).min()  # smallest DOY
+    largest_doy = target_df.index.strftime('%j').astype(int).max()  # largest DOY
+    # smallest_doy = 1  # smallest DOY
+    # largest_doy = 366  # largest DOY
 
     cmap_DOY = cm.get_cmap('rainbow')
     bounds_DOY = np.linspace(smallest_doy, largest_doy, len(groups) + 1)
