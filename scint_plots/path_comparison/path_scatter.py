@@ -52,7 +52,8 @@ def cmap_discretize(cmap, N):
     return mcolors.LinearSegmentedColormap(cmap.name + "_%d" % N, cdict, 1024)
 
 
-def read_all_scint_data(list_of_vars=['QH']):
+def read_all_scint_data(list_of_vars=['QH'],
+                        csv_dir='./'):
     """
 
     :return:
@@ -63,7 +64,7 @@ def read_all_scint_data(list_of_vars=['QH']):
 
     path_df_dict = {}
     for path in path_list:
-        df = pd.read_csv('./path_' + str(path) + '_vals.csv')
+        df = pd.read_csv(csv_dir + 'path_' + str(path) + '_vals.csv')
         df['time'] = pd.to_datetime(df['time'], format='%Y-%m-%d %H:%M:%S')
         df = df.set_index('time')
 
@@ -503,12 +504,15 @@ def scatter_paths_wind_direction(df_combine, save_path):
     plt.savefig(save_path + 'scatter_wind_dir.png', bbox_inches='tight', dpi=300)
 
 
-save_path = os.getcwd().replace('\\', '/') + '/'
 
-# df_combine = read_all_scint_data()
-# scatter_paths(df_combine, save_path)
+if __name__ == "__main__":
 
-df_combine = read_all_scint_data(['QH', 'wind_direction_corrected'])
-scatter_paths_wind_direction(df_combine, save_path)
+    save_path = os.getcwd().replace('\\', '/') + '/'
 
-print('end')
+    # df_combine = read_all_scint_data()
+    # scatter_paths(df_combine, save_path)
+
+    df_combine = read_all_scint_data(['QH', 'wind_direction_corrected'])
+    scatter_paths_wind_direction(df_combine, save_path)
+
+    print('end')

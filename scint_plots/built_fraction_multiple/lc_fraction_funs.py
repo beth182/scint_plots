@@ -94,6 +94,7 @@ def read_preprocessed_scint_csv(scint_path,
                                 save_path):
     # take the subset of days from the pre made csvs with hourly obs data - that have been read in to save time
 
+    # ToDo: compare this version with the one in path comparison - scatter
     # ToDo: consider moving these to generic location
     pre_made_csv_dir = save_path + '../path_comparison/'
 
