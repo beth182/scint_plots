@@ -6,7 +6,7 @@ from scint_plots.scint_seasonality import seasonality_funs
 
 
 # user choices
-path_choice = 15
+path_choice = 11
 
 
 save_path = os.getcwd().replace('\\', '/') + '/'

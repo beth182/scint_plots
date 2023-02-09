@@ -1,10 +1,11 @@
 import pandas as pd
 import matplotlib.pyplot as plt
+from matplotlib.ticker import MaxNLocator
 
 from scint_flux import look_up
 
 
-def plot_season(season_dict):
+def plot_season(season_dict, variable='QH'):
     """
 
     :return:
@@ -41,6 +42,17 @@ def plot_season(season_dict):
                 ax[axis_count].plot(IQR_dict['75'].columns, IQR_dict['75'].iloc[0], colour_dict[pair_id], linestyle='--')
                 ax[axis_count].fill_between(IQR_dict['25'].columns, IQR_dict['25'].iloc[0], IQR_dict['75'].iloc[0], color=colour_dict[pair_id], alpha=0.1)
 
+                ax[axis_count].get_xaxis().set_major_locator(MaxNLocator(integer=True))
+
+                if axis_count != 0:
+                    ax[axis_count].get_yaxis().set_ticks([])
+                else:
+                    if variable == 'QH':
+                        ax[0].set_ylabel('$Q_{H}$ ($W m^{-2}$)')
+                    elif variable == 'kdown':
+                        ax[0].set_ylabel('$K_{\downarrow}$ ($W m^{-2}$)')
+
+
                 y_lim_here = IQR_dict['75'].max().max()
                 y_lims.append(y_lim_here)
 
@@ -50,6 +62,10 @@ def plot_season(season_dict):
     ylim = max(y_lims) + 10
     for axs in ax:
         axs.set_ylim(0, ylim)
+        axs.set_xlim(5, 19)
+        axs.set_xlabel('Hour')
+
+    plt.tight_layout()
 
     plt.show()
     print('end')
