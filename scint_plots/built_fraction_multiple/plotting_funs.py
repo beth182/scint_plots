@@ -137,7 +137,7 @@ def plot_built_fraction_5(df, pair_id, save_path, normalise_with='qstar'):
     plt.tight_layout()
 
     # plt.show()
-    plt.savefig(save_path + pair_id + '_wd_built_fraction.png', bbox_inches='tight', dpi=300)
+    plt.savefig(save_path + 'plots/' + pair_id + '_wd_built_fraction.png', bbox_inches='tight', dpi=300)
 
     print('end')
 
@@ -272,7 +272,7 @@ def plot_built_fraction_4(path_dict, save_path):
     plt.tight_layout()
 
     # plt.show()
-    plt.savefig(save_path + 'all_paths' + '_built_fraction.png', bbox_inches='tight', dpi=300)
+    plt.savefig(save_path + 'plots/' + 'all_paths' + '_built_fraction.png', bbox_inches='tight', dpi=300)
 
     print('end')
 
@@ -362,7 +362,7 @@ def plot_built_fraction_3(df, pair_id, save_path):
     plt.tight_layout()
 
     # plt.show()
-    plt.savefig(save_path + pair_id + '_built_fraction.png', bbox_inches='tight', dpi=300)
+    plt.savefig(save_path + 'plots/' + pair_id + '_built_fraction.png', bbox_inches='tight', dpi=300)
 
     print('end')
 
