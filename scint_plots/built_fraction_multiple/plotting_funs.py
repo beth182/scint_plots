@@ -7,13 +7,14 @@ import matplotlib.pyplot as plt
 from matplotlib import cm
 import matplotlib as mpl
 from mpl_toolkits.axes_grid1 import make_axes_locatable
-import matplotlib.patches as mpatches
 from matplotlib.lines import Line2D
+
+from scint_fp.create_input_csvs import wx_u_v_components
 
 mpl.rcParams.update({'font.size': 15})
 
 
-def plot_built_fraction_5(df, pair_id, save_path):
+def plot_built_fraction_5(df, pair_id, save_path, normalise_with='qstar'):
     """
     Hour and day averages
     Lines are joined
@@ -27,6 +28,118 @@ def plot_built_fraction_5(df, pair_id, save_path):
 
     :return:
     """
+
+    # get only spring and summer points
+    mam_jja = df.loc[df.index.month.isin([3,4,5,6,7,8])]
+
+    # subset df where kdown is bellow 100
+    target_df = mam_jja.iloc[np.where(mam_jja.kdown >= 200)[0]][['QH', 'kdown', 'Urban', 'wind_direction_corrected', 'wind_speed_adj', 'qstar']].dropna()
+
+    # make sure df is in chronological order
+    target_df = target_df.sort_index()
+
+    # set up figure
+    fig, ax = plt.subplots(figsize=(15, 8))
+
+    # get individual days into groups
+    groups = target_df.groupby([target_df.index.date])
+
+    # set up colourbar: DOY
+    ####################################################################################################################
+    smallest_doy = target_df.index.strftime('%j').astype(int).min()  # smallest DOY
+    largest_doy = target_df.index.strftime('%j').astype(int).max()  # largest DOY
+    # smallest_doy = 1  # smallest DOY
+    # largest_doy = 366  # largest DOY
+
+    cmap_DOY = cm.get_cmap('viridis')
+    bounds_DOY = np.linspace(smallest_doy, largest_doy, len(groups) + 1)
+    norm_DOY = mpl.colors.BoundaryNorm(bounds_DOY, cmap_DOY.N)
+
+    smap_DOY = mpl.cm.ScalarMappable(norm=norm_DOY, cmap=cmap_DOY)
+    # invisable plot
+    s_DOY = ax.scatter(target_df.Urban, target_df.QH / target_df[normalise_with], c=target_df.index.strftime('%j').astype(int),
+                       cmap=cmap_DOY, norm=norm_DOY, zorder=0, alpha=0)
+    cbar_DOY = fig.colorbar(mappable=s_DOY, orientation="vertical", format='%.0f', pad=-0.03)
+    cbar_DOY.set_label('DOY')
+    cbar_DOY.set_alpha(1)
+    cbar_DOY.draw_all()
+
+    # set up colourbar: wind direction
+    ####################################################################################################################
+    smallest_wd = 0  # largest radiation value
+    largest_wd = 360  # smallest radiation value
+    cmap_wd = cm.get_cmap('gist_rainbow')
+    bounds_wd = np.linspace(smallest_wd, largest_wd, 256)
+    norm_wd = mpl.colors.BoundaryNorm(bounds_wd, cmap_wd.N)
+
+    # invisable plot
+    s_wd = ax.scatter(target_df.Urban, target_df.QH / target_df[normalise_with], c=target_df.wind_direction_corrected,
+                         cmap=cmap_wd, norm=norm_wd, zorder=0, alpha=0)
+
+    cbar_wd = fig.colorbar(mappable=s_wd, orientation="vertical", format='%.0f', pad=0.01)
+    cbar_wd.set_label('WD')
+
+    cbar_wd.set_alpha(1)
+    cbar_wd.draw_all()
+
+    ####################################################################################################################
+    for i, group in groups:
+
+        # set group's colour
+        colour = smap_DOY.to_rgba(int(i.strftime('%j')))
+
+        # take only hours in the middle of the day
+        middle_of_day_df = group.loc[group.index.hour.isin([10, 11, 12, 13, 14])]
+
+        # set centre point (daily average)
+        av_qh = middle_of_day_df.QH.mean()
+        av_kdown = middle_of_day_df.kdown.mean()
+        av_qstar = middle_of_day_df.qstar.mean()
+        av_built = middle_of_day_df.Urban.mean()
+
+        # take the average wind direction
+        # convert to u and v
+        component_df = wx_u_v_components.ws_wd_to_u_v(middle_of_day_df['wind_speed_adj'], middle_of_day_df['wind_direction_corrected'])
+        # average
+        component_av = component_df.resample('D', closed='right', label='right').mean()
+        # convert back to wind speed and direction
+        wind_av = wx_u_v_components.u_v_to_ws_wd(component_av['u_component'], component_av['v_component'])
+        # take just the one value for dir (only one value as only one day - and we are averaging over a day)
+        try:
+            av_dir = wind_av.wind_direction_convert.values[0]
+        except:
+            assert len(middle_of_day_df) == 0
+            av_dir = np.nan
+
+        # plot daily average
+        if normalise_with == 'kdown':
+            av_norm = av_kdown
+        else:
+            assert normalise_with == 'qstar'
+            av_norm = av_qstar
+        ax.scatter(av_built, av_qh / av_norm, c=av_dir, cmap=cmap_wd, norm=norm_wd, zorder=3, marker='o',
+                   edgecolor='k')
+
+
+        for index, row in middle_of_day_df.iterrows():
+            x = [av_built, row.Urban]
+            y = [av_qh / av_norm, row.QH / row[normalise_with]]
+            ax.plot(x, y, c=colour, alpha=0.4, zorder=1)
+
+        # each individual hour
+        ax.scatter(middle_of_day_df.Urban, middle_of_day_df.QH / middle_of_day_df[normalise_with],
+                   c=middle_of_day_df.wind_direction_corrected,
+                   cmap=cmap_wd, norm=norm_wd, zorder=2, marker='.', alpha=1)
+
+    ax.set_xlabel('Built frac')
+    ax.set_ylabel('QH/' + normalise_with)
+
+    plt.tight_layout()
+
+    # plt.show()
+    plt.savefig(save_path + pair_id + '_wd_built_fraction.png', bbox_inches='tight', dpi=300)
+
+    print('end')
 
 
 def plot_built_fraction_4(path_dict, save_path):
