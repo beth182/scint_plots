@@ -14,7 +14,7 @@ from scint_fp.create_input_csvs import wx_u_v_components
 mpl.rcParams.update({'font.size': 15})
 
 
-def plot_built_fraction_5(df, pair_id, save_path, normalise_with='qstar'):
+def plot_built_fraction_5(df, pair_id, save_path, normalise_with='kdown'):
     """
     Hour and day averages
     Lines are joined
