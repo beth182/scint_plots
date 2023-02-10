@@ -35,7 +35,7 @@ def plot_built_fraction_5(df, pair_id, save_path, normalise_with='qstar'):
     target_df = target_df.sort_index()
 
     # set up figure
-    fig, ax = plt.subplots(figsize=(15, 8))
+    fig, ax = plt.subplots(figsize=(8, 8))
 
     # get individual days into groups
     groups = target_df.groupby([target_df.index.date])
@@ -58,11 +58,13 @@ def plot_built_fraction_5(df, pair_id, save_path, normalise_with='qstar'):
     s_DOY = ax.scatter(target_df.Urban, target_df.QH / target_df[normalise_with],
                        c=target_df.index.strftime('%j').astype(int),
                        cmap=cmap_DOY, norm=norm_DOY, zorder=0, alpha=0)
+    """
     cbar_DOY = fig.colorbar(mappable=s_DOY, orientation="vertical", format='%.0f', pad=-0.03)
     cbar_DOY.set_label('DOY')
     cbar_DOY.set_alpha(1)
     cbar_DOY.draw_all()
     cbar_DOY.ax.set_title('Lines', fontsize=12)
+    """
 
     # set up colourbar: wind direction
     ####################################################################################################################
@@ -76,13 +78,15 @@ def plot_built_fraction_5(df, pair_id, save_path, normalise_with='qstar'):
     s_wd = ax.scatter(target_df.Urban, target_df.QH / target_df[normalise_with], c=target_df.wind_direction_corrected,
                       cmap=cmap_wd, norm=norm_wd, zorder=0, alpha=0)
 
+    """
     cbar_wd = fig.colorbar(mappable=s_wd, orientation="vertical", format='%.0f', pad=0.01)
-    cbar_wd.set_label('WD')
+    cbar_wd.set_label(r"$\theta$ ($^{\circ}$)")
 
     cbar_wd.set_alpha(1)
     cbar_wd.draw_all()
     cbar_wd.set_ticks([0, 45, 90, 135, 180, 225, 270, 315, 360])
     cbar_wd.ax.set_title('Points', fontsize=12)
+    """
 
     ####################################################################################################################
     for i, group in groups:
@@ -133,17 +137,18 @@ def plot_built_fraction_5(df, pair_id, save_path, normalise_with='qstar'):
                    c=middle_of_day_df.wind_direction_corrected,
                    cmap=cmap_wd, norm=norm_wd, zorder=2, marker='.', alpha=1)
 
-    ax.set_xlabel('Built frac')
-    ax.set_ylabel('QH/' + normalise_with)
+    ax.set_xlabel('Built (%)')
 
     # set x and y lims
     ax.set_xlim(54, 100)
 
     if normalise_with == 'kdown':
         ax.set_ylim(0.05, 1.7)
+        ax.set_ylabel('$Q_{H}$/' + normalise_with)
     else:
         assert normalise_with == 'qstar'
         ax.set_ylim(0.05, 2.2)
+        ax.set_ylabel('$Q_{H}$/$Q^{*}$')
 
     plt.tight_layout()
 
