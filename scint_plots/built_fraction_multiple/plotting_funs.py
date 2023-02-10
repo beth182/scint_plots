@@ -13,9 +13,28 @@ from matplotlib.lines import Line2D
 mpl.rcParams.update({'font.size': 15})
 
 
-def plot_built_fraction_4(path_dict, save_path):
+def plot_built_fraction_5(df, pair_id, save_path):
+    """
+    Hour and day averages
+    Lines are joined
+    Just spring and summer
+    Just 10 - 2
+    200 wm2 limit
+    colour bar for DOY
+    colour bar for WD
+    normalise with Q*
+    One path
+
+    :return:
     """
 
+
+def plot_built_fraction_4(path_dict, save_path):
+    """
+    Hours and day scatter
+    Lines are joined
+    2 colour bars
+    All paths on one axis
     :param df:
     :return:
     """
@@ -47,12 +66,10 @@ def plot_built_fraction_4(path_dict, save_path):
         smallest_DOYs.append(smallest_doy_path)
         largest_DOYs.append(largest_doy_path)
 
-
     smallest_kdown = min(smallest_kdowns)  # largest radiation value
     largest_kdown = max(largest_kdowns)  # smallest radiation value
     smallest_DOY = min(smallest_DOYs)  # smallest DOY
     largest_DOY = max(largest_DOYs)  # largest DOY
-
 
     # set up colour bars
     example_path = list(path_dict.keys())[0]
@@ -73,14 +90,14 @@ def plot_built_fraction_4(path_dict, save_path):
     cbar_DOY.set_alpha(1)
     cbar_DOY.draw_all()
 
-
     # set up colourbar: radiation
     cmap_kdown = cm.get_cmap('gnuplot')
     bounds_kdown = np.linspace(smallest_kdown, largest_kdown, 256)
     norm_kdown = mpl.colors.BoundaryNorm(bounds_kdown, cmap_kdown.N)
 
     # invisable plot
-    s_kdown = ax.scatter(example_target_df.Urban, example_target_df.QH / example_target_df.kdown, c=example_target_df.kdown,
+    s_kdown = ax.scatter(example_target_df.Urban, example_target_df.QH / example_target_df.kdown,
+                         c=example_target_df.kdown,
                          cmap=cmap_kdown, norm=norm_kdown, zorder=0, alpha=0)
 
     cbar_kdown = fig.colorbar(mappable=s_kdown, orientation="vertical", format='%.0f', pad=0.01)
@@ -106,7 +123,6 @@ def plot_built_fraction_4(path_dict, save_path):
         # get individual days into groups
         groups = target_df.groupby([target_df.index.date])
 
-
         for i, group in groups:
             # set group's colour
             colour = smap_DOY.to_rgba(int(i.strftime('%j')))
@@ -129,17 +145,13 @@ def plot_built_fraction_4(path_dict, save_path):
             ax.scatter(group.Urban, group.QH / group.kdown, c=group.kdown, cmap=cmap_kdown, norm=norm_kdown,
                        zorder=2, marker='.', alpha=1)
 
-
-
     handles, labels = plt.gca().get_legend_handles_labels()
 
     for path in path_dict:
-
         line = Line2D([0], [0], label=path, color='k', linestyle=linestyle_dict[path])
         handles.extend([line])
 
     plt.legend(handles=handles)
-
 
     ax.set_xlabel('Built frac')
     ax.set_ylabel('QH/Kdn')
@@ -152,18 +164,11 @@ def plot_built_fraction_4(path_dict, save_path):
     print('end')
 
 
-
-
-
-
-
-    print('end')
-
-
-
 def plot_built_fraction_3(df, pair_id, save_path):
     """
-
+    Scatter of hours and day averages, lines are joined
+    2 colour bars
+    One path at a time
     :param df:
     :return:
     """
@@ -253,6 +258,7 @@ def plot_built_fraction_2(df):
     """
     Scatter of hours AND day averages
     where data is only taken when kdn is above 200
+    Lines are not joined
     :param df:
     :return:
     """
