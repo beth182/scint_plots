@@ -14,13 +14,12 @@ from scint_fp.create_input_csvs import wx_u_v_components
 mpl.rcParams.update({'font.size': 15})
 
 
-def plot_built_fraction_5(df, pair_id, save_path, normalise_with='qstar'):
+def plot_built_fraction_5(df, pair_id, save_path, normalise_with='kdown'):
     """
     Hour and day averages
     Lines are joined
     Just spring and summer
     Just 10 - 2
-    200 wm2 limit
     colour bar for DOY
     colour bar for WD
     normalise with Q*
@@ -30,11 +29,7 @@ def plot_built_fraction_5(df, pair_id, save_path, normalise_with='qstar'):
     """
 
     # get only spring and summer points
-    mam_jja = df.loc[df.index.month.isin([3, 4, 5, 6, 7, 8])]
-
-    # subset df where kdown is bellow 100
-    target_df = mam_jja.iloc[np.where(mam_jja.kdown >= 200)[0]][
-        ['QH', 'kdown', 'Urban', 'wind_direction_corrected', 'wind_speed_adj', 'qstar']].dropna()
+    target_df = df.loc[df.index.month.isin([3, 4, 5, 6, 7, 8])][['QH', 'kdown', 'Urban', 'wind_direction_corrected', 'wind_speed_adj', 'qstar']].dropna()
 
     # make sure df is in chronological order
     target_df = target_df.sort_index()
@@ -143,10 +138,10 @@ def plot_built_fraction_5(df, pair_id, save_path, normalise_with='qstar'):
     ax.set_xlim(54, 100)
 
     if normalise_with == 'kdown':
-        ax.set_ylim(0.05, 1.35)
+        ax.set_ylim(0.05, 1.7)
     else:
         assert normalise_with == 'qstar'
-        ax.set_ylim(0.05, 1.65)
+        ax.set_ylim(0.05, 2.2)
 
     plt.tight_layout()
 
