@@ -14,7 +14,7 @@ from scint_fp.create_input_csvs import wx_u_v_components
 mpl.rcParams.update({'font.size': 15})
 
 
-def plot_built_fraction_5(df, pair_id, save_path, normalise_with='kdown'):
+def plot_built_fraction_5(df, pair_id, save_path, normalise_with='qstar'):
     """
     Hour and day averages
     Lines are joined
@@ -146,7 +146,7 @@ def plot_built_fraction_5(df, pair_id, save_path, normalise_with='kdown'):
         ax.set_ylim(0.05, 1.35)
     else:
         assert normalise_with == 'qstar'
-        ax.set_ylim(0.2, 2)
+        ax.set_ylim(0.05, 1.65)
 
     plt.tight_layout()
 
