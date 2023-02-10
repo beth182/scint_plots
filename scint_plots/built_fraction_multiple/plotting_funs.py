@@ -139,6 +139,15 @@ def plot_built_fraction_5(df, pair_id, save_path, normalise_with='kdown'):
     ax.set_xlabel('Built frac')
     ax.set_ylabel('QH/' + normalise_with)
 
+    # set x and y lims
+    ax.set_xlim(54, 100)
+
+    if normalise_with == 'kdown':
+        ax.set_ylim(0.05, 1.35)
+    else:
+        assert normalise_with == 'qstar'
+        ax.set_ylim(0.2, 2)
+
     plt.tight_layout()
 
     # plt.show()
