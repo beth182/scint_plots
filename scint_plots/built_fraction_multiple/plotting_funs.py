@@ -30,10 +30,11 @@ def plot_built_fraction_5(df, pair_id, save_path, normalise_with='qstar'):
     """
 
     # get only spring and summer points
-    mam_jja = df.loc[df.index.month.isin([3,4,5,6,7,8])]
+    mam_jja = df.loc[df.index.month.isin([3, 4, 5, 6, 7, 8])]
 
     # subset df where kdown is bellow 100
-    target_df = mam_jja.iloc[np.where(mam_jja.kdown >= 200)[0]][['QH', 'kdown', 'Urban', 'wind_direction_corrected', 'wind_speed_adj', 'qstar']].dropna()
+    target_df = mam_jja.iloc[np.where(mam_jja.kdown >= 200)[0]][
+        ['QH', 'kdown', 'Urban', 'wind_direction_corrected', 'wind_speed_adj', 'qstar']].dropna()
 
     # make sure df is in chronological order
     target_df = target_df.sort_index()
@@ -46,18 +47,21 @@ def plot_built_fraction_5(df, pair_id, save_path, normalise_with='qstar'):
 
     # set up colourbar: DOY
     ####################################################################################################################
-    smallest_doy = target_df.index.strftime('%j').astype(int).min()  # smallest DOY
-    largest_doy = target_df.index.strftime('%j').astype(int).max()  # largest DOY
+    # smallest_doy = target_df.index.strftime('%j').astype(int).min()  # smallest DOY
+    # largest_doy = target_df.index.strftime('%j').astype(int).max()  # largest DOY
     # smallest_doy = 1  # smallest DOY
     # largest_doy = 366  # largest DOY
+    smallest_doy = 100  # smallest DOY
+    largest_doy = 200  # largest DOY
 
     cmap_DOY = cm.get_cmap('viridis')
-    bounds_DOY = np.linspace(smallest_doy, largest_doy, len(groups) + 1)
+    bounds_DOY = np.linspace(smallest_doy, largest_doy, 256)
     norm_DOY = mpl.colors.BoundaryNorm(bounds_DOY, cmap_DOY.N)
 
     smap_DOY = mpl.cm.ScalarMappable(norm=norm_DOY, cmap=cmap_DOY)
     # invisable plot
-    s_DOY = ax.scatter(target_df.Urban, target_df.QH / target_df[normalise_with], c=target_df.index.strftime('%j').astype(int),
+    s_DOY = ax.scatter(target_df.Urban, target_df.QH / target_df[normalise_with],
+                       c=target_df.index.strftime('%j').astype(int),
                        cmap=cmap_DOY, norm=norm_DOY, zorder=0, alpha=0)
     cbar_DOY = fig.colorbar(mappable=s_DOY, orientation="vertical", format='%.0f', pad=-0.03)
     cbar_DOY.set_label('DOY')
@@ -74,13 +78,14 @@ def plot_built_fraction_5(df, pair_id, save_path, normalise_with='qstar'):
 
     # invisable plot
     s_wd = ax.scatter(target_df.Urban, target_df.QH / target_df[normalise_with], c=target_df.wind_direction_corrected,
-                         cmap=cmap_wd, norm=norm_wd, zorder=0, alpha=0)
+                      cmap=cmap_wd, norm=norm_wd, zorder=0, alpha=0)
 
     cbar_wd = fig.colorbar(mappable=s_wd, orientation="vertical", format='%.0f', pad=0.01)
     cbar_wd.set_label('WD')
 
     cbar_wd.set_alpha(1)
     cbar_wd.draw_all()
+    cbar_wd.set_ticks([0, 45, 90, 135, 180, 225, 270, 315, 360])
 
     ####################################################################################################################
     for i, group in groups:
@@ -99,7 +104,8 @@ def plot_built_fraction_5(df, pair_id, save_path, normalise_with='qstar'):
 
         # take the average wind direction
         # convert to u and v
-        component_df = wx_u_v_components.ws_wd_to_u_v(middle_of_day_df['wind_speed_adj'], middle_of_day_df['wind_direction_corrected'])
+        component_df = wx_u_v_components.ws_wd_to_u_v(middle_of_day_df['wind_speed_adj'],
+                                                      middle_of_day_df['wind_direction_corrected'])
         # average
         component_av = component_df.resample('D', closed='right', label='right').mean()
         # convert back to wind speed and direction
@@ -120,7 +126,6 @@ def plot_built_fraction_5(df, pair_id, save_path, normalise_with='qstar'):
         ax.scatter(av_built, av_qh / av_norm, c=av_dir, cmap=cmap_wd, norm=norm_wd, zorder=3, marker='o',
                    edgecolor='k')
 
-
         for index, row in middle_of_day_df.iterrows():
             x = [av_built, row.Urban]
             y = [av_qh / av_norm, row.QH / row[normalise_with]]
@@ -137,7 +142,8 @@ def plot_built_fraction_5(df, pair_id, save_path, normalise_with='qstar'):
     plt.tight_layout()
 
     # plt.show()
-    plt.savefig(save_path + 'plots/' + pair_id + '_wd_built_fraction.png', bbox_inches='tight', dpi=300)
+    plt.savefig(save_path + 'plots/' + normalise_with + '_' + pair_id + '_wd_built_fraction.png', bbox_inches='tight',
+                dpi=300)
 
     print('end')
 
