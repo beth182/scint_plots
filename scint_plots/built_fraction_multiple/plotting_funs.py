@@ -14,7 +14,7 @@ from scint_fp.create_input_csvs import wx_u_v_components
 mpl.rcParams.update({'font.size': 15})
 
 
-def plot_built_fraction_5(df, pair_id, save_path, normalise_with='kdown'):
+def plot_built_fraction_5(df, pair_id, save_path, normalise_with='qstar'):
     """
     Hour and day averages
     Lines are joined
@@ -62,6 +62,7 @@ def plot_built_fraction_5(df, pair_id, save_path, normalise_with='kdown'):
     cbar_DOY.set_label('DOY')
     cbar_DOY.set_alpha(1)
     cbar_DOY.draw_all()
+    cbar_DOY.ax.set_title('Lines', fontsize=12)
 
     # set up colourbar: wind direction
     ####################################################################################################################
@@ -81,6 +82,7 @@ def plot_built_fraction_5(df, pair_id, save_path, normalise_with='kdown'):
     cbar_wd.set_alpha(1)
     cbar_wd.draw_all()
     cbar_wd.set_ticks([0, 45, 90, 135, 180, 225, 270, 315, 360])
+    cbar_wd.ax.set_title('Points', fontsize=12)
 
     ####################################################################################################################
     for i, group in groups:
