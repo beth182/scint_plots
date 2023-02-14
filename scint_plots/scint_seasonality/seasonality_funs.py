@@ -30,6 +30,14 @@ def plot_season_one_panel(season_dict, season_dict_UKV, save_path, variable='QH'
 
             df_season = season_dict[season]
             df_season_UKV = season_dict_UKV[season]
+
+            max_obs_hour = max(df_season.index.hour)
+            min_obs_hour = min(df_season.index.hour)
+
+            df_season_UKV['hour'] = df_season_UKV.index.hour
+
+            df_season_UKV = df_season_UKV[(df_season_UKV.hour <= max_obs_hour) & (df_season_UKV.hour >= min_obs_hour)].drop(columns=['hour'])
+
             ax.set_title(season)
 
             IQR_path_dict_UKV = IQR(df_season_UKV)
@@ -44,13 +52,13 @@ def plot_season_one_panel(season_dict, season_dict_UKV, save_path, variable='QH'
                 IQR_dict_UKV = IQR_path_dict_UKV['BL_H_' + path_num_str]
                 pair_id = look_up.scint_path_numbers[int(path.split('_')[-1])]
 
-                ax.plot(IQR_dict_UKV['mean'].index, IQR_dict_UKV['mean'], color=colour_dict[pair_id],linestyle=linestyle_dict['UKV_mean'])
-                ax.plot(IQR_dict_UKV['median'].index, IQR_dict_UKV['median'], color=colour_dict[pair_id],linestyle=linestyle_dict['UKV_median'])
+                ax.plot(IQR_dict_UKV['mean'].index, IQR_dict_UKV['mean'], color=colour_dict[pair_id],linestyle=linestyle_dict['UKV_mean'], zorder=2)
+                ax.plot(IQR_dict_UKV['median'].index, IQR_dict_UKV['median'], color=colour_dict[pair_id],linestyle=linestyle_dict['UKV_median'], zorder=2)
 
-                ax.scatter(IQR_dict['mean'].index, IQR_dict['mean'], color=colour_dict[pair_id], marker=linestyle_dict['mean'], s=10, edgecolor='k')
-                ax.scatter(IQR_dict['median'].index, IQR_dict['median'], color=colour_dict[pair_id], marker=linestyle_dict['median'], s=15, edgecolor='k')
+                ax.scatter(IQR_dict['mean'].index, IQR_dict['mean'], color=colour_dict[pair_id], marker=linestyle_dict['mean'], s=10, edgecolor='k', zorder=3)
+                ax.scatter(IQR_dict['median'].index, IQR_dict['median'], color=colour_dict[pair_id], marker=linestyle_dict['median'], s=15, edgecolor='k', zorder=3)
 
-                ax.fill_between(IQR_dict['25'].columns, IQR_dict['25'].iloc[0], IQR_dict['75'].iloc[0], color=colour_dict[pair_id], alpha=0.2)
+                ax.fill_between(IQR_dict['25'].columns, IQR_dict['25'].iloc[0], IQR_dict['75'].iloc[0], color=colour_dict[pair_id], alpha=0.2, zorder=1)
 
             ax.get_xaxis().set_major_locator(MaxNLocator(integer=True))
 
@@ -59,8 +67,8 @@ def plot_season_one_panel(season_dict, season_dict_UKV, save_path, variable='QH'
             elif variable == 'kdown':
                 ax.set_ylabel('$K_{\downarrow}$ ($W m^{-2}$)')
 
-            ax.set_ylim(0, ylim)
-            ax.set_xlim(5, 19)
+            ax.set_ylim(-10, ylim)
+            ax.set_xlim(4.5, 19.5)
             ax.set_xlabel('Hour')
 
             if season == 'MAM':
