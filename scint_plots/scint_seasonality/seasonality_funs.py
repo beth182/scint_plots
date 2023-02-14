@@ -2,6 +2,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib.ticker import MaxNLocator
 from matplotlib.lines import Line2D
+import matplotlib.patches as mpatches
 
 from scint_flux import look_up
 
@@ -19,9 +20,7 @@ def plot_season_one_panel(season_dict, season_dict_UKV, save_path, variable='QH'
 
     all_seasons = ['DJF', 'MAM', 'JJA', 'SON']
 
-    ukv_colours = {'BCT_IMU': 'darkred', 'SCT_SWT': 'rebeccapurple', 'IMU_BTT': 'darkslategrey', 'BTT_BCT': 'navy'}
-
-    linestyle_dict = {'median': ':', 'mean': '-.', 'IQR': '--', 'UKV_median': '-', 'UKV_mean': '-'}
+    linestyle_dict = {'median': 'o', 'mean': 's', 'UKV_median': ':', 'UKV_mean': '--'}
 
     for season in all_seasons:
 
@@ -45,14 +44,13 @@ def plot_season_one_panel(season_dict, season_dict_UKV, save_path, variable='QH'
                 IQR_dict_UKV = IQR_path_dict_UKV['BL_H_' + path_num_str]
                 pair_id = look_up.scint_path_numbers[int(path.split('_')[-1])]
 
-                ax.plot(IQR_dict_UKV['mean'].index, IQR_dict_UKV['mean'], color=ukv_colours[pair_id],linestyle=linestyle_dict['UKV_mean'])
-                ax.plot(IQR_dict_UKV['median'].index, IQR_dict_UKV['median'], color=ukv_colours[pair_id],linestyle=linestyle_dict['UKV_median'])
+                ax.plot(IQR_dict_UKV['mean'].index, IQR_dict_UKV['mean'], color=colour_dict[pair_id],linestyle=linestyle_dict['UKV_mean'])
+                ax.plot(IQR_dict_UKV['median'].index, IQR_dict_UKV['median'], color=colour_dict[pair_id],linestyle=linestyle_dict['UKV_median'])
 
-                ax.plot(IQR_dict['mean'].index, IQR_dict['mean'], color=colour_dict[pair_id], linestyle=linestyle_dict['mean'])
-                ax.plot(IQR_dict['median'].index, IQR_dict['median'], color=colour_dict[pair_id], linestyle=linestyle_dict['median'])
-                ax.plot(IQR_dict['25'].columns, IQR_dict['25'].iloc[0], color=colour_dict[pair_id], linestyle=linestyle_dict['IQR'], alpha=0.4)
-                ax.plot(IQR_dict['75'].columns, IQR_dict['75'].iloc[0], colour_dict[pair_id], linestyle=linestyle_dict['IQR'], alpha=0.4)
-                ax.fill_between(IQR_dict['25'].columns, IQR_dict['25'].iloc[0], IQR_dict['75'].iloc[0], color=colour_dict[pair_id], alpha=0.1)
+                ax.scatter(IQR_dict['mean'].index, IQR_dict['mean'], color=colour_dict[pair_id], marker=linestyle_dict['mean'], s=10, edgecolor='k')
+                ax.scatter(IQR_dict['median'].index, IQR_dict['median'], color=colour_dict[pair_id], marker=linestyle_dict['median'], s=15, edgecolor='k')
+
+                ax.fill_between(IQR_dict['25'].columns, IQR_dict['25'].iloc[0], IQR_dict['75'].iloc[0], color=colour_dict[pair_id], alpha=0.2)
 
             ax.get_xaxis().set_major_locator(MaxNLocator(integer=True))
 
@@ -69,11 +67,17 @@ def plot_season_one_panel(season_dict, season_dict_UKV, save_path, variable='QH'
                 if pair_id == 'IMU_BTT':
                     # manually create legend
                     handles, labels = plt.gca().get_legend_handles_labels()
-                    line_mean = Line2D([0], [0], label='Mean', color='k', linestyle=linestyle_dict['mean'])
-                    line_median = Line2D([0], [0], label='Median', color='k', linestyle=linestyle_dict['median'])
-                    line_IQR = Line2D([0], [0], label='IQR', color='k', linestyle=linestyle_dict['IQR'])
-                    handles.extend([line_mean, line_median, line_IQR])
-                    plt.legend(handles=handles)
+
+                    scatter_mean = plt.scatter([1000], [1000], label='LAS Mean', color='grey', marker=linestyle_dict['mean'], edgecolor='k')
+                    scatter_median = plt.scatter([1000], [1000], label='LAS Median', color='grey', marker=linestyle_dict['median'], edgecolor='k')
+
+                    line_mean_ukv = Line2D([0], [0], label='UKV Mean', color='k', linestyle=linestyle_dict['UKV_mean'])
+                    line_median_ukv = Line2D([0], [0], label='UKV Median', color='k', linestyle=linestyle_dict['UKV_median'])
+
+                    IQR_patch = mpatches.Patch(color='k', label='LAS IQR', alpha=0.2)
+
+                    handles.extend([scatter_mean, scatter_median, IQR_patch, line_mean_ukv, line_median_ukv])
+                    plt.legend(handles=handles, fontsize=8)
 
             plt.tight_layout()
             # plt.show()

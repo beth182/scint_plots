@@ -8,7 +8,7 @@ from scint_plots.tools.preprocessed_UKV_csvs import read_UKV_csvs
 # user choices
 # 11, 13, 15
 # not 12 - this is always included
-path_choice = 15
+path_choice = 13
 
 save_path = os.getcwd().replace('\\', '/') + '/'
 
