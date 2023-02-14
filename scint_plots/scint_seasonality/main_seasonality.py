@@ -22,8 +22,9 @@ df_UKV = seasonality_funs.drop_unchosen_cols(path_choice, df_UKV).dropna()
 
 # split df into seasons
 season_dict = seasonality_funs.split_df_into_season(df)
+season_dict_UKV = seasonality_funs.split_df_into_season(df_UKV)
 
 # seasonality_funs.plot_season(season_dict, save_path)
-seasonality_funs.plot_season_one_panel(season_dict, save_path)
+seasonality_funs.plot_season_one_panel(season_dict, season_dict_UKV, save_path)
 
 print('end')

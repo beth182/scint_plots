@@ -6,7 +6,7 @@ from matplotlib.lines import Line2D
 from scint_flux import look_up
 
 
-def plot_season_one_panel(season_dict, save_path, variable='QH'):
+def plot_season_one_panel(season_dict, season_dict_UKV, save_path, variable='QH'):
     """
 
     :return:
