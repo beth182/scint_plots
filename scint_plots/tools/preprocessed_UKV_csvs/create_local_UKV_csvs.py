@@ -3,32 +3,83 @@
 
 # imports
 import os
+import pandas as pd
+import datetime as dt
+import numpy as np
 
 from model_eval_tools.retrieve_UKV import retrieve_ukv_vars
 from scint_flux import look_up
 
 # user choices
-scint_path = 15
-DOY_list = [2016126, 2016123]
+scint_path = 12
+
+# read in all DOYs for the selected path
+# read in csv with days
+DOY_df = pd.read_csv('C:/Users/beths/OneDrive - University of Reading/Paper 2/all_days.csv')
+# take only days of the target path
+scint_path_string = 'P' + str(scint_path)
+df_subset = DOY_df.iloc[np.where(DOY_df[scint_path_string] == 1)[0]]
+df_subset['DOY_string'] = df_subset.year.astype(str) + df_subset.DOY.astype(str)
+df_subset['DOY_string'] = df_subset['DOY_string'].astype(int)
+DOY_list = df_subset.DOY_string.to_list()
 
 pair_id = look_up.scint_path_numbers[scint_path]
 scint_UKV_grid_choices = {'BCT_IMU': 13, 'IMU_BTT': 12, 'BTT_BCT': 12, 'SCT_SWT': 37}
-
 scint_median_zf = {'BCT_IMU': 73.6, 'IMU_BTT': 103.3, 'BTT_BCT': 113.5, 'SCT_SWT': 32.4}
 
-run_details = {'variable': 'BL_H',
-               'run_time': '21Z',
-               'scint_path': scint_path,
-               'grid_number': scint_UKV_grid_choices[pair_id],
-               'target_height': scint_median_zf[pair_id]}
+DOY_df_list = []
 
 for DOY in DOY_list:
-    # get model sensible heat
-    ukv_data_dict_QH = retrieve_ukv_vars.retrieve_UKV(run_choices=run_details, DOYstart=DOY, DOYstop=DOY)
+    # get model wind
+    run_details_wind = {'variable': 'wind',
+                        'run_time': '21Z',
+                        'scint_path': scint_path,
+                        'grid_number': scint_UKV_grid_choices[pair_id],
+                        'target_height': scint_median_zf[pair_id]}
+
+    # get model wind speed and direction
+    ukv_data_dict_wind = retrieve_ukv_vars.retrieve_UKV(run_choices=run_details_wind, DOYstart=DOY, DOYstop=DOY)
+
+    UKV_df_wind = retrieve_ukv_vars.UKV_df(ukv_data_dict_wind, wind=True)
+    ####################################################################################################################
+
+    # get model kdown
+    run_details_kdown = {'variable': 'kdown',
+                         'run_time': '21Z',
+                         'scint_path': scint_path,
+                         'grid_number': scint_UKV_grid_choices[pair_id],
+                         'target_height': 0  # surface stash code
+                         }
+
+    ukv_data_dict_kdown = retrieve_ukv_vars.retrieve_UKV(run_choices=run_details_kdown, DOYstart=DOY, DOYstop=DOY,
+                                                         sa_analysis=False)
+
+    UKV_df_kdown = retrieve_ukv_vars.UKV_df(ukv_data_dict_kdown)
+
+    # push back kdown (15 min average time starting) by 15 mins to match QH time (instantaneous on the hour)
+    UKV_df_kdown.index = UKV_df_kdown.index - dt.timedelta(minutes=15)
+
+    # rename column to kdown (is orignially grid)
+    UKV_df_kdown = UKV_df_kdown.rename(columns={scint_UKV_grid_choices[pair_id]: 'kdown'})
+    ####################################################################################################################
+
+    # get model sensible heat - BL_H
+    run_details_BL_H = {'variable': 'BL_H',
+                        'run_time': '21Z',
+                        'scint_path': scint_path,
+                        'grid_number': scint_UKV_grid_choices[pair_id],
+                        'target_height': scint_median_zf[pair_id]}
+
+    ukv_data_dict_QH = retrieve_ukv_vars.retrieve_UKV(run_choices=run_details_BL_H, DOYstart=DOY, DOYstop=DOY)
     UKV_df_QH = retrieve_ukv_vars.UKV_df(ukv_data_dict_QH)
+    ####################################################################################################################
 
-    print('end')
+    # combine all variables into one df
+    DOY_df = pd.concat([UKV_df_QH, UKV_df_kdown, UKV_df_wind], axis=1)
+    DOY_df_list.append(DOY_df)
+    print(DOY)
 
+df_all = pd.concat(DOY_df_list)
+save_path = os.getcwd().replace('\\', '/') + '/UKV_csv_files/'
+df_all.to_csv(save_path + 'grid_' + str(scint_UKV_grid_choices[pair_id]) + '_' + pair_id + '_vals.csv')
 print('end')
-
-save_path = os.getcwd().replace('\\', '/') + '/csv_files/'
