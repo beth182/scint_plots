@@ -89,34 +89,4 @@ def read_preprocessed_lc_csv(scint_path,
     return df
 
 
-def read_preprocessed_scint_csv(scint_path,
-                                DOY_list,
-                                save_path):
-    # take the subset of days from the pre made csvs with hourly obs data - that have been read in to save time
 
-    # ToDo: compare this version with the one in path comparison - scatter
-    # ToDo: consider moving these to generic location
-    pre_made_csv_dir = save_path + '../path_comparison/'
-
-    # select the target path
-    path_data_filepath = pre_made_csv_dir + 'path_' + str(scint_path) + '_vals.csv'
-
-    # read the csv
-    scint_df = pd.read_csv(path_data_filepath)
-    scint_df['time'] = pd.to_datetime(scint_df['time'], format='%Y-%m-%d %H:%M:%S')
-    scint_df = scint_df.set_index('time')
-
-    # take just the days in the DOY list
-    df_DOY_list = []
-    for DOY in DOY_list:
-        dt_obj = dt.datetime.strptime(str(DOY), '%Y%j')
-        next_day = dt_obj + dt.timedelta(days=1)
-
-        mask = (scint_df.index >= dt_obj) & (scint_df.index < next_day)
-        df_DOY = scint_df.loc[mask]
-
-        df_DOY_list.append(df_DOY)
-
-    df = pd.concat(df_DOY_list)
-
-    return df

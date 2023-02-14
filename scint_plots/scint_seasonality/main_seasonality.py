@@ -1,7 +1,7 @@
 # imports
 import os
 
-from scint_plots.path_comparison import path_scatter
+from scint_plots.tools.preprocessed_scint_csvs import read_obs_csvs
 from scint_plots.scint_seasonality import seasonality_funs
 
 # user choices
@@ -10,7 +10,7 @@ path_choice = 13
 save_path = os.getcwd().replace('\\', '/') + '/'
 
 # read the premade scint data csv files
-df = path_scatter.read_all_scint_data(['QH'], csv_dir=save_path + '../path_comparison/')
+df = read_obs_csvs.read_all_of_preprocessed_scint_csv(['QH'])
 
 # drop any path other than the one chosen and BCT_IMU
 for col in df.columns:

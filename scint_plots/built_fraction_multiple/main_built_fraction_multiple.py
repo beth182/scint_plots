@@ -6,6 +6,7 @@ import numpy as np
 from scint_flux import look_up
 
 from scint_plots.built_fraction_multiple import lc_fraction_funs
+from scint_plots.tools.preprocessed_scint_csvs import read_obs_csvs
 from scint_plots.built_fraction_multiple import plotting_funs
 
 # user choice
@@ -29,8 +30,8 @@ for scint_path in path_list:
     DOY_list = df_subset.DOY_string.to_list()
 
     lc_df = lc_fraction_funs.read_preprocessed_lc_csv(scint_path=scint_path, DOY_list=DOY_list, save_path=save_path)
-    scint_df = lc_fraction_funs.read_preprocessed_scint_csv(scint_path=scint_path, DOY_list=DOY_list,
-                                                            save_path=save_path)
+    scint_df = read_obs_csvs.read_selection_of_preprocessed_scint_csv(scint_path=scint_path, DOY_list=DOY_list,
+                                                                      save_path=save_path)
 
     # combine lc fraction csv's and pre-read hourly data csvs
     df = pd.concat([scint_df, lc_df], axis=1)

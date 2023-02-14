@@ -62,7 +62,8 @@ def save_df_to_csv(save_path='./',
     df_combine_11.to_csv(save_path + 'path_11_vals.csv')
 
 
-save_path = os.getcwd().replace('\\', '/') + '/'
+if __name__ == '__main__':
+    save_path = os.getcwd().replace('\\', '/') + '/csv_files/'
 
-save_df_to_csv(save_path)
-print('end')
+    save_df_to_csv(save_path)
+    print('end')
