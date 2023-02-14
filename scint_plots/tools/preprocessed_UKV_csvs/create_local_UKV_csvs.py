@@ -7,6 +7,7 @@ import pandas as pd
 import datetime as dt
 import numpy as np
 
+from scint_plots.tools.preprocessed_UKV_csvs import UKV_lookup
 from model_eval_tools.retrieve_UKV import retrieve_ukv_vars
 from scint_flux import look_up
 
@@ -24,8 +25,6 @@ df_subset['DOY_string'] = df_subset['DOY_string'].astype(int)
 DOY_list = df_subset.DOY_string.to_list()
 
 pair_id = look_up.scint_path_numbers[scint_path]
-scint_UKV_grid_choices = {'BCT_IMU': 13, 'IMU_BTT': 12, 'BTT_BCT': 12, 'SCT_SWT': 37}
-scint_median_zf = {'BCT_IMU': 73.6, 'IMU_BTT': 103.3, 'BTT_BCT': 113.5, 'SCT_SWT': 32.4}
 
 DOY_df_list = []
 
@@ -34,8 +33,8 @@ for DOY in DOY_list:
     run_details_wind = {'variable': 'wind',
                         'run_time': '21Z',
                         'scint_path': scint_path,
-                        'grid_number': scint_UKV_grid_choices[pair_id],
-                        'target_height': scint_median_zf[pair_id]}
+                        'grid_number': UKV_lookup.scint_UKV_grid_choices[pair_id],
+                        'target_height': UKV_lookup.scint_median_zf[pair_id]}
 
     # get model wind speed and direction
     ukv_data_dict_wind = retrieve_ukv_vars.retrieve_UKV(run_choices=run_details_wind, DOYstart=DOY, DOYstop=DOY)
