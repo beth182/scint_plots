@@ -46,7 +46,7 @@ for DOY in DOY_list:
     run_details_kdown = {'variable': 'kdown',
                          'run_time': '21Z',
                          'scint_path': scint_path,
-                         'grid_number': scint_UKV_grid_choices[pair_id],
+                         'grid_number': UKV_lookup.scint_UKV_grid_choices[pair_id],
                          'target_height': 0  # surface stash code
                          }
 
@@ -59,15 +59,15 @@ for DOY in DOY_list:
     UKV_df_kdown.index = UKV_df_kdown.index - dt.timedelta(minutes=15)
 
     # rename column to kdown (is orignially grid)
-    UKV_df_kdown = UKV_df_kdown.rename(columns={scint_UKV_grid_choices[pair_id]: 'kdown'})
+    UKV_df_kdown = UKV_df_kdown.rename(columns={UKV_lookup.scint_UKV_grid_choices[pair_id]: 'kdown'})
     ####################################################################################################################
 
     # get model sensible heat - BL_H
     run_details_BL_H = {'variable': 'BL_H',
                         'run_time': '21Z',
                         'scint_path': scint_path,
-                        'grid_number': scint_UKV_grid_choices[pair_id],
-                        'target_height': scint_median_zf[pair_id]}
+                        'grid_number': UKV_lookup.scint_UKV_grid_choices[pair_id],
+                        'target_height': UKV_lookup.scint_median_zf[pair_id]}
 
     ukv_data_dict_QH = retrieve_ukv_vars.retrieve_UKV(run_choices=run_details_BL_H, DOYstart=DOY, DOYstop=DOY)
     UKV_df_QH = retrieve_ukv_vars.UKV_df(ukv_data_dict_QH)
@@ -80,5 +80,5 @@ for DOY in DOY_list:
 
 df_all = pd.concat(DOY_df_list)
 save_path = os.getcwd().replace('\\', '/') + '/UKV_csv_files/'
-df_all.to_csv(save_path + 'grid_' + str(scint_UKV_grid_choices[pair_id]) + '_' + pair_id + '_vals.csv')
+df_all.to_csv(save_path + 'grid_' + str(UKV_lookup.scint_UKV_grid_choices[pair_id]) + '_' + pair_id + '_vals.csv')
 print('end')
