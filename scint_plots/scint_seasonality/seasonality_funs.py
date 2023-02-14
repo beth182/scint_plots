@@ -242,3 +242,15 @@ def split_df_into_season(df):
         season_dict['SON'] = df_SON
 
     return season_dict
+
+
+def drop_unchosen_cols(path_choice, df):
+    # drop any path other than the one chosen and BCT_IMU
+    for col in df.columns:
+        if path_choice == int(col.split('_')[-1]):
+            pass
+        elif int(col.split('_')[-1]) == 12:
+            pass
+        else:
+            df = df.drop(columns=[col])
+    return df

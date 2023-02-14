@@ -3,6 +3,7 @@ import os
 
 from scint_plots.tools.preprocessed_scint_csvs import read_obs_csvs
 from scint_plots.scint_seasonality import seasonality_funs
+from scint_plots.tools.preprocessed_UKV_csvs import read_UKV_csvs
 
 # user choices
 path_choice = 13
@@ -12,17 +13,12 @@ save_path = os.getcwd().replace('\\', '/') + '/'
 # read the premade scint data csv files
 df = read_obs_csvs.read_all_of_preprocessed_scint_csv(['QH'])
 
-# drop any path other than the one chosen and BCT_IMU
-for col in df.columns:
-    if path_choice == int(col.split('_')[-1]):
-        pass
-    elif int(col.split('_')[-1]) == 12:
-        pass
-    else:
-        df = df.drop(columns=[col])
+# read the premade UKV data csv files
+df_UKV = read_UKV_csvs.read_all_of_preprocessed_UKV_csv(['BL_H'])
 
-# drop nans
-df = df.dropna()
+# drop columns not the path choice or BCT-IMU
+df = seasonality_funs.drop_unchosen_cols(path_choice, df).dropna()
+df_UKV = seasonality_funs.drop_unchosen_cols(path_choice, df_UKV).dropna()
 
 # split df into seasons
 season_dict = seasonality_funs.split_df_into_season(df)
