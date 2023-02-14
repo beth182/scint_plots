@@ -1,11 +1,12 @@
 # imports
 import pandas as pd
 
+from scint_plots.tools.preprocessed_UKV_csvs import UKV_lookup
 from scint_flux import look_up
 
 
 def read_all_of_preprocessed_UKV_csv(list_of_vars=['BL_H'],
-                                       csv_dir='D:/Documents/scint_plots/scint_plots/tools/preprocessed_UKV_csvs/UKVcsv_files/'):
+                                       csv_dir='D:/Documents/scint_plots/scint_plots/tools/preprocessed_UKV_csvs/UKV_csv_files/'):
     """
 
     :return:
@@ -17,7 +18,7 @@ def read_all_of_preprocessed_UKV_csv(list_of_vars=['BL_H'],
     path_df_dict = {}
     for path in path_list:
         pair_id = look_up.scint_path_numbers[path]
-        df = pd.read_csv(csv_dir + 'path_' + str(path) + '_vals.csv')
+        df = pd.read_csv(csv_dir + 'grid_' + str(UKV_lookup.scint_UKV_grid_choices[pair_id]) + '_' + pair_id + '_vals.csv')
         df['time'] = pd.to_datetime(df['time'], format='%Y-%m-%d %H:%M:%S')
         df = df.set_index('time')
 
@@ -34,3 +35,8 @@ def read_all_of_preprocessed_UKV_csv(list_of_vars=['BL_H'],
     df_combine = pd.concat([path_df_dict[11], path_df_dict[12], path_df_dict[13], path_df_dict[15]], axis=1)
 
     return df_combine
+
+if __name__ == '__main__':
+    read_all_of_preprocessed_UKV_csv()
+
+    print('end')
