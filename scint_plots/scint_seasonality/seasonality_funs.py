@@ -19,6 +19,8 @@ def plot_season_one_panel(season_dict, season_dict_UKV, save_path, variable='QH'
 
     all_seasons = ['DJF', 'MAM', 'JJA', 'SON']
 
+    ukv_colours = {'BCT_IMU': 'darkred', 'SCT_SWT': 'darkmagenta', 'IMU_BTT': 'darkslategrey', 'BTT_BCT': 'navy'}
+
     linestyle_dict = {'median': ':', 'mean': '-.', 'IQR': '--', 'UKV_median': '-', 'UKV_mean': '-'}
 
     for season in all_seasons:
@@ -43,8 +45,8 @@ def plot_season_one_panel(season_dict, season_dict_UKV, save_path, variable='QH'
                 IQR_dict_UKV = IQR_path_dict_UKV['BL_H_' + path_num_str]
                 pair_id = look_up.scint_path_numbers[int(path.split('_')[-1])]
 
-                ax.plot(IQR_dict_UKV['mean'].index, IQR_dict_UKV['mean'], color=colour_dict[pair_id],linestyle=linestyle_dict['UKV_mean'])
-                ax.plot(IQR_dict_UKV['median'].index, IQR_dict_UKV['median'], color=colour_dict[pair_id],linestyle=linestyle_dict['UKV_median'])
+                ax.plot(IQR_dict_UKV['mean'].index, IQR_dict_UKV['mean'], color=ukv_colours[pair_id],linestyle=linestyle_dict['UKV_mean'])
+                ax.plot(IQR_dict_UKV['median'].index, IQR_dict_UKV['median'], color=ukv_colours[pair_id],linestyle=linestyle_dict['UKV_median'])
 
                 ax.plot(IQR_dict['mean'].index, IQR_dict['mean'], color=colour_dict[pair_id], linestyle=linestyle_dict['mean'])
                 ax.plot(IQR_dict['median'].index, IQR_dict['median'], color=colour_dict[pair_id], linestyle=linestyle_dict['median'])
