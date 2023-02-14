@@ -19,7 +19,7 @@ def plot_season_one_panel(season_dict, season_dict_UKV, save_path, variable='QH'
 
     all_seasons = ['DJF', 'MAM', 'JJA', 'SON']
 
-    linestyle_dict = {'median': ':', 'mean': '-.', 'IQR': '--'}
+    linestyle_dict = {'median': ':', 'mean': '-.', 'IQR': '--', 'UKV_median': '-', 'UKV_mean': '-'}
 
     for season in all_seasons:
 
@@ -28,20 +28,29 @@ def plot_season_one_panel(season_dict, season_dict_UKV, save_path, variable='QH'
             fig, ax = plt.subplots(figsize=(5, 5))
 
             df_season = season_dict[season]
+            df_season_UKV = season_dict_UKV[season]
             ax.set_title(season)
 
+            IQR_path_dict_UKV = IQR(df_season_UKV)
             IQR_path_dict = IQR(df_season)
 
+
             for path in IQR_path_dict:
+
+                path_num_str = path.split('_')[-1]
+
                 IQR_dict = IQR_path_dict[path]
+                IQR_dict_UKV = IQR_path_dict_UKV['BL_H_' + path_num_str]
                 pair_id = look_up.scint_path_numbers[int(path.split('_')[-1])]
+
+                ax.plot(IQR_dict_UKV['mean'].index, IQR_dict_UKV['mean'], color=colour_dict[pair_id],linestyle=linestyle_dict['UKV_mean'])
+                ax.plot(IQR_dict_UKV['median'].index, IQR_dict_UKV['median'], color=colour_dict[pair_id],linestyle=linestyle_dict['UKV_median'])
 
                 ax.plot(IQR_dict['mean'].index, IQR_dict['mean'], color=colour_dict[pair_id], linestyle=linestyle_dict['mean'])
                 ax.plot(IQR_dict['median'].index, IQR_dict['median'], color=colour_dict[pair_id], linestyle=linestyle_dict['median'])
                 ax.plot(IQR_dict['25'].columns, IQR_dict['25'].iloc[0], color=colour_dict[pair_id], linestyle=linestyle_dict['IQR'], alpha=0.4)
                 ax.plot(IQR_dict['75'].columns, IQR_dict['75'].iloc[0], colour_dict[pair_id], linestyle=linestyle_dict['IQR'], alpha=0.4)
-                ax.fill_between(IQR_dict['25'].columns, IQR_dict['25'].iloc[0], IQR_dict['75'].iloc[0],
-                                color=colour_dict[pair_id], alpha=0.1)
+                ax.fill_between(IQR_dict['25'].columns, IQR_dict['25'].iloc[0], IQR_dict['75'].iloc[0], color=colour_dict[pair_id], alpha=0.1)
 
             ax.get_xaxis().set_major_locator(MaxNLocator(integer=True))
 
@@ -150,11 +159,13 @@ def IQR(df):
     """
 
     for column in df.columns:
-        if column != 'QH_12':
+        if column.split('_')[-1] != '12':
             other_col_name = column
+        else:
+            column_name_12 = column
 
     df_12 = df.drop(columns=[other_col_name])
-    df_other = df.drop(columns=['QH_12'])
+    df_other = df.drop(columns=[column_name_12])
 
     df_path_list = [df_12, df_other]
     dict_path = {}
