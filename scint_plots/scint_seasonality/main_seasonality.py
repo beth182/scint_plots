@@ -4,10 +4,8 @@ import os
 from scint_plots.path_comparison import path_scatter
 from scint_plots.scint_seasonality import seasonality_funs
 
-
 # user choices
 path_choice = 13
-
 
 save_path = os.getcwd().replace('\\', '/') + '/'
 
@@ -23,10 +21,8 @@ for col in df.columns:
     else:
         df = df.drop(columns=[col])
 
-
 # drop nans
 df = df.dropna()
-
 
 # split df into seasons
 season_dict = seasonality_funs.split_df_into_season(df)
@@ -35,4 +31,3 @@ season_dict = seasonality_funs.split_df_into_season(df)
 seasonality_funs.plot_season_one_panel(season_dict, save_path)
 
 print('end')
-

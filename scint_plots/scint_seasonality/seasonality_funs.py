@@ -5,7 +5,6 @@ from matplotlib.ticker import MaxNLocator
 from scint_flux import look_up
 
 
-
 def plot_season_one_panel(season_dict, save_path, variable='QH'):
     """
 
@@ -31,7 +30,6 @@ def plot_season_one_panel(season_dict, save_path, variable='QH'):
             IQR_path_dict = IQR(df_season)
 
             for path in IQR_path_dict:
-
                 IQR_dict = IQR_path_dict[path]
                 pair_id = look_up.scint_path_numbers[int(path.split('_')[-1])]
 
@@ -39,7 +37,8 @@ def plot_season_one_panel(season_dict, save_path, variable='QH'):
                 ax.plot(IQR_dict['median'].index, IQR_dict['median'], color=colour_dict[pair_id], linestyle=':')
                 ax.plot(IQR_dict['25'].columns, IQR_dict['25'].iloc[0], color=colour_dict[pair_id], linestyle='--')
                 ax.plot(IQR_dict['75'].columns, IQR_dict['75'].iloc[0], colour_dict[pair_id], linestyle='--')
-                ax.fill_between(IQR_dict['25'].columns, IQR_dict['25'].iloc[0], IQR_dict['75'].iloc[0], color=colour_dict[pair_id], alpha=0.1)
+                ax.fill_between(IQR_dict['25'].columns, IQR_dict['25'].iloc[0], IQR_dict['75'].iloc[0],
+                                color=colour_dict[pair_id], alpha=0.1)
 
             ax.get_xaxis().set_major_locator(MaxNLocator(integer=True))
 
@@ -55,9 +54,9 @@ def plot_season_one_panel(season_dict, save_path, variable='QH'):
             plt.tight_layout()
             # plt.show()
 
-            path_name_here = look_up.scint_path_numbers[int(season_dict[list(season_dict.keys())[0]].drop(columns=['QH_12']).columns[0].split('_')[-1])]
+            path_name_here = look_up.scint_path_numbers[
+                int(season_dict[list(season_dict.keys())[0]].drop(columns=['QH_12']).columns[0].split('_')[-1])]
             plt.savefig(save_path + path_name_here + '_' + season + '_seasonality.png', bbox_inches='tight', dpi=300)
-
 
 
 def plot_season(season_dict, save_path, variable='QH'):
@@ -90,12 +89,15 @@ def plot_season(season_dict, save_path, variable='QH'):
                 IQR_dict = IQR_path_dict[path]
                 pair_id = look_up.scint_path_numbers[int(path.split('_')[-1])]
 
-
                 ax[axis_count].plot(IQR_dict['mean'].index, IQR_dict['mean'], color=colour_dict[pair_id])
-                ax[axis_count].plot(IQR_dict['median'].index, IQR_dict['median'], color=colour_dict[pair_id], linestyle=':')
-                ax[axis_count].plot(IQR_dict['25'].columns, IQR_dict['25'].iloc[0], color=colour_dict[pair_id], linestyle='--')
-                ax[axis_count].plot(IQR_dict['75'].columns, IQR_dict['75'].iloc[0], colour_dict[pair_id], linestyle='--')
-                ax[axis_count].fill_between(IQR_dict['25'].columns, IQR_dict['25'].iloc[0], IQR_dict['75'].iloc[0], color=colour_dict[pair_id], alpha=0.1)
+                ax[axis_count].plot(IQR_dict['median'].index, IQR_dict['median'], color=colour_dict[pair_id],
+                                    linestyle=':')
+                ax[axis_count].plot(IQR_dict['25'].columns, IQR_dict['25'].iloc[0], color=colour_dict[pair_id],
+                                    linestyle='--')
+                ax[axis_count].plot(IQR_dict['75'].columns, IQR_dict['75'].iloc[0], colour_dict[pair_id],
+                                    linestyle='--')
+                ax[axis_count].fill_between(IQR_dict['25'].columns, IQR_dict['25'].iloc[0], IQR_dict['75'].iloc[0],
+                                            color=colour_dict[pair_id], alpha=0.1)
 
                 ax[axis_count].get_xaxis().set_major_locator(MaxNLocator(integer=True))
 
@@ -107,12 +109,10 @@ def plot_season(season_dict, save_path, variable='QH'):
                     elif variable == 'kdown':
                         ax[0].set_ylabel('$K_{\downarrow}$ ($W m^{-2}$)')
 
-
                 y_lim_here = IQR_dict['75'].max().max()
                 y_lims.append(y_lim_here)
 
             axis_count += 1
-
 
     ylim = max(y_lims) + 10
     for axs in ax:
@@ -123,13 +123,11 @@ def plot_season(season_dict, save_path, variable='QH'):
     plt.tight_layout()
 
     # plt.show()
-    path_name_here = look_up.scint_path_numbers[int(season_dict[list(season_dict.keys())[0]].drop(columns=['QH_12']).columns[0].split('_')[-1])]
+    path_name_here = look_up.scint_path_numbers[
+        int(season_dict[list(season_dict.keys())[0]].drop(columns=['QH_12']).columns[0].split('_')[-1])]
     plt.savefig(save_path + path_name_here + '_seasonality.png', bbox_inches='tight', dpi=300)
 
     print('end')
-
-
-
 
 
 def IQR(df):
