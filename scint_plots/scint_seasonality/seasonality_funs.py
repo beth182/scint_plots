@@ -1,6 +1,7 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib.ticker import MaxNLocator
+from matplotlib.lines import Line2D
 
 from scint_flux import look_up
 
@@ -18,6 +19,8 @@ def plot_season_one_panel(season_dict, save_path, variable='QH'):
 
     all_seasons = ['DJF', 'MAM', 'JJA', 'SON']
 
+    linestyle_dict = {'median': ':', 'mean': '-.', 'IQR': '--'}
+
     for season in all_seasons:
 
         if season in season_dict.keys():
@@ -33,10 +36,10 @@ def plot_season_one_panel(season_dict, save_path, variable='QH'):
                 IQR_dict = IQR_path_dict[path]
                 pair_id = look_up.scint_path_numbers[int(path.split('_')[-1])]
 
-                ax.plot(IQR_dict['mean'].index, IQR_dict['mean'], color=colour_dict[pair_id], linestyle='-.')
-                ax.plot(IQR_dict['median'].index, IQR_dict['median'], color=colour_dict[pair_id], linestyle=':')
-                ax.plot(IQR_dict['25'].columns, IQR_dict['25'].iloc[0], color=colour_dict[pair_id], linestyle='--', alpha=0.4)
-                ax.plot(IQR_dict['75'].columns, IQR_dict['75'].iloc[0], colour_dict[pair_id], linestyle='--', alpha=0.4)
+                ax.plot(IQR_dict['mean'].index, IQR_dict['mean'], color=colour_dict[pair_id], linestyle=linestyle_dict['mean'])
+                ax.plot(IQR_dict['median'].index, IQR_dict['median'], color=colour_dict[pair_id], linestyle=linestyle_dict['median'])
+                ax.plot(IQR_dict['25'].columns, IQR_dict['25'].iloc[0], color=colour_dict[pair_id], linestyle=linestyle_dict['IQR'], alpha=0.4)
+                ax.plot(IQR_dict['75'].columns, IQR_dict['75'].iloc[0], colour_dict[pair_id], linestyle=linestyle_dict['IQR'], alpha=0.4)
                 ax.fill_between(IQR_dict['25'].columns, IQR_dict['25'].iloc[0], IQR_dict['75'].iloc[0],
                                 color=colour_dict[pair_id], alpha=0.1)
 
@@ -50,6 +53,16 @@ def plot_season_one_panel(season_dict, save_path, variable='QH'):
             ax.set_ylim(0, ylim)
             ax.set_xlim(5, 19)
             ax.set_xlabel('Hour')
+
+            if season == 'MAM':
+                if pair_id == 'IMU_BTT':
+                    # manually create legend
+                    handles, labels = plt.gca().get_legend_handles_labels()
+                    line_mean = Line2D([0], [0], label='Mean', color='k', linestyle=linestyle_dict['mean'])
+                    line_median = Line2D([0], [0], label='Median', color='k', linestyle=linestyle_dict['median'])
+                    line_IQR = Line2D([0], [0], label='IQR', color='k', linestyle=linestyle_dict['IQR'])
+                    handles.extend([line_mean, line_median, line_IQR])
+                    plt.legend(handles=handles)
 
             plt.tight_layout()
             # plt.show()
