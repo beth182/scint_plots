@@ -19,7 +19,7 @@ def plot_season_one_panel(season_dict, season_dict_UKV, save_path, variable='QH'
 
     all_seasons = ['DJF', 'MAM', 'JJA', 'SON']
 
-    ukv_colours = {'BCT_IMU': 'darkred', 'SCT_SWT': 'darkmagenta', 'IMU_BTT': 'darkslategrey', 'BTT_BCT': 'navy'}
+    ukv_colours = {'BCT_IMU': 'darkred', 'SCT_SWT': 'rebeccapurple', 'IMU_BTT': 'darkslategrey', 'BTT_BCT': 'navy'}
 
     linestyle_dict = {'median': ':', 'mean': '-.', 'IQR': '--', 'UKV_median': '-', 'UKV_mean': '-'}
 
