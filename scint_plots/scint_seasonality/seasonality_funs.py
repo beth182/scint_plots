@@ -16,7 +16,11 @@ def plot_season_one_panel(season_dict, season_dict_UKV, save_path, variable='QH'
     colour_dict = {'BCT_IMU': 'red', 'SCT_SWT': 'mediumorchid', 'IMU_BTT': 'green', 'BTT_BCT': 'blue'}
 
     # hard code ylim
-    ylim = 425
+    if variable == 'QH':
+        ylim = 425
+    else:
+        assert variable == 'kdown'
+        ylim = 900
 
     all_seasons = ['DJF', 'MAM', 'JJA', 'SON']
 
@@ -48,40 +52,80 @@ def plot_season_one_panel(season_dict, season_dict_UKV, save_path, variable='QH'
                 path_num_str = path.split('_')[-1]
 
                 IQR_dict = IQR_path_dict[path]
-                IQR_dict_UKV = IQR_path_dict_UKV['BL_H_' + path_num_str]
+
+                if variable == 'QH':
+                    IQR_dict_UKV = IQR_path_dict_UKV['BL_H_' + path_num_str]
+                else:
+                    IQR_dict_UKV = IQR_path_dict_UKV[path]
+
                 pair_id = look_up.scint_path_numbers[int(path.split('_')[-1])]
+
+                if variable == 'kdown':
+                    if pair_id == 'BCT_IMU':
+                        pass
+                    else:
+
+                        # points above threshold
+                        ax.scatter(IQR_dict['mean'][IQR_dict['count'] >= count_threshold].index,
+                                   IQR_dict['mean'][IQR_dict['count'] >= count_threshold],
+                                   color=colour_dict[pair_id], marker=linestyle_dict['mean'], s=15, edgecolor='k',
+                                   zorder=3)
+                        ax.scatter(IQR_dict['median'][IQR_dict['count'] >= count_threshold].index,
+                                   IQR_dict['median'][IQR_dict['count'] >= count_threshold],
+                                   color=colour_dict[pair_id], marker=linestyle_dict['median'], s=20, edgecolor='k',
+                                   zorder=3)
+
+                        # transparent markers for points bellow threshold
+                        ax.scatter(IQR_dict['mean'][IQR_dict['count'] < count_threshold].index,
+                                   IQR_dict['mean'][IQR_dict['count'] < count_threshold],
+                                   marker=linestyle_dict['mean'], s=15, edgecolor=colour_dict[pair_id], zorder=4,
+                                   facecolors='None')
+                        ax.scatter(IQR_dict['median'][IQR_dict['count'] < count_threshold].index,
+                                   IQR_dict['median'][IQR_dict['count'] < count_threshold],
+                                   marker=linestyle_dict['median'], s=20, edgecolor=colour_dict[pair_id], zorder=4,
+                                   facecolors='None')
+
+                        # for col in IQR_dict['25']:
+                        #     if col not in IQR_dict['mean'][IQR_dict['count'] >= count_threshold].index:
+                        #         IQR_dict['25'] = IQR_dict['25'].drop(columns=[col])
+                        #         IQR_dict['75'] = IQR_dict['75'].drop(columns=[col])
+
+                        ax.fill_between(IQR_dict['25'].columns, IQR_dict['25'].iloc[0], IQR_dict['75'].iloc[0],
+                                        color=colour_dict[pair_id], alpha=0.2, zorder=1)
+
+                else:
+
+                    # points above threshold
+                    ax.scatter(IQR_dict['mean'][IQR_dict['count'] >= count_threshold].index,
+                               IQR_dict['mean'][IQR_dict['count'] >= count_threshold],
+                               color=colour_dict[pair_id], marker=linestyle_dict['mean'], s=15, edgecolor='k', zorder=3)
+                    ax.scatter(IQR_dict['median'][IQR_dict['count'] >= count_threshold].index,
+                               IQR_dict['median'][IQR_dict['count'] >= count_threshold],
+                               color=colour_dict[pair_id], marker=linestyle_dict['median'], s=20, edgecolor='k',
+                               zorder=3)
+
+                    # transparent markers for points bellow threshold
+                    ax.scatter(IQR_dict['mean'][IQR_dict['count'] < count_threshold].index,
+                               IQR_dict['mean'][IQR_dict['count'] < count_threshold],
+                               marker=linestyle_dict['mean'], s=15, edgecolor=colour_dict[pair_id], zorder=4,
+                               facecolors='None')
+                    ax.scatter(IQR_dict['median'][IQR_dict['count'] < count_threshold].index,
+                               IQR_dict['median'][IQR_dict['count'] < count_threshold],
+                               marker=linestyle_dict['median'], s=20, edgecolor=colour_dict[pair_id], zorder=4,
+                               facecolors='None')
+
+                    # for col in IQR_dict['25']:
+                    #     if col not in IQR_dict['mean'][IQR_dict['count'] >= count_threshold].index:
+                    #         IQR_dict['25'] = IQR_dict['25'].drop(columns=[col])
+                    #         IQR_dict['75'] = IQR_dict['75'].drop(columns=[col])
+
+                    ax.fill_between(IQR_dict['25'].columns, IQR_dict['25'].iloc[0], IQR_dict['75'].iloc[0],
+                                    color=colour_dict[pair_id], alpha=0.2, zorder=1)
 
                 ax.plot(IQR_dict_UKV['mean'].index, IQR_dict_UKV['mean'], color=colour_dict[pair_id],
                         linestyle=linestyle_dict['UKV_mean'], zorder=2)
                 ax.plot(IQR_dict_UKV['median'].index, IQR_dict_UKV['median'], color=colour_dict[pair_id],
                         linestyle=linestyle_dict['UKV_median'], zorder=2)
-
-                # points above threshold
-                ax.scatter(IQR_dict['mean'][IQR_dict['count'] >= count_threshold].index,
-                           IQR_dict['mean'][IQR_dict['count'] >= count_threshold],
-                           color=colour_dict[pair_id], marker=linestyle_dict['mean'], s=15, edgecolor='k', zorder=3)
-                ax.scatter(IQR_dict['median'][IQR_dict['count'] >= count_threshold].index,
-                           IQR_dict['median'][IQR_dict['count'] >= count_threshold],
-                           color=colour_dict[pair_id], marker=linestyle_dict['median'], s=20, edgecolor='k', zorder=3)
-
-                # transparent markers for points bellow threshold
-                ax.scatter(IQR_dict['mean'][IQR_dict['count'] < count_threshold].index,
-                           IQR_dict['mean'][IQR_dict['count'] < count_threshold],
-                           marker=linestyle_dict['mean'], s=15, edgecolor=colour_dict[pair_id], zorder=4,
-                           facecolors='None')
-
-                ax.scatter(IQR_dict['median'][IQR_dict['count'] < count_threshold].index,
-                           IQR_dict['median'][IQR_dict['count'] < count_threshold],
-                           marker=linestyle_dict['median'], s=20, edgecolor=colour_dict[pair_id], zorder=4,
-                           facecolors='None')
-
-                # for col in IQR_dict['25']:
-                #     if col not in IQR_dict['mean'][IQR_dict['count'] >= count_threshold].index:
-                #         IQR_dict['25'] = IQR_dict['25'].drop(columns=[col])
-                #         IQR_dict['75'] = IQR_dict['75'].drop(columns=[col])
-
-                ax.fill_between(IQR_dict['25'].columns, IQR_dict['25'].iloc[0], IQR_dict['75'].iloc[0],
-                                color=colour_dict[pair_id], alpha=0.2, zorder=1)
 
             ax.get_xaxis().set_major_locator(MaxNLocator(integer=True))
 
@@ -120,9 +164,13 @@ def plot_season_one_panel(season_dict, season_dict_UKV, save_path, variable='QH'
 
             plt.tight_layout()
 
+            # plt.show()
+
             path_name_here = look_up.scint_path_numbers[
-                int(season_dict[list(season_dict.keys())[0]].drop(columns=['QH_12']).columns[0].split('_')[-1])]
-            plt.savefig(save_path + path_name_here + '_' + season + '_seasonality.png', bbox_inches='tight', dpi=300)
+                int(season_dict[list(season_dict.keys())[0]].drop(columns=[variable + '_12']).columns[0].split('_')[
+                        -1])]
+            plt.savefig(save_path + variable + '_' + path_name_here + '_' + season + '_seasonality.png',
+                        bbox_inches='tight', dpi=300)
 
 
 def plot_season(season_dict, save_path, variable='QH'):
