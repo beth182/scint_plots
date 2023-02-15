@@ -6,7 +6,7 @@ from scint_plots.scint_seasonality import seasonality_funs
 from scint_plots.tools.preprocessed_UKV_csvs import read_UKV_csvs
 
 # user choices
-variable = 'kdown'
+variable = 'QH'
 
 # 11, 13, 15
 # not 12 - this is always included
