@@ -8,10 +8,12 @@ import numpy as np
 from scint_plots.tools.preprocessed_scint_csvs import read_obs_csvs
 from scint_plots.tools.preprocessed_UKV_csvs import read_UKV_csvs
 from scint_plots.scint_seasonality import seasonality_funs
+from scint_plots.tools import eval_stat_funs
 
 # user choices
 path_choice = 15
 variable = 'QH'
+HR_threshold = 20
 
 if variable == 'QH':
     ukv_variable = 'BL_H'
@@ -51,9 +53,10 @@ df_all = pd.concat([df, df_UKV], axis=1).dropna()
 df_all['BE'] = df_all[variable + '_' + str(path_choice)] - df_all['UKV_' + variable + '_' + str(path_choice)]
 df_all['AE'] = np.abs(df_all[variable + '_' + str(path_choice)] - df_all['UKV_' + variable + '_' + str(path_choice)])
 
+# all seasons together
 # HR
-
-
+HR_all = eval_stat_funs.hitrate(obs=df_all[variable + '_' + str(path_choice)],
+                                mod=df_all['UKV_' + variable + '_' + str(path_choice)], threshold=HR_threshold)
 
 # split by season
 season_dict = seasonality_funs.split_df_into_season(df_all)
@@ -63,7 +66,10 @@ for season in season_dict:
 
     season_df = season_dict[season]
 
-
+    # HR
+    HR_season = eval_stat_funs.hitrate(obs=season_df[variable + '_' + str(path_choice)],
+                                       mod=season_df['UKV_' + variable + '_' + str(path_choice)],
+                                       threshold=HR_threshold)
 
     print('end')
 
