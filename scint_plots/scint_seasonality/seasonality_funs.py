@@ -7,7 +7,7 @@ import matplotlib.patches as mpatches
 from scint_flux import look_up
 
 
-def plot_season_one_panel(season_dict, season_dict_UKV, save_path, variable='QH'):
+def plot_season_one_panel(season_dict, season_dict_UKV, save_path, variable='QH', count_threshold=5):
     """
 
     :return:
@@ -36,29 +36,52 @@ def plot_season_one_panel(season_dict, season_dict_UKV, save_path, variable='QH'
 
             df_season_UKV['hour'] = df_season_UKV.index.hour
 
-            df_season_UKV = df_season_UKV[(df_season_UKV.hour <= max_obs_hour) & (df_season_UKV.hour >= min_obs_hour)].drop(columns=['hour'])
+            df_season_UKV = df_season_UKV[
+                (df_season_UKV.hour <= max_obs_hour) & (df_season_UKV.hour >= min_obs_hour)].drop(columns=['hour'])
 
             ax.set_title(season)
 
             IQR_path_dict_UKV = IQR(df_season_UKV)
             IQR_path_dict = IQR(df_season)
 
-
             for path in IQR_path_dict:
-
                 path_num_str = path.split('_')[-1]
 
                 IQR_dict = IQR_path_dict[path]
                 IQR_dict_UKV = IQR_path_dict_UKV['BL_H_' + path_num_str]
                 pair_id = look_up.scint_path_numbers[int(path.split('_')[-1])]
 
-                ax.plot(IQR_dict_UKV['mean'].index, IQR_dict_UKV['mean'], color=colour_dict[pair_id],linestyle=linestyle_dict['UKV_mean'], zorder=2)
-                ax.plot(IQR_dict_UKV['median'].index, IQR_dict_UKV['median'], color=colour_dict[pair_id],linestyle=linestyle_dict['UKV_median'], zorder=2)
+                ax.plot(IQR_dict_UKV['mean'].index, IQR_dict_UKV['mean'], color=colour_dict[pair_id],
+                        linestyle=linestyle_dict['UKV_mean'], zorder=2)
+                ax.plot(IQR_dict_UKV['median'].index, IQR_dict_UKV['median'], color=colour_dict[pair_id],
+                        linestyle=linestyle_dict['UKV_median'], zorder=2)
 
-                ax.scatter(IQR_dict['mean'].index, IQR_dict['mean'], color=colour_dict[pair_id], marker=linestyle_dict['mean'], s=10, edgecolor='k', zorder=3)
-                ax.scatter(IQR_dict['median'].index, IQR_dict['median'], color=colour_dict[pair_id], marker=linestyle_dict['median'], s=15, edgecolor='k', zorder=3)
+                # points above threshold
+                ax.scatter(IQR_dict['mean'][IQR_dict['count'] >= count_threshold].index,
+                           IQR_dict['mean'][IQR_dict['count'] >= count_threshold],
+                           color=colour_dict[pair_id], marker=linestyle_dict['mean'], s=15, edgecolor='k', zorder=3)
+                ax.scatter(IQR_dict['median'][IQR_dict['count'] >= count_threshold].index,
+                           IQR_dict['median'][IQR_dict['count'] >= count_threshold],
+                           color=colour_dict[pair_id], marker=linestyle_dict['median'], s=20, edgecolor='k', zorder=3)
 
-                ax.fill_between(IQR_dict['25'].columns, IQR_dict['25'].iloc[0], IQR_dict['75'].iloc[0], color=colour_dict[pair_id], alpha=0.2, zorder=1)
+                # transparent markers for points bellow threshold
+                ax.scatter(IQR_dict['mean'][IQR_dict['count'] < count_threshold].index,
+                           IQR_dict['mean'][IQR_dict['count'] < count_threshold],
+                           marker=linestyle_dict['mean'], s=15, edgecolor=colour_dict[pair_id], zorder=4,
+                           facecolors='None')
+
+                ax.scatter(IQR_dict['median'][IQR_dict['count'] < count_threshold].index,
+                           IQR_dict['median'][IQR_dict['count'] < count_threshold],
+                           marker=linestyle_dict['median'], s=20, edgecolor=colour_dict[pair_id], zorder=4,
+                           facecolors='None')
+
+                # for col in IQR_dict['25']:
+                #     if col not in IQR_dict['mean'][IQR_dict['count'] >= count_threshold].index:
+                #         IQR_dict['25'] = IQR_dict['25'].drop(columns=[col])
+                #         IQR_dict['75'] = IQR_dict['75'].drop(columns=[col])
+
+                ax.fill_between(IQR_dict['25'].columns, IQR_dict['25'].iloc[0], IQR_dict['75'].iloc[0],
+                                color=colour_dict[pair_id], alpha=0.2, zorder=1)
 
             ax.get_xaxis().set_major_locator(MaxNLocator(integer=True))
 
@@ -76,11 +99,14 @@ def plot_season_one_panel(season_dict, season_dict_UKV, save_path, variable='QH'
                     # manually create legend
                     handles, labels = plt.gca().get_legend_handles_labels()
 
-                    scatter_mean = plt.scatter([1000], [1000], label='LAS Mean', color='grey', marker=linestyle_dict['mean'], edgecolor='k')
-                    scatter_median = plt.scatter([1000], [1000], label='LAS Median', color='grey', marker=linestyle_dict['median'], edgecolor='k')
+                    scatter_mean = plt.scatter([1000], [1000], label='LAS Mean', color='grey',
+                                               marker=linestyle_dict['mean'], edgecolor='k')
+                    scatter_median = plt.scatter([1000], [1000], label='LAS Median', color='grey',
+                                                 marker=linestyle_dict['median'], edgecolor='k')
 
                     line_mean_ukv = Line2D([0], [0], label='UKV Mean', color='k', linestyle=linestyle_dict['UKV_mean'])
-                    line_median_ukv = Line2D([0], [0], label='UKV Median', color='k', linestyle=linestyle_dict['UKV_median'])
+                    line_median_ukv = Line2D([0], [0], label='UKV Median', color='k',
+                                             linestyle=linestyle_dict['UKV_median'])
 
                     IQR_patch = mpatches.Patch(color='k', label='LAS IQR', alpha=0.2)
 
@@ -88,7 +114,9 @@ def plot_season_one_panel(season_dict, season_dict_UKV, save_path, variable='QH'
                     plt.legend(handles=handles, fontsize=8)
 
             plt.tight_layout()
-            # plt.show()
+            plt.show()
+
+            print('end')
 
             path_name_here = look_up.scint_path_numbers[
                 int(season_dict[list(season_dict.keys())[0]].drop(columns=['QH_12']).columns[0].split('_')[-1])]
