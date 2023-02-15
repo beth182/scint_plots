@@ -103,6 +103,8 @@ def plot_season_one_panel(season_dict, season_dict_UKV, save_path, variable='QH'
                                                marker=linestyle_dict['mean'], edgecolor='k')
                     scatter_median = plt.scatter([1000], [1000], label='LAS Median', color='grey',
                                                  marker=linestyle_dict['median'], edgecolor='k')
+                    scatter_median_hollow = plt.scatter([1000], [1000], label='Data count under ' + str(count_threshold), facecolors='None',
+                                                 marker=linestyle_dict['median'], edgecolor='grey')
 
                     line_mean_ukv = Line2D([0], [0], label='UKV Mean', color='k', linestyle=linestyle_dict['UKV_mean'])
                     line_median_ukv = Line2D([0], [0], label='UKV Median', color='k',
@@ -110,13 +112,10 @@ def plot_season_one_panel(season_dict, season_dict_UKV, save_path, variable='QH'
 
                     IQR_patch = mpatches.Patch(color='k', label='LAS IQR', alpha=0.2)
 
-                    handles.extend([scatter_mean, scatter_median, IQR_patch, line_mean_ukv, line_median_ukv])
+                    handles.extend([scatter_mean, scatter_median, scatter_median_hollow, IQR_patch, line_mean_ukv, line_median_ukv])
                     plt.legend(handles=handles, fontsize=8)
 
             plt.tight_layout()
-            plt.show()
-
-            print('end')
 
             path_name_here = look_up.scint_path_numbers[
                 int(season_dict[list(season_dict.keys())[0]].drop(columns=['QH_12']).columns[0].split('_')[-1])]
