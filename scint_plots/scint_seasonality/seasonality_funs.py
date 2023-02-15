@@ -26,7 +26,7 @@ def plot_season_one_panel(season_dict, season_dict_UKV, save_path, variable='QH'
 
         if season in season_dict.keys():
 
-            fig, ax = plt.subplots(figsize=(5, 5))
+            fig, ax = plt.subplots(figsize=(4, 4))
 
             df_season = season_dict[season]
             df_season_UKV = season_dict_UKV[season]
@@ -116,7 +116,7 @@ def plot_season_one_panel(season_dict, season_dict_UKV, save_path, variable='QH'
 
                     handles.extend([scatter_mean, scatter_median, scatter_median_hollow, IQR_patch, line_mean_ukv,
                                     line_median_ukv])
-                    plt.legend(handles=handles, fontsize=8)
+                    # plt.legend(handles=handles, loc='center left', bbox_to_anchor=(1, 0.5))
 
             plt.tight_layout()
 
