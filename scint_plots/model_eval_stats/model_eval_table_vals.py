@@ -13,7 +13,7 @@ from scint_plots.tools import eval_stat_funs
 # user choices
 path_choice = 15
 variable = 'QH'
-HR_threshold = 20
+HR_threshold = 50
 
 if variable == 'QH':
     ukv_variable = 'BL_H'
@@ -58,10 +58,28 @@ df_all['AE'] = np.abs(df_all[variable + '_' + str(path_choice)] - df_all['UKV_' 
 HR_all = eval_stat_funs.hitrate(obs=df_all[variable + '_' + str(path_choice)],
                                 mod=df_all['UKV_' + variable + '_' + str(path_choice)], threshold=HR_threshold)
 
+# MAE
+MAE_all = df_all.AE.mean()
+# MBE
+MBE_all = df_all.BE.mean()
+
+# means
+mean_obs = df_all[variable + '_' + str(path_choice)].mean()
+mean_UKV = df_all['UKV_' + variable + '_' + str(path_choice)].mean()
+
+print(' ')
+print('ALL')
+print('mean LAS:', mean_obs)
+print('mean UKV:', mean_UKV)
+print('MBE: ', MBE_all)
+print('MAE: ', MAE_all)
+print('HR: ', HR_all)
+
 # split by season
 season_dict = seasonality_funs.split_df_into_season(df_all)
 
 for season in season_dict:
+    print(' ')
     print(season)
 
     season_df = season_dict[season]
@@ -71,6 +89,19 @@ for season in season_dict:
                                        mod=season_df['UKV_' + variable + '_' + str(path_choice)],
                                        threshold=HR_threshold)
 
-    print('end')
+    # MAE
+    MAE_season = season_df.AE.mean()
+    # MBE
+    MBE_season = season_df.BE.mean()
+
+    # means
+    mean_obs_season = season_df[variable + '_' + str(path_choice)].mean()
+    mean_UKV_season = season_df['UKV_' + variable + '_' + str(path_choice)].mean()
+
+    print('mean LAS:', mean_obs_season)
+    print('mean UKV:', mean_UKV_season)
+    print('MBE: ', MBE_season)
+    print('MAE: ', MAE_season)
+    print('HR: ', HR_season)
 
 print('end')
