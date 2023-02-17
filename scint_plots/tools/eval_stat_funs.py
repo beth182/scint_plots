@@ -30,8 +30,8 @@ def hitrate(obs, mod, threshold):
 def variable_hitrate(obs, mod, obs_uncertainty=10):
     """
     Hit Rate
-    :param obs:
-    :param mod:
+    :param obs: Pandas series of observations (or dataset 1).
+    :param mod: Pandas series of model data (or dataset 2).
     :param obs_uncertainty: The observation uncertainty, as a percentage.
      We use 10 %: For day-time eddy covariance data: Martin Best thesis page 119
     :return:
