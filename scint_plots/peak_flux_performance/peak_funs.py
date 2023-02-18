@@ -7,6 +7,133 @@ from scipy.stats import linregress
 from scint_flux.functions import read_calculated_fluxes
 
 
+def peak_BE(df, scint_path):
+    """
+    Get the peak bias error and time offset between obs and UKV
+    Returns
+    -------
+
+    """
+
+    # loop over all days in df
+    df_DOY_list = []
+    for group in df.groupby(df.index.date):
+        day_df = group[1]
+
+        obs_QH_col_name = 'QH_' + str(scint_path)
+        obs_kdown_col_name = 'kdown_' + str(scint_path)
+        UKV_QH_col_name = 'UKV_QH_' + str(scint_path)
+        UKV_kdown_col_name = 'UKV_kdown_' + str(scint_path)
+
+        # observation peaks
+        # QH
+        QH_obs_df = df_peak(day_df, obs_QH_col_name)
+        # kdwn
+        Kdn_obs_df = df_peak(day_df, obs_kdown_col_name)
+
+        # model peaks
+        # peak UKV Kdn
+        UKV_kdn_df = df_peak(day_df, UKV_kdown_col_name)
+        # peak UKV QH
+        UKB_QH_df = df_peak(day_df, UKV_QH_col_name)
+
+        df_combine = pd.concat([QH_obs_df, Kdn_obs_df, UKV_kdn_df, UKB_QH_df])
+
+        # take difference in time
+        time_delta_qh = df_combine.loc[obs_QH_col_name].time - df_combine.loc[UKV_QH_col_name].time
+        time_delta_kdn = df_combine.loc[obs_kdown_col_name].time - df_combine.loc[UKV_kdown_col_name].time
+
+        # total minutes difference
+        delta_minutes_qh = time_delta_qh.total_seconds() / 60 / 60
+        delta_minutes_kdown = time_delta_kdn.total_seconds() / 60 / 60
+
+        # take difference in value
+        val_delta_qh = df_combine.loc[obs_QH_col_name].value - df_combine.loc[UKV_QH_col_name].value
+        val_delta_kdn = df_combine.loc[obs_kdown_col_name].value - df_combine.loc[UKV_kdown_col_name].value
+
+        # create a dataframe of differences to return
+        peak_df = pd.DataFrame.from_dict({'time_delta_qh': [delta_minutes_qh], 'time_delta_kdn': [delta_minutes_kdown],
+                                          'value_delta_qh': [val_delta_qh], 'value_delta_kdn': [val_delta_kdn]})
+
+        # DOY for index
+        DOY = int(QH_obs_df.loc[obs_QH_col_name].time.strftime('%Y%j'))
+
+        peak_df.index = [DOY]
+
+        df_DOY_list.append(peak_df)
+
+    df_all = pd.concat(df_DOY_list)
+
+    return df_all
+
+
+def df_peak(df, column_name):
+    """
+    Find peak value and time of a dataframe
+    """
+
+    var = df[column_name].dropna()
+
+    peak_time = var.iloc[np.where(var == var.max())[0]].index
+    peak_val = var.max()
+
+    # create df
+
+    return_df = pd.DataFrame.from_dict({'time': peak_time, 'value': peak_val})
+
+    if len(return_df) != 1:
+        # when more than one peak, take the first one only
+        return_df = return_df.loc[0:0]
+
+    return_df.index = [column_name]
+
+    return return_df
+
+
+def peak_analysis_plot(peak_df):
+    plt.close('all')
+    plt.figure(figsize=(12, 10))
+    cmap = cm.get_cmap('rainbow')
+    plt.scatter(peak_df.MBE_qh_day, peak_df.value_delta_qh, c=peak_df.time_delta_qh, cmap=cmap)
+    cbar = plt.colorbar()
+
+    slope, intercept, r_value, p_value, std_err = linregress(peak_df.MBE_qh_day, peak_df.value_delta_qh)
+    string_for_leg = 'm = ' + str(round(slope, 2)) + '\n' + 'c = ' + str(round(intercept, 2))
+
+    plt.plot(np.unique(peak_df.MBE_qh_day),
+             np.poly1d(np.polyfit(peak_df.MBE_qh_day, peak_df.value_delta_qh, 1))(np.unique(peak_df.MBE_qh_day)),
+             color='blue', linestyle='--', alpha=0.5, label=string_for_leg)
+
+    plt.plot([min(peak_df.MBE_qh_day), max(peak_df.MBE_qh_day)], [min(peak_df.MBE_qh_day), max(peak_df.MBE_qh_day)],
+             color='k', linestyle=':', alpha=0.5, label='Identity')
+
+    cbar.ax.set_ylabel('Time Offset (h)')
+    plt.xlabel('day MBE (W $m^{-2}$)')
+    plt.ylabel('peak BE (W $m^{-2}$)')
+
+    plt.legend()
+
+    plt.savefig('C:/Users/beths/OneDrive - University of Reading/Working Folder/peak.png', bbox_inches='tight', dpi=300)
+
+    print('end')
+
+
+# def peak_rolling_mean(df, column_name, window_size=10):
+#     """
+#     Find the observation peak value and time
+#     """
+#
+#     obs_var = df[column_name].dropna()
+#
+#     # rolling mean
+#     obs_rolling_mean = obs_var.rolling(window=window_size).mean()
+#
+#     # peak time
+#     peak_time = obs_rolling_mean.iloc[np.where(obs_rolling_mean == obs_rolling_mean.max())[0]].index
+#
+#     return peak_time
+
+
 def read_peak_csvs(pair_id):
     """
 
@@ -116,150 +243,3 @@ def peak_stats_by_season(pair_id):
 if __name__ == "__main__":
     # read_peak_csvs('IMU_BTT')
     peak_stats_by_season('BCT_IMU')
-
-
-def peak_analysis_plot(peak_df):
-    plt.close('all')
-    plt.figure(figsize=(12, 10))
-    cmap = cm.get_cmap('rainbow')
-    plt.scatter(peak_df.MBE_qh_day, peak_df.value_delta_qh, c=peak_df.time_delta_qh, cmap=cmap)
-    cbar = plt.colorbar()
-
-    slope, intercept, r_value, p_value, std_err = linregress(peak_df.MBE_qh_day, peak_df.value_delta_qh)
-    string_for_leg = 'm = ' + str(round(slope, 2)) + '\n' + 'c = ' + str(round(intercept, 2))
-
-    plt.plot(np.unique(peak_df.MBE_qh_day),
-             np.poly1d(np.polyfit(peak_df.MBE_qh_day, peak_df.value_delta_qh, 1))(np.unique(peak_df.MBE_qh_day)),
-             color='blue', linestyle='--', alpha=0.5, label=string_for_leg)
-
-    plt.plot([min(peak_df.MBE_qh_day), max(peak_df.MBE_qh_day)], [min(peak_df.MBE_qh_day), max(peak_df.MBE_qh_day)],
-             color='k', linestyle=':', alpha=0.5, label='Identity')
-
-    cbar.ax.set_ylabel('Time Offset (h)')
-    plt.xlabel('day MBE (W $m^{-2}$)')
-    plt.ylabel('peak BE (W $m^{-2}$)')
-
-    plt.legend()
-
-    plt.savefig('C:/Users/beths/OneDrive - University of Reading/Working Folder/peak.png', bbox_inches='tight', dpi=300)
-
-    print('end')
-
-
-def read_day_statistic(DOY, pair_id, column_name,
-                       csv_path='C:/Users/beths/OneDrive - University of Reading/Paper 2/categorize_days/FLUX_PLOTS/'):
-    """
-    Get a statistic from a day - by reading existing spreadsheet
-    """
-
-    # read csv
-    file_path = csv_path + pair_id + '_STATS.csv'
-
-    df = pd.read_csv(file_path)
-
-    stat = float(df.iloc[np.where(df.DOY == DOY)[0]][column_name])
-
-    return stat
-
-
-def df_peak(df, column_name):
-    """
-    Find peak value and time of a dataframe
-    """
-
-    var = df[column_name].dropna()
-
-    peak_time = var.iloc[np.where(var == var.max())[0]].index
-    peak_val = var.max()
-
-    # create df
-
-    return_df = pd.DataFrame.from_dict({'time': peak_time, 'value': peak_val})
-
-    if len(return_df) != 1:
-        # when more than one peak, take the first one only
-        return_df = return_df.loc[0:0]
-
-    return_df.index = [column_name]
-
-    return return_df
-
-
-def peak_rolling_mean(df, column_name, window_size=10):
-    """
-    Find the observation peak value and time
-    """
-
-    obs_var = df[column_name].dropna()
-
-    # rolling mean
-    obs_rolling_mean = obs_var.rolling(window=window_size).mean()
-
-    # peak time
-    peak_time = obs_rolling_mean.iloc[np.where(obs_rolling_mean == obs_rolling_mean.max())[0]].index
-
-    return peak_time
-
-
-def peak_BE(df, UKV_df, pair_id):
-    """
-    Get the peak bias error and time offset between obs and UKV
-    Returns
-    -------
-
-    """
-
-    # peak model/ obs equivalent
-    # get the equivalent
-    # resample the obs into 10 min averages
-    QH_obs_avs = read_calculated_fluxes.time_averages_of_obs(df, 'QH', on_hour=True).rename(
-        columns={'obs_1': 'QH_1', 'obs_5': 'QH_5', 'obs_10': 'QH_10', 'obs_60': 'QH_60'})
-
-    kdown_obs_avs = read_calculated_fluxes.time_averages_of_obs(df, 'kdown', on_hour=True, for_model=True).rename(
-        columns={'obs_1': 'kdown_1', 'obs_5': 'kdown_5', 'obs_10': 'kdown_10', 'obs_60': 'kdown_60'})
-
-    # observation peak
-    # QH
-    QH_obs_df = df_peak(QH_obs_avs, 'QH_10')
-    # kdwn
-    Kdn_obs_df = df_peak(kdown_obs_avs, 'kdown_10')
-
-    # model peaks
-    # peak UKV Kdn
-    UKV_kdn_df = df_peak(UKV_df, 'kdown_UKV')
-    # peak UKV QH
-    UKB_QH_df = df_peak(UKV_df, 'BL_H_UKV')
-
-    df_combine = pd.concat([QH_obs_df, Kdn_obs_df, UKV_kdn_df, UKB_QH_df])
-
-    # take difference in time
-    time_delta_qh = df_combine.loc['QH_10'].time - df_combine.loc['BL_H_UKV'].time
-    time_delta_kdn = df_combine.loc['kdown_10'].time - df_combine.loc['kdown_UKV'].time
-
-    # total minutes difference
-    delta_minutes_qh = time_delta_qh.total_seconds() / 60 / 60
-    delta_minutes_kdown = time_delta_kdn.total_seconds() / 60 / 60
-
-    # take difference in value
-    val_delta_qh = df_combine.loc['QH_10'].value - df_combine.loc['BL_H_UKV'].value
-    val_delta_kdn = df_combine.loc['kdown_10'].value - df_combine.loc['kdown_UKV'].value
-
-    # create a dataframe of differences to return?
-
-    peak_df = pd.DataFrame.from_dict({'time_delta_qh': [delta_minutes_qh], 'time_delta_kdn': [delta_minutes_kdown],
-                                      'value_delta_qh': [val_delta_qh], 'value_delta_kdn': [val_delta_kdn]})
-
-    # DOY for index
-    DOY = int(QH_obs_df.loc['QH_10'].time.strftime('%Y%j'))
-
-    peak_df.index = [DOY]
-
-    # read MBE of day
-    MBE_qh = read_day_statistic(DOY, pair_id, 'H_MBE')
-    MBE_Kdn = read_day_statistic(DOY, pair_id, 'kdown_MBE')
-
-    # add to df
-    peak_df['MBE_qh_day'] = MBE_qh
-    peak_df['MBE_kdn_day'] = MBE_Kdn
-
-    return peak_df
