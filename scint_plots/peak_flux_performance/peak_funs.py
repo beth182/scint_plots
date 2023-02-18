@@ -25,6 +25,10 @@ def peak_BE(df, scint_path):
         UKV_QH_col_name = 'UKV_QH_' + str(scint_path)
         UKV_kdown_col_name = 'UKV_kdown_' + str(scint_path)
 
+        # calculate MBE of day
+        MBE_QH = (day_df[obs_QH_col_name] - day_df[UKV_QH_col_name]).mean()
+        MBE_kdown = (day_df[obs_kdown_col_name] - day_df[UKV_kdown_col_name]).mean()
+
         # observation peaks
         # QH
         QH_obs_df = df_peak(day_df, obs_QH_col_name)
@@ -51,9 +55,12 @@ def peak_BE(df, scint_path):
         val_delta_qh = df_combine.loc[obs_QH_col_name].value - df_combine.loc[UKV_QH_col_name].value
         val_delta_kdn = df_combine.loc[obs_kdown_col_name].value - df_combine.loc[UKV_kdown_col_name].value
 
+
+
         # create a dataframe of differences to return
         peak_df = pd.DataFrame.from_dict({'time_delta_qh': [delta_minutes_qh], 'time_delta_kdn': [delta_minutes_kdown],
-                                          'value_delta_qh': [val_delta_qh], 'value_delta_kdn': [val_delta_kdn]})
+                                          'value_delta_qh': [val_delta_qh], 'value_delta_kdn': [val_delta_kdn],
+                                          'MBE_qh_day': MBE_QH, 'MBE_kdn_day': MBE_kdown})
 
         # DOY for index
         DOY = int(QH_obs_df.loc[obs_QH_col_name].time.strftime('%Y%j'))
@@ -113,6 +120,7 @@ def peak_analysis_plot(peak_df):
 
     plt.legend()
 
+    # Todo: update save path
     plt.savefig('C:/Users/beths/OneDrive - University of Reading/Working Folder/peak.png', bbox_inches='tight', dpi=300)
 
     print('end')

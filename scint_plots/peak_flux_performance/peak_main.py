@@ -48,13 +48,11 @@ df = pd.concat([df_obs, df_UKV], axis=1)
 
 peak_df = peak_funs.peak_BE(df=df, scint_path=scint_path)
 
-print('end')
-
-
 # save csv
+# ToDo: update if needed
 # peak_df.to_csv('C:/Users/beths/OneDrive - University of Reading/Paper 2/categorize_days/peak_analysis/peak_analysis_' + pair_id +'.csv')
 
 # plot
-peak_analysis.peak_analysis_plot(peak_df)
+peak_funs.peak_analysis_plot(peak_df)
 
 print('end')
