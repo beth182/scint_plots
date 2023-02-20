@@ -66,5 +66,5 @@ def save_df_to_csv(save_path='./',
 if __name__ == '__main__':
     save_path = os.getcwd().replace('\\', '/') + '/csv_files/'
 
-    save_df_to_csv(save_path, average=60)
+    save_df_to_csv(save_path, average=10)
     print('end')
