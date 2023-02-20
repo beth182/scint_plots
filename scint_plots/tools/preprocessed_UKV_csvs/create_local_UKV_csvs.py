@@ -33,9 +33,6 @@ df_subset['DOY_string'] = df_subset.year.astype(str) + df_subset.DOY.astype(str)
 df_subset['DOY_string'] = df_subset['DOY_string'].astype(int)
 DOY_list = df_subset.DOY_string.to_list()
 
-# FOR TESTING
-DOY_list = DOY_list[:2]
-
 pair_id = look_up.scint_path_numbers[scint_path]
 
 # set the target height
