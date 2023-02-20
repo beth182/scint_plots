@@ -68,9 +68,9 @@ def save_df_to_csv(save_path='./',
     else:
         save_path_offset = save_path + 'offset_' + str(offset) + '/'
 
-        df_combine_13.to_csv(save_path_offset + 'path_13_' + str(average) + 'vals.csv')
-        df_combine_15.to_csv(save_path_offset + 'path_15_' + str(average) + 'vals.csv')
-        df_combine_12.to_csv(save_path_offset + 'path_12_' + str(average) + 'vals.csv')
+        df_combine_13.to_csv(save_path_offset + 'path_13_' + str(average) + '_vals.csv')
+        df_combine_15.to_csv(save_path_offset + 'path_15_' + str(average) + '_vals.csv')
+        df_combine_12.to_csv(save_path_offset + 'path_12_' + str(average) + '_vals.csv')
         df_combine_11.to_csv(save_path_offset + 'path_11_' + str(average) + '_vals.csv')
 
 
