@@ -112,6 +112,10 @@ def peak_analysis_plot(peak_df, pair_id, average, save_path):
     cmap = cm.get_cmap('rainbow')
 
     if average == 60:
+
+        axlim_min = -300
+        axlim_max = 300
+
         smallest_dt = -6
         largest_dt = 6
     else:
@@ -137,6 +141,9 @@ def peak_analysis_plot(peak_df, pair_id, average, save_path):
     cbar.ax.set_ylabel('Time Offset (h)')
     plt.xlabel('day MBE (W $m^{-2}$)')
     plt.ylabel('peak BE (W $m^{-2}$)')
+
+    plt.xlim(axlim_min, axlim_max)
+    plt.ylim(axlim_min, axlim_max)
 
     plt.legend()
 
