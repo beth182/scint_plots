@@ -3,6 +3,10 @@ import matplotlib.pyplot as plt
 import pandas as pd
 from matplotlib import cm
 from scipy.stats import linregress
+import matplotlib as mpl
+from matplotlib.ticker import MaxNLocator
+
+mpl.rcParams.update({'font.size': 15})
 
 from scint_flux.functions import read_calculated_fluxes
 
@@ -54,8 +58,6 @@ def peak_BE(df, scint_path):
         # take difference in value
         val_delta_qh = df_combine.loc[obs_QH_col_name].value - df_combine.loc[UKV_QH_col_name].value
         val_delta_kdn = df_combine.loc[obs_kdown_col_name].value - df_combine.loc[UKV_kdown_col_name].value
-
-
 
         # create a dataframe of differences to return
         peak_df = pd.DataFrame.from_dict({'time_delta_qh': [delta_minutes_qh], 'time_delta_kdn': [delta_minutes_kdown],
@@ -109,8 +111,18 @@ def peak_analysis_plot(peak_df, pair_id, average, save_path):
 
     cmap = cm.get_cmap('rainbow')
 
-    plt.scatter(peak_df.MBE_qh_day, peak_df.value_delta_qh, c=peak_df.time_delta_qh, cmap=cmap)
+    if average == 60:
+        smallest_dt = -6
+        largest_dt = 6
+    else:
+        raise ValueError('average lims not set yet')
+
+    bounds = np.linspace(smallest_dt, largest_dt, np.abs(largest_dt) + np.abs(smallest_dt) + 1)
+    norm = mpl.colors.BoundaryNorm(bounds, cmap.N)
+
+    plt.scatter(peak_df.MBE_qh_day, peak_df.value_delta_qh, c=peak_df.time_delta_qh, cmap=cmap, norm=norm)
     cbar = plt.colorbar()
+    cbar.set_ticks(np.arange(smallest_dt, largest_dt + 1, step=1))
 
     slope, intercept, r_value, p_value, std_err = linregress(peak_df.MBE_qh_day, peak_df.value_delta_qh)
     string_for_leg = 'm = ' + str(round(slope, 2)) + '\n' + 'c = ' + str(round(intercept, 2))
