@@ -14,8 +14,8 @@ from scint_flux import look_up
 ########################################################################################################################
 
 # user choices
-scint_path = 11
-target_level = -1
+scint_path = 15
+target_level = 1
 # target model levels.
 # 0 = closest level to obs median zf
 # 1 is one above

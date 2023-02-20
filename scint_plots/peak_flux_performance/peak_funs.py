@@ -99,7 +99,7 @@ def df_peak(df, column_name):
     return return_df
 
 
-def peak_analysis_plot(peak_df, pair_id, average, save_path):
+def peak_analysis_plot(peak_path_dict, average, save_path):
     """
 
     :param peak_df:
@@ -107,48 +107,72 @@ def peak_analysis_plot(peak_df, pair_id, average, save_path):
     :return:
     """
 
+    # get extreme vals
+
+    dt_mins = []
+    dt_maxs = []
+
+    ax_mins = []
+    ax_maxs = []
+
+    for pair_id in peak_path_dict:
+        peak_df = peak_path_dict[pair_id]
+
+        dt_mins.append(peak_df.time_delta_qh.min())
+        dt_maxs.append(peak_df.time_delta_qh.max())
+
+        ax_mins.append(peak_df.MBE_qh_day.min())
+        ax_mins.append(peak_df.value_delta_qh.min())
+
+        ax_maxs.append(peak_df.MBE_qh_day.max())
+        ax_maxs.append(peak_df.value_delta_qh.max())
+
+    cbar_min = min(dt_mins)
+    cbar_max = max(dt_maxs)
+
+    ax_min = min(ax_mins) - 10
+    ax_max = max(ax_maxs) + 10
+
+
+    print('end')
+
     plt.figure(figsize=(12, 10))
 
     cmap = cm.get_cmap('rainbow')
 
-    if average == 60:
-
-        axlim_min = -300
-        axlim_max = 300
-
-        smallest_dt = -6
-        largest_dt = 6
-    else:
-        raise ValueError('average lims not set yet')
-
-    bounds = np.linspace(smallest_dt, largest_dt, np.abs(largest_dt) + np.abs(smallest_dt) + 1)
+    bounds = np.linspace(cbar_min, cbar_max, int(np.abs(cbar_max) + np.abs(cbar_min) + 1))
     norm = mpl.colors.BoundaryNorm(bounds, cmap.N)
 
-    plt.scatter(peak_df.MBE_qh_day, peak_df.value_delta_qh, c=peak_df.time_delta_qh, cmap=cmap, norm=norm)
+    for path_id in peak_path_dict:
+        peak_df = peak_path_dict[path_id]
+
+        plt.scatter(peak_df.MBE_qh_day, peak_df.value_delta_qh, c=peak_df.time_delta_qh, cmap=cmap, norm=norm)
+
+        slope, intercept, r_value, p_value, std_err = linregress(peak_df.MBE_qh_day, peak_df.value_delta_qh)
+        string_for_leg = 'm = ' + str(round(slope, 2)) + '\n' + 'c = ' + str(round(intercept, 2))
+
+        plt.plot(np.unique(peak_df.MBE_qh_day),
+                 np.poly1d(np.polyfit(peak_df.MBE_qh_day, peak_df.value_delta_qh, 1))(np.unique(peak_df.MBE_qh_day)),
+                 color='blue', linestyle='--', alpha=0.5, label=string_for_leg)
+
+        # ToDo: remove from loop and only do once
+        plt.plot([min(peak_df.MBE_qh_day), max(peak_df.MBE_qh_day)], [min(peak_df.MBE_qh_day), max(peak_df.MBE_qh_day)],
+                 color='k', linestyle=':', alpha=0.5, label='Identity')
+
     cbar = plt.colorbar()
-    cbar.set_ticks(np.arange(smallest_dt, largest_dt + 1, step=1))
-
-    slope, intercept, r_value, p_value, std_err = linregress(peak_df.MBE_qh_day, peak_df.value_delta_qh)
-    string_for_leg = 'm = ' + str(round(slope, 2)) + '\n' + 'c = ' + str(round(intercept, 2))
-
-    plt.plot(np.unique(peak_df.MBE_qh_day),
-             np.poly1d(np.polyfit(peak_df.MBE_qh_day, peak_df.value_delta_qh, 1))(np.unique(peak_df.MBE_qh_day)),
-             color='blue', linestyle='--', alpha=0.5, label=string_for_leg)
-
-    plt.plot([min(peak_df.MBE_qh_day), max(peak_df.MBE_qh_day)], [min(peak_df.MBE_qh_day), max(peak_df.MBE_qh_day)],
-             color='k', linestyle=':', alpha=0.5, label='Identity')
+    cbar.set_ticks(np.arange(cbar_min, cbar_max + 1, step=1))
 
     cbar.ax.set_ylabel('Time Offset (h)')
     plt.xlabel('day MBE (W $m^{-2}$)')
     plt.ylabel('peak BE (W $m^{-2}$)')
 
-    plt.xlim(axlim_min, axlim_max)
-    plt.ylim(axlim_min, axlim_max)
+    # plt.xlim(ax_min, ax_max)
+    # plt.ylim(ax_min, ax_max)
 
     plt.legend()
 
     # plt.show()
-    plt.savefig(save_path + pair_id + '_' + str(average) + '_peak.png', bbox_inches='tight', dpi=300)
+    plt.savefig(save_path + str(average) + '_peak.png', bbox_inches='tight', dpi=300)
 
     print('end')
 

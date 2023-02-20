@@ -14,11 +14,14 @@ from scint_plots.scint_seasonality import seasonality_funs
 
 # User inputs
 # scint_path = 15
-scint_path_list = [11,12,13,15]
+# scint_path_list = [11, 12, 13, 15]
+scint_path_list = [11, 15]
 var_list = ['QH', 'kdown']
 obs_average = 60
 
 save_path = os.getcwd().replace('\\', '/') + '/'
+
+path_dict = {}
 
 for scint_path in scint_path_list:
 
@@ -59,7 +62,8 @@ for scint_path in scint_path_list:
     # ToDo: update if needed
     # peak_df.to_csv('C:/Users/beths/OneDrive - University of Reading/Paper 2/categorize_days/peak_analysis/peak_analysis_' + pair_id +'.csv')
 
-    # plot
-    peak_funs.peak_analysis_plot(peak_df, pair_id, obs_average, save_path)
+    path_dict[pair_id] = peak_df
 
+# plot
+peak_funs.peak_analysis_plot(path_dict, obs_average, save_path)
 print('end')
