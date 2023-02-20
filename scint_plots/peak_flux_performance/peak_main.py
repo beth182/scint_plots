@@ -56,6 +56,7 @@ peak_df = peak_funs.peak_BE(df=df, scint_path=scint_path)
 # peak_df.to_csv('C:/Users/beths/OneDrive - University of Reading/Paper 2/categorize_days/peak_analysis/peak_analysis_' + pair_id +'.csv')
 
 # plot
+# ToDo: get obs average in name of dave plot & set limits based on what average it is
 peak_funs.peak_analysis_plot(peak_df, pair_id, save_path)
 
 print('end')
