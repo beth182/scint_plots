@@ -105,8 +105,6 @@ def peak_analysis_plot(peak_df, pair_id, save_path):
     :return:
     """
 
-    plt.close('all')
-
     plt.figure(figsize=(12, 10))
 
     cmap = cm.get_cmap('rainbow')
@@ -131,8 +129,6 @@ def peak_analysis_plot(peak_df, pair_id, save_path):
     plt.legend()
 
     # plt.show()
-
-    # Todo: update save path
     plt.savefig(save_path + pair_id + '_peak.png', bbox_inches='tight', dpi=300)
 
     print('end')

@@ -13,7 +13,7 @@ from scint_plots.scint_seasonality import seasonality_funs
 # ToDo: do I need the statistics csvs anymore in FLUX_PLOTS
 
 # User inputs
-scint_path = 12
+scint_path = 15
 var_list = ['QH', 'kdown']
 
 save_path = os.getcwd().replace('\\', '/') + '/'
