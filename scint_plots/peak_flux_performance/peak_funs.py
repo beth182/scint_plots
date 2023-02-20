@@ -129,6 +129,7 @@ def peak_analysis_plot(peak_df, pair_id, save_path):
     plt.legend()
 
     # plt.show()
+    # ToDo: get obs average in name of dave plot & set limits based on what average it is
     plt.savefig(save_path + pair_id + '_peak.png', bbox_inches='tight', dpi=300)
 
     print('end')
