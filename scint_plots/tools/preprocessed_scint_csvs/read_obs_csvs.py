@@ -4,7 +4,9 @@ import pandas as pd
 
 
 def read_all_of_preprocessed_scint_csv(list_of_vars=['QH'],
-                                       csv_dir='D:/Documents/scint_plots/scint_plots/tools/preprocessed_scint_csvs/csv_files/'):
+                                       csv_dir='D:/Documents/scint_plots/scint_plots/tools/preprocessed_scint_csvs/csv_files/',
+                                       average=60,
+                                       offset=0):
     """
 
     :return:
@@ -15,7 +17,13 @@ def read_all_of_preprocessed_scint_csv(list_of_vars=['QH'],
 
     path_df_dict = {}
     for path in path_list:
-        df = pd.read_csv(csv_dir + 'path_' + str(path) + '_vals.csv')
+
+        if offset == 0:
+            pass
+        else:
+            csv_dir = csv_dir + 'offset_' + str(offset)
+
+        df = pd.read_csv(csv_dir + 'path_' + str(path) + '_' + str(average) + '_vals.csv')
         df['time'] = pd.to_datetime(df['time'], format='%Y-%m-%d %H:%M:%S')
         df = df.set_index('time')
 
