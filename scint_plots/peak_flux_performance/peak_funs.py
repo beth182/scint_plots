@@ -97,10 +97,20 @@ def df_peak(df, column_name):
     return return_df
 
 
-def peak_analysis_plot(peak_df):
+def peak_analysis_plot(peak_df, pair_id, save_path):
+    """
+
+    :param peak_df:
+    :param save_path:
+    :return:
+    """
+
     plt.close('all')
+
     plt.figure(figsize=(12, 10))
+
     cmap = cm.get_cmap('rainbow')
+
     plt.scatter(peak_df.MBE_qh_day, peak_df.value_delta_qh, c=peak_df.time_delta_qh, cmap=cmap)
     cbar = plt.colorbar()
 
@@ -120,8 +130,10 @@ def peak_analysis_plot(peak_df):
 
     plt.legend()
 
+    # plt.show()
+
     # Todo: update save path
-    plt.savefig('C:/Users/beths/OneDrive - University of Reading/Working Folder/peak.png', bbox_inches='tight', dpi=300)
+    plt.savefig(save_path + pair_id + '_peak.png', bbox_inches='tight', dpi=300)
 
     print('end')
 

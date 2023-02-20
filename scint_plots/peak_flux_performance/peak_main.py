@@ -1,4 +1,5 @@
 import pandas as pd
+import os
 
 from scint_flux import look_up
 
@@ -14,6 +15,8 @@ from scint_plots.scint_seasonality import seasonality_funs
 # User inputs
 scint_path = 12
 var_list = ['QH', 'kdown']
+
+save_path = os.getcwd().replace('\\', '/') + '/'
 
 pair_id = look_up.scint_path_numbers[scint_path]
 
@@ -53,6 +56,6 @@ peak_df = peak_funs.peak_BE(df=df, scint_path=scint_path)
 # peak_df.to_csv('C:/Users/beths/OneDrive - University of Reading/Paper 2/categorize_days/peak_analysis/peak_analysis_' + pair_id +'.csv')
 
 # plot
-peak_funs.peak_analysis_plot(peak_df)
+peak_funs.peak_analysis_plot(peak_df, pair_id, save_path)
 
 print('end')
