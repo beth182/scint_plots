@@ -188,23 +188,7 @@ def peak_analysis_plot(peak_path_dict, average, save_path):
     print('end')
 
 
-# def peak_rolling_mean(df, column_name, window_size=10):
-#     """
-#     Find the observation peak value and time
-#     """
-#
-#     obs_var = df[column_name].dropna()
-#
-#     # rolling mean
-#     obs_rolling_mean = obs_var.rolling(window=window_size).mean()
-#
-#     # peak time
-#     peak_time = obs_rolling_mean.iloc[np.where(obs_rolling_mean == obs_rolling_mean.max())[0]].index
-#
-#     return peak_time
-
-
-def read_peak_csvs(pair_id):
+def peak_stats(path_dict):
     """
 
     Returns
@@ -212,100 +196,117 @@ def read_peak_csvs(pair_id):
 
     """
 
-    # open pandas df from csv file
-    df = pd.read_csv(
-        'C:/Users/beths/OneDrive - University of Reading/Paper 2/categorize_days/peak_analysis/peak_analysis_' + pair_id + '.csv')
-    df = df.rename(columns={'Unnamed: 0': 'DOY'})
-    df = df.set_index('DOY')
+    for pair_id in path_dict.keys():
+        print(' ')
+        print(pair_id)
+        print(' ')
 
-    # total days
-    print('len days: ', len(df))
+        df = path_dict[pair_id]
 
-    assert len(np.where(df.time_delta_qh == 0)[0]) + len(np.where(df.time_delta_qh > 0)[0]) + len(
-        np.where(df.time_delta_qh < 0)[0]) == len(df)
+        # total days
+        print('len days: ', len(df))
 
-    # total negative t delta
-    print('len negative dt: ', len(np.where(df.time_delta_qh < 0)[0]))
+        assert len(np.where(df.time_delta_qh == 0)[0]) + len(np.where(df.time_delta_qh > 0)[0]) + len(
+            np.where(df.time_delta_qh < 0)[0]) == len(df)
 
-    # total number of positive t delta
-    print('len positive dt: ', len(np.where(df.time_delta_qh > 0)[0]))
+        # total negative t delta
+        print('len negative dt: ', len(np.where(df.time_delta_qh < 0)[0]))
 
-    # total number of 0 t delta
-    print('len 0 dt: ', len(np.where(df.time_delta_qh == 0)[0]))
+        # total number of positive t delta
+        print('len positive dt: ', len(np.where(df.time_delta_qh > 0)[0]))
 
-    # precentage of negative dt from total days
-    print('% of negative dt :', len(np.where(df.time_delta_qh < 0)[0]) / len(df) * 100)
+        # total number of 0 t delta
+        print('len 0 dt: ', len(np.where(df.time_delta_qh == 0)[0]))
 
-    # most frequant t delta
-    print('most common t delta: ',
-          df['time_delta_qh'].value_counts().sort_values(ascending=False)[df.time_delta_qh.mode()])
+        # precentage of negative dt from total days
+        print('% of negative dt :', len(np.where(df.time_delta_qh < 0)[0]) / len(df) * 100)
 
-    # peak MBE
-    print('peak MBE: ', df.value_delta_qh.mean())
+        # most frequant t delta
+        print('most common t delta: ',
+              df['time_delta_qh'].value_counts().sort_values(ascending=False)[df.time_delta_qh.mode()])
 
-    # day MBE
-    print('DAY MBE: ', df.MBE_qh_day.mean())
+        # peak MBE
+        print('peak MBE: ', df.value_delta_qh.mean())
+
+        # day MBE
+        print('DAY MBE: ', df.MBE_qh_day.mean())
+
+    print('end')
 
 
-def peak_stats_by_season(pair_id):
-    # open pandas df from csv file
-    df = pd.read_csv(
-        'C:/Users/beths/OneDrive - University of Reading/Paper 2/categorize_days/peak_analysis/peak_analysis_' + pair_id + '.csv')
-    df = df.rename(columns={'Unnamed: 0': 'DOY'})
-    df = df.set_index('DOY')
+def peak_stats_by_season(path_dict):
+    """
 
-    # split into seasons
+    :param path_dict:
+    :return:
+    """
 
-    # convert index to datetime
+    for pair_id in path_dict.keys():
+        print(' ')
+        print(pair_id)
+        print(' ')
 
-    # add month column
-    df['month'] = pd.to_datetime(df.index, format='%Y%j').month
+        df = path_dict[pair_id]
 
-    DJF = df.iloc[np.asarray(
-        list(np.where(df.month == 1)[0]) + list(np.where(df.month == 2)[0]) + list(np.where(df.month == 12)[0]))]
+        # split into seasons
+        # add month column
+        df['month'] = pd.to_datetime(df.index, format='%Y%j').month
 
-    MAM = df.iloc[np.asarray(
-        list(np.where(df.month == 3)[0]) + list(np.where(df.month == 4)[0]) + list(np.where(df.month == 5)[0]))]
+        DJF = df.iloc[np.asarray(
+            list(np.where(df.month == 1)[0]) + list(np.where(df.month == 2)[0]) + list(np.where(df.month == 12)[0]))]
 
-    JJA = df.iloc[np.asarray(
-        list(np.where(df.month == 6)[0]) + list(np.where(df.month == 7)[0]) + list(np.where(df.month == 8)[0]))]
+        MAM = df.iloc[np.asarray(
+            list(np.where(df.month == 3)[0]) + list(np.where(df.month == 4)[0]) + list(np.where(df.month == 5)[0]))]
 
-    SON = df.iloc[np.asarray(
-        list(np.where(df.month == 9)[0]) + list(np.where(df.month == 10)[0]) + list(np.where(df.month == 11)[0]))]
+        JJA = df.iloc[np.asarray(
+            list(np.where(df.month == 6)[0]) + list(np.where(df.month == 7)[0]) + list(np.where(df.month == 8)[0]))]
 
-    assert len(DJF) + len(MAM) + len(JJA) + len(SON) == len(df)
+        SON = df.iloc[np.asarray(
+            list(np.where(df.month == 9)[0]) + list(np.where(df.month == 10)[0]) + list(np.where(df.month == 11)[0]))]
 
-    # print len days in each season
-    print('len days by season:')
-    print('DJF: ', len(DJF))
-    print('MAM: ', len(MAM))
-    print('JJA: ', len(JJA))
-    print('SON: ', len(SON))
-    print(' ')
+        assert len(DJF) + len(MAM) + len(JJA) + len(SON) == len(df)
 
-    # print % days negative dt
+        # print len days in each season
+        print('len days by season:')
+        print('DJF: ', len(DJF))
+        print('MAM: ', len(MAM))
+        print('JJA: ', len(JJA))
+        print('SON: ', len(SON))
+        print(' ')
 
-    print('% of negative dt :')
+        # print % days negative dt
 
-    try:
-        print('DJF: ', len(np.where(DJF.time_delta_qh < 0)[0]) / len(DJF) * 100)
-    except ZeroDivisionError:
-        pass
+        print('% of negative dt :')
 
-    try:
-        print('MAM: ', len(np.where(MAM.time_delta_qh < 0)[0]) / len(MAM) * 100)
-    except ZeroDivisionError:
-        pass
+        try:
+            print('DJF: ', len(np.where(DJF.time_delta_qh < 0)[0]) / len(DJF) * 100)
+        except ZeroDivisionError:
+            pass
+        try:
+            print('MAM: ', len(np.where(MAM.time_delta_qh < 0)[0]) / len(MAM) * 100)
+        except ZeroDivisionError:
+            pass
+        try:
+            print('JJA: ', len(np.where(JJA.time_delta_qh < 0)[0]) / len(JJA) * 100)
+        except ZeroDivisionError:
+            pass
+        try:
+            print('SON: ', len(np.where(SON.time_delta_qh < 0)[0]) / len(SON) * 100)
+        except ZeroDivisionError:
+            pass
 
-    try:
-        print('JJA: ', len(np.where(JJA.time_delta_qh < 0)[0]) / len(JJA) * 100)
-    except ZeroDivisionError:
-        pass
+        print(' ')
+        print('MBE')
 
-    try:
-        print('SON: ', len(np.where(SON.time_delta_qh < 0)[0]) / len(SON) * 100)
-    except ZeroDivisionError:
-        pass
+        # peak MBE
+        print('DJF peak MBE: ', DJF.value_delta_qh.mean())
+        print('DJF DAY MBE: ', DJF.MBE_qh_day.mean())
+        print('MAM peak MBE: ', MAM.value_delta_qh.mean())
+        print('MAM DAY MBE: ', MAM.MBE_qh_day.mean())
+        print('JJA peak MBE: ', JJA.value_delta_qh.mean())
+        print('JJA DAY MBE: ', JJA.MBE_qh_day.mean())
+        print('SON peak MBE: ', SON.value_delta_qh.mean())
+        print('SON DAY MBE: ', SON.MBE_qh_day.mean())
 
     print('end')
 

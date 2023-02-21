@@ -16,6 +16,7 @@ from scint_plots.scint_seasonality import seasonality_funs
 # scint_path = 15
 scint_path_list = [11, 12, 13, 15]
 # scint_path_list = [11, 15]
+
 var_list = ['QH', 'kdown']
 obs_average = 60
 
@@ -58,12 +59,12 @@ for scint_path in scint_path_list:
 
     peak_df = peak_funs.peak_BE(df=df, scint_path=scint_path)
 
-    # save csv
-    # ToDo: update if needed
-    # peak_df.to_csv('C:/Users/beths/OneDrive - University of Reading/Paper 2/categorize_days/peak_analysis/peak_analysis_' + pair_id +'.csv')
-
     path_dict[pair_id] = peak_df
 
 # plot
-peak_funs.peak_analysis_plot(path_dict, obs_average, save_path)
+# peak_funs.peak_analysis_plot(path_dict, obs_average, save_path)
+
+# stats
+# peak_funs.peak_stats(path_dict)
+peak_funs.peak_stats_by_season(path_dict)  # by season
 print('end')
