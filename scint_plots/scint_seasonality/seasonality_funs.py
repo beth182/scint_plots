@@ -7,7 +7,7 @@ import matplotlib.patches as mpatches
 from scint_flux import look_up
 
 
-def plot_season_one_panel(season_dict, season_dict_UKV, save_path, variable='QH', count_threshold=5):
+def plot_season_one_panel(season_dict, season_dict_UKV, save_path, average, variable='QH', count_threshold=5):
     """
 
     :return:
@@ -169,7 +169,10 @@ def plot_season_one_panel(season_dict, season_dict_UKV, save_path, variable='QH'
             path_name_here = look_up.scint_path_numbers[
                 int(season_dict[list(season_dict.keys())[0]].drop(columns=[variable + '_12']).columns[0].split('_')[
                         -1])]
-            plt.savefig(save_path + variable + '_' + path_name_here + '_' + season + '_seasonality.png',
+
+            save_path_string = save_path + str(average) + '/'
+
+            plt.savefig(save_path_string + variable + '_' + path_name_here + '_' + season + '_seasonality.png',
                         bbox_inches='tight', dpi=300)
 
 
