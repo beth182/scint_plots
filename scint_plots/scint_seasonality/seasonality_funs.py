@@ -17,7 +17,7 @@ def plot_season_one_panel(season_dict, season_dict_UKV, save_path, average, vari
 
     # hard code ylim
     if variable == 'QH':
-        ylim = 425
+        ylim = 500
     else:
         assert variable == 'kdown'
         ylim = 900
