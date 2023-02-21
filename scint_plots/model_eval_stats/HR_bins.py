@@ -92,6 +92,18 @@ df['min'] = df[obs_cols].min(axis=1)
 df['max_threshold'] = df['max'] + (df['max'] / 100) * 10
 df['min_threshold'] = df['min'] - (df['min'] / 100) * 10
 
-print('end')
+model_hits_cols = []
+for col in ukv_cols:
+
+    # hits name
+    hit_col_name = col + '_hits'
+    model_hits_cols.append(hit_col_name)
+
+    # set up dataframe with column of zeros
+    df[hit_col_name] = np.zeros(len(df))
+    df[hit_col_name][(df[col] >= df['min_threshold']) & (df[col] <= df['max_threshold'])] = 1
+
+# sum the hits
+df[model_hits_cols].mean().mean() * 100
 
 print('end')
