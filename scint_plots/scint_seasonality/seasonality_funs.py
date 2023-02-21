@@ -130,9 +130,9 @@ def plot_season_one_panel(season_dict, season_dict_UKV, save_path, average, vari
             ax.get_xaxis().set_major_locator(MaxNLocator(integer=True))
 
             if variable == 'QH':
-                ax.set_ylabel('$Q_{H}$ ($W m^{-2}$)')
+                ax.set_ylabel('$Q_{H}$ (W m$^{-2}$)')
             elif variable == 'kdown':
-                ax.set_ylabel('$K_{\downarrow}$ ($W m^{-2}$)')
+                ax.set_ylabel('$K_{\downarrow}$ (W m$^{-2}$)')
 
             ax.set_ylim(-10, ylim)
             ax.set_xlim(4.5, 19.5)
@@ -222,9 +222,9 @@ def plot_season(season_dict, save_path, variable='QH'):
                     ax[axis_count].get_yaxis().set_ticks([])
                 else:
                     if variable == 'QH':
-                        ax[0].set_ylabel('$Q_{H}$ ($W m^{-2}$)')
+                        ax[0].set_ylabel('$Q_{H}$ (W m$^{-2}$)')
                     elif variable == 'kdown':
-                        ax[0].set_ylabel('$K_{\downarrow}$ ($W m^{-2}$)')
+                        ax[0].set_ylabel('$K_{\downarrow}$ (W m$^{-2}$)')
 
                 y_lim_here = IQR_dict['75'].max().max()
                 y_lims.append(y_lim_here)
