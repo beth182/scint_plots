@@ -6,10 +6,10 @@ from scint_plots.scint_seasonality import seasonality_funs
 from scint_plots.tools.preprocessed_UKV_csvs import read_UKV_csvs
 
 # user choices
-variable = 'QH'
-# variable = 'kdown'
+# variable = 'QH'
+variable = 'kdown'
 
-average = 10
+average = 15
 # average = 60
 
 # 11, 13, 15

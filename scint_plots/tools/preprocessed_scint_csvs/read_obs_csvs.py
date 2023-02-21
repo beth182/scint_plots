@@ -15,14 +15,13 @@ def read_all_of_preprocessed_scint_csv(list_of_vars=['QH'],
     # read in locally saved files
     path_list = [11, 12, 13, 15]
 
+    if offset == 0:
+        pass
+    else:
+        csv_dir = csv_dir + 'offset_' + str(offset) + '/'
+
     path_df_dict = {}
     for path in path_list:
-
-        if offset == 0:
-            pass
-        else:
-            csv_dir = csv_dir + 'offset_' + str(offset)
-
         df = pd.read_csv(csv_dir + 'path_' + str(path) + '_' + str(average) + '_vals.csv')
         df['time'] = pd.to_datetime(df['time'], format='%Y-%m-%d %H:%M:%S')
         df = df.set_index('time')
