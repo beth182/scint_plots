@@ -9,7 +9,6 @@ from scint_plots.tools.preprocessed_scint_csvs import read_obs_csvs
 from scint_plots.tools.preprocessed_UKV_csvs import read_UKV_csvs
 from scint_plots.scint_seasonality import seasonality_funs
 
-# ToDo: remove the peak scripts from scint_flux repo
 # ToDo: do I need the statistics csvs anymore in FLUX_PLOTS
 
 # User inputs
