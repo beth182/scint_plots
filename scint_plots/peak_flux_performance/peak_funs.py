@@ -108,68 +108,79 @@ def peak_analysis_plot(peak_path_dict, average, save_path):
     """
 
     # get extreme vals
-
     dt_mins = []
     dt_maxs = []
-
     ax_mins = []
     ax_maxs = []
-
     for pair_id in peak_path_dict:
         peak_df = peak_path_dict[pair_id]
-
         dt_mins.append(peak_df.time_delta_qh.min())
         dt_maxs.append(peak_df.time_delta_qh.max())
-
         ax_mins.append(peak_df.MBE_qh_day.min())
         ax_mins.append(peak_df.value_delta_qh.min())
-
         ax_maxs.append(peak_df.MBE_qh_day.max())
         ax_maxs.append(peak_df.value_delta_qh.max())
 
     cbar_min = min(dt_mins)
     cbar_max = max(dt_maxs)
-
     ax_min = min(ax_mins) - 10
     ax_max = max(ax_maxs) + 10
 
+    # ToDo: move this and every version of this into a lookup
+    colour_dict = {'BCT_IMU': 'red', 'SCT_SWT': 'mediumorchid', 'IMU_BTT': 'green', 'BTT_BCT': 'blue'}
+    marker_dict = {'BCT_IMU': 'o', 'SCT_SWT': 'v', 'IMU_BTT': 's', 'BTT_BCT': '^'}
 
-    print('end')
+    # plt.figure(figsize=(10, 8))
+    fig, ax = plt.subplots(1, 2, figsize=(9, 8), gridspec_kw={'width_ratios': [1, 0.1]})
 
-    plt.figure(figsize=(12, 10))
-
-    cmap = cm.get_cmap('rainbow')
+    cmap = cm.get_cmap('PiYG')
 
     bounds = np.linspace(cbar_min, cbar_max, int(np.abs(cbar_max) + np.abs(cbar_min) + 1))
     norm = mpl.colors.BoundaryNorm(bounds, cmap.N)
 
-    for path_id in peak_path_dict:
-        peak_df = peak_path_dict[path_id]
+    # keep track of pair_id's included
+    pair_ids = []
 
-        plt.scatter(peak_df.MBE_qh_day, peak_df.value_delta_qh, c=peak_df.time_delta_qh, cmap=cmap, norm=norm)
+    for pair_id in peak_path_dict:
+        peak_df = peak_path_dict[pair_id]
+
+        ye = ax[0].scatter(peak_df.MBE_qh_day, peak_df.value_delta_qh, c=peak_df.time_delta_qh, cmap=cmap, norm=norm,
+                           edgecolors=colour_dict[pair_id],
+                           marker=marker_dict[pair_id],
+                           label=pair_id, zorder=3, linewidth=0.65)
 
         slope, intercept, r_value, p_value, std_err = linregress(peak_df.MBE_qh_day, peak_df.value_delta_qh)
-        string_for_leg = 'm = ' + str(round(slope, 2)) + '\n' + 'c = ' + str(round(intercept, 2))
+        string_for_leg = 'y = ' + str(round(slope, 2)) + 'x + ' + str(round(intercept, 1))
 
-        plt.plot(np.unique(peak_df.MBE_qh_day),
-                 np.poly1d(np.polyfit(peak_df.MBE_qh_day, peak_df.value_delta_qh, 1))(np.unique(peak_df.MBE_qh_day)),
-                 color='blue', linestyle='--', alpha=0.5, label=string_for_leg)
+        ax[0].plot(np.array([-1000, 1000]), slope * np.array([-1000, 1000]) + intercept, color=colour_dict[pair_id],
+                   label=string_for_leg, zorder=2)
 
-        # ToDo: remove from loop and only do once
-        plt.plot([min(peak_df.MBE_qh_day), max(peak_df.MBE_qh_day)], [min(peak_df.MBE_qh_day), max(peak_df.MBE_qh_day)],
-                 color='k', linestyle=':', alpha=0.5, label='Identity')
+        pair_ids.append(pair_id)
 
-    cbar = plt.colorbar()
+    ax[0].plot([-1000, 1000], [-1000, 1000], color='k', linestyle=':', alpha=0.5, label='Identity', zorder=1)
+
+    cax = ax[1]
+    cbar = fig.colorbar(mappable=ye, cax=cax)
     cbar.set_ticks(np.arange(cbar_min, cbar_max + 1, step=1))
 
     cbar.ax.set_ylabel('Time Offset (h)')
-    plt.xlabel('day MBE (W $m^{-2}$)')
-    plt.ylabel('peak BE (W $m^{-2}$)')
+    ax[0].set_xlabel('day MBE (W m$^{-2}$)')
+    ax[0].set_ylabel('peak BE (W m$^{-2}$)')
 
-    # plt.xlim(ax_min, ax_max)
-    # plt.ylim(ax_min, ax_max)
+    ax[0].set_xlim(ax_min, ax_max)
+    ax[0].set_ylim(ax_min, ax_max)
 
-    plt.legend()
+    handles, labels = ax[0].get_legend_handles_labels()
+
+    for i, label in enumerate(labels):
+        if label in pair_ids:
+            # set scatter points to have black facecolour
+            handles[i].set_facecolor('white')
+
+    ax[0].legend(handles=handles, loc='best')
+
+    fig.tight_layout()
+    plt.subplots_adjust(wspace=0.02, hspace=0.02)
 
     # plt.show()
     plt.savefig(save_path + str(average) + '_peak.png', bbox_inches='tight', dpi=300)

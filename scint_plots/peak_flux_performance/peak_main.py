@@ -14,8 +14,8 @@ from scint_plots.scint_seasonality import seasonality_funs
 
 # User inputs
 # scint_path = 15
-# scint_path_list = [11, 12, 13, 15]
-scint_path_list = [11, 15]
+scint_path_list = [11, 12, 13, 15]
+# scint_path_list = [11, 15]
 var_list = ['QH', 'kdown']
 obs_average = 60
 
