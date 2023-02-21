@@ -11,8 +11,10 @@ from scint_plots.scint_seasonality import seasonality_funs
 from scint_plots.tools import eval_stat_funs
 
 # user choices
-path_choice = 11
+path_choice = 15
 variable = 'QH'
+# average = 60
+average = 10
 
 if variable == 'QH':
     ukv_variable = 'BL_H'
@@ -20,7 +22,7 @@ else:
     ukv_variable = variable
 
 # read the premade scint data csv files
-df = read_obs_csvs.read_all_of_preprocessed_scint_csv([variable])
+df = read_obs_csvs.read_all_of_preprocessed_scint_csv([variable], average=average)
 
 # read the premade UKV data csv files
 df_UKV = read_UKV_csvs.read_all_of_preprocessed_UKV_csv([ukv_variable])
