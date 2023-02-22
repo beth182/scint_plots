@@ -3,12 +3,12 @@
 
 # imports
 import pandas as pd
-import numpy as np
 
 from scint_plots.tools.preprocessed_scint_csvs import read_obs_csvs
 from scint_plots.tools.preprocessed_UKV_csvs import read_UKV_csvs
 from scint_plots.tools import eval_stat_funs
 from scint_plots.tools.preprocessed_UKV_csvs import UKV_lookup
+from scint_plots.scint_seasonality import seasonality_funs
 
 # user choices
 variable = 'QH'
@@ -69,6 +69,20 @@ df_all_UKV = pd.concat(UKV_df_list, axis=1)
 # combine dfs
 df_all = pd.concat([df, df_all_UKV], axis=1).dropna()
 
+print(' ')
+print('HR: ALL seasons')
 HR = eval_stat_funs.hitrate_bins(df_all)
+print(HR)
+
+# split by season
+season_dict = seasonality_funs.split_df_into_season(df_all)
+
+for season in season_dict.keys():
+    print(' ')
+    print(season)
+    df_season = season_dict[season]
+    HR_season = eval_stat_funs.hitrate_bins(df_season)
+    print(HR_season)
+
 
 print('end')
