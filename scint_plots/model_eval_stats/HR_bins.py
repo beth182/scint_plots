@@ -69,41 +69,6 @@ df_all_UKV = pd.concat(UKV_df_list, axis=1)
 # combine dfs
 df_all = pd.concat([df, df_all_UKV], axis=1).dropna()
 
-
-
-
-
-# perform hit rate function
-
-df = df_all.copy()
-# identify obs columns
-obs_cols = []
-ukv_cols = []
-for col in df:
-    if col.startswith('QH'):
-        obs_cols.append(col)
-    else:
-        ukv_cols.append(col)
-
-df['max'] = df[obs_cols].max(axis=1)
-df['min'] = df[obs_cols].min(axis=1)
-
-# take 10 percent
-df['max_threshold'] = df['max'] + (df['max'] / 100) * 10
-df['min_threshold'] = df['min'] - (df['min'] / 100) * 10
-
-model_hits_cols = []
-for col in ukv_cols:
-
-    # hits name
-    hit_col_name = col + '_hits'
-    model_hits_cols.append(hit_col_name)
-
-    # set up dataframe with column of zeros
-    df[hit_col_name] = np.zeros(len(df))
-    df[hit_col_name][(df[col] >= df['min_threshold']) & (df[col] <= df['max_threshold'])] = 1
-
-# sum the hits
-df[model_hits_cols].mean().mean() * 100
+HR = eval_stat_funs.hitrate_bins(df_all)
 
 print('end')

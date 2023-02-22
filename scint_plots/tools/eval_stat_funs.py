@@ -56,3 +56,43 @@ def variable_hitrate(obs, mod, obs_uncertainty=10):
     hr_variable = df.hits.mean() * 100
 
     return hr_variable
+
+
+def hitrate_bins(df_all):
+    """
+
+    :param df:
+    :return:
+    """
+
+    df = df_all.copy()
+    # identify obs columns
+    obs_cols = []
+    ukv_cols = []
+    for col in df:
+        if col.startswith('QH'):
+            obs_cols.append(col)
+        else:
+            ukv_cols.append(col)
+
+    df['max'] = df[obs_cols].max(axis=1)
+    df['min'] = df[obs_cols].min(axis=1)
+
+    # take 10 percent
+    df['max_threshold'] = df['max'] + (df['max'] / 100) * 10
+    df['min_threshold'] = df['min'] - (df['min'] / 100) * 10
+
+    model_hits_cols = []
+    for col in ukv_cols:
+        # hits name
+        hit_col_name = col + '_hits'
+        model_hits_cols.append(hit_col_name)
+
+        # set up dataframe with column of zeros
+        df[hit_col_name] = np.zeros(len(df))
+        df[hit_col_name][(df[col] >= df['min_threshold']) & (df[col] <= df['max_threshold'])] = 1
+
+    # sum the hits
+    hitrate_val = df[model_hits_cols].mean().mean() * 100
+
+    return hitrate_val
