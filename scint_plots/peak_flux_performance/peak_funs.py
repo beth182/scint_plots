@@ -309,8 +309,3 @@ def peak_stats_by_season(path_dict):
         print('SON DAY MBE: ', SON.MBE_qh_day.mean())
 
     print('end')
-
-
-if __name__ == "__main__":
-    # read_peak_csvs('IMU_BTT')
-    peak_stats_by_season('BCT_IMU')
