@@ -64,6 +64,6 @@ for scint_path in scint_path_list:
 # peak_funs.peak_analysis_plot(path_dict, obs_average, save_path)
 
 # stats
-# peak_funs.peak_stats(path_dict)
-peak_funs.peak_stats_by_season(path_dict)  # by season
+peak_funs.peak_stats(path_dict)
+# peak_funs.peak_stats_by_season(path_dict)  # by season
 print('end')

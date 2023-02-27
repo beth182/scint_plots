@@ -203,27 +203,13 @@ def peak_stats(path_dict):
 
         df = path_dict[pair_id]
 
-        # total days
-        print('len days: ', len(df))
-
-        assert len(np.where(df.time_delta_qh == 0)[0]) + len(np.where(df.time_delta_qh > 0)[0]) + len(
-            np.where(df.time_delta_qh < 0)[0]) == len(df)
-
-        # total negative t delta
-        print('len negative dt: ', len(np.where(df.time_delta_qh < 0)[0]))
-
-        # total number of positive t delta
-        print('len positive dt: ', len(np.where(df.time_delta_qh > 0)[0]))
-
-        # total number of 0 t delta
-        print('len 0 dt: ', len(np.where(df.time_delta_qh == 0)[0]))
-
-        # precentage of negative dt from total days
-        print('% of negative dt :', len(np.where(df.time_delta_qh < 0)[0]) / len(df) * 100)
-
-        # most frequant t delta
-        print('most common t delta: ',
-              df['time_delta_qh'].value_counts().sort_values(ascending=False)[df.time_delta_qh.mode()])
+        print('len dt 5, 6: ', len(df[df['time_delta_qh'].between(5, 6)]))
+        print('len dt 3, 4: ', len(df[df['time_delta_qh'].between(3, 4)]))
+        print('len dt 1, 2: ', len(df[df['time_delta_qh'].between(1, 2)]))
+        print('len dt 0: ', len(df[df['time_delta_qh'] == 0]))
+        print('len dt -2, -1: ', len(df[df['time_delta_qh'].between(-2, -1)]))
+        print('len dt -4, -3: ', len(df[df['time_delta_qh'].between(-4, -3)]))
+        print('len dt -6, -5: ', len(df[df['time_delta_qh'].between(-6, -5)]))
 
         # peak MBE
         print('peak MBE: ', df.value_delta_qh.mean())
