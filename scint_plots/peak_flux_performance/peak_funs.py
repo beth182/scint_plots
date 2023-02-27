@@ -252,32 +252,25 @@ def peak_stats_by_season(path_dict):
 
         assert len(DJF) + len(MAM) + len(JJA) + len(SON) == len(df)
 
-        # print len days in each season
-        print('len days by season:')
-        print('DJF: ', len(DJF))
-        print('MAM: ', len(MAM))
-        print('JJA: ', len(JJA))
-        print('SON: ', len(SON))
-        print(' ')
+        # print % days positive dt
 
-        # print % days negative dt
-
-        print('% of negative dt :')
+        print('% of positive dt :')
+        print('ALL: ' , len(np.where(df.time_delta_qh > 0)[0]) / len(df) * 100)
 
         try:
-            print('DJF: ', len(np.where(DJF.time_delta_qh < 0)[0]) / len(DJF) * 100)
+            print('DJF: ', len(np.where(DJF.time_delta_qh > 0)[0]) / len(DJF) * 100)
         except ZeroDivisionError:
             pass
         try:
-            print('MAM: ', len(np.where(MAM.time_delta_qh < 0)[0]) / len(MAM) * 100)
+            print('MAM: ', len(np.where(MAM.time_delta_qh > 0)[0]) / len(MAM) * 100)
         except ZeroDivisionError:
             pass
         try:
-            print('JJA: ', len(np.where(JJA.time_delta_qh < 0)[0]) / len(JJA) * 100)
+            print('JJA: ', len(np.where(JJA.time_delta_qh > 0)[0]) / len(JJA) * 100)
         except ZeroDivisionError:
             pass
         try:
-            print('SON: ', len(np.where(SON.time_delta_qh < 0)[0]) / len(SON) * 100)
+            print('SON: ', len(np.where(SON.time_delta_qh > 0)[0]) / len(SON) * 100)
         except ZeroDivisionError:
             pass
 
