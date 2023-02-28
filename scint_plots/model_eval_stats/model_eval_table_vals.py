@@ -11,10 +11,10 @@ from scint_plots.scint_seasonality import seasonality_funs
 from scint_plots.tools import eval_stat_funs
 
 # user choices
-path_choice = 12
+path_choice = 11
 variable = 'QH'
-average = 60
-# average = 10
+# average = 60
+average = 10
 
 if variable == 'QH':
     ukv_variable = 'BL_H'
