@@ -10,7 +10,7 @@ import os
 from model_eval_tools import look_up
 
 # user choice
-grid_number = 37
+grid_number = 21
 
 # ToDo: move the scripts used to make these csv files over to here from Model_eval
 
