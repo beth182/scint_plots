@@ -15,11 +15,13 @@ from scint_flux import look_up
 
 # user choices
 scint_path = 11
-target_level = 1
+
 # target model levels.
 # 0 = closest level to obs median zf
 # 1 is one above
 # -1 is one bellow
+target_level = 0
+
 # target grid - primary or secondary grid for this site?
 target_grid = 'primary'
 # target_grid = 'secondary'
@@ -38,7 +40,7 @@ df_subset['DOY_string'] = df_subset['DOY_string'].astype(int)
 DOY_list = df_subset.DOY_string.to_list()
 
 # for testing
-DOY_list = DOY_list[:2]
+# DOY_list = DOY_list[:2]
 
 pair_id = look_up.scint_path_numbers[scint_path]
 
@@ -95,7 +97,7 @@ for DOY in DOY_list:
     run_details_wind = {'variable': 'wind',
                         'run_time': '21Z',
                         'scint_path': scint_path,
-                        'grid_number': UKV_lookup.scint_UKV_grid_choices[pair_id],
+                        'grid_number': UKV_lookup.scint_UKV_grid_choices[pair_id][grid_ind],
                         'target_height': target_height}
 
     # get model wind speed and direction
@@ -108,7 +110,7 @@ for DOY in DOY_list:
     run_details_kdown = {'variable': 'kdown',
                          'run_time': '21Z',
                          'scint_path': scint_path,
-                         'grid_number': UKV_lookup.scint_UKV_grid_choices[pair_id],
+                         'grid_number': UKV_lookup.scint_UKV_grid_choices[pair_id][grid_ind],
                          'target_height': 0  # surface stash code
                          }
 
@@ -121,7 +123,7 @@ for DOY in DOY_list:
     UKV_df_kdown.index = UKV_df_kdown.index - dt.timedelta(minutes=15)
 
     # rename column to kdown (is orignially grid)
-    UKV_df_kdown = UKV_df_kdown.rename(columns={UKV_lookup.scint_UKV_grid_choices[pair_id]: 'kdown'})
+    UKV_df_kdown = UKV_df_kdown.rename(columns={UKV_lookup.scint_UKV_grid_choices[pair_id][grid_ind]: 'kdown'})
     ####################################################################################################################
 
     # combine all variables into one df
@@ -133,6 +135,6 @@ assert model_level_heights.count(model_level_heights[0]) == len(model_level_heig
 
 df_all = pd.concat(DOY_df_list)
 save_path = os.getcwd().replace('\\', '/') + '/UKV_csv_files/'
-df_all.to_csv(save_path + 'grid_' + str(UKV_lookup.scint_UKV_grid_choices[pair_id]) + '_height_' + str(
+df_all.to_csv(save_path + 'grid_' + str(UKV_lookup.scint_UKV_grid_choices[pair_id][grid_ind]) + '_height_' + str(
     model_level_heights[0]) + '_' + pair_id + '_vals.csv')
 print('end')
