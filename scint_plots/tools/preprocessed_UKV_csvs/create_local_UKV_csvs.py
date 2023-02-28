@@ -20,7 +20,7 @@ scint_path = 11
 # 0 = closest level to obs median zf
 # 1 is one above
 # -1 is one bellow
-target_level = 0
+target_level = -1
 
 # target grid - primary or secondary grid for this site?
 target_grid = 'primary'
