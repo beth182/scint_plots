@@ -40,22 +40,21 @@ for model_level in model_level_list:
     # drop unneeded column of SCT_SWT
     df_UKV = df_UKV.drop(columns=[ukv_variable + '_15'])
 
-    # confirm that the path 11 and path 13 columns are identical
-    assert (df_UKV.BL_H_11 - df_UKV.BL_H_13).sum() == 0
-    df_UKV = df_UKV.drop(columns='BL_H_13')
-
     # get rid of any times where one path is missing
     df_UKV = df_UKV.dropna()
 
     # get heights
     height_11 = UKV_lookup.model_level_heights['BTT_BCT'][model_level]
     height_12 = UKV_lookup.model_level_heights['BCT_IMU'][model_level]
+    height_13 = UKV_lookup.model_level_heights['IMU_BTT'][model_level]
 
     # add heights to columns
     for col in df_UKV.columns:
 
         if int(col.split('_')[-1]) == 11:
             new_name = col + '_' + str(height_11)
+        elif int(col.split('_')[-1]) == 13:
+            new_name = col + '_' + str(height_13)
         else:
             assert int(col.split('_')[-1]) == 12
             new_name = col + '_' + str(height_12)
