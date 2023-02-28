@@ -14,17 +14,17 @@ from scint_flux import look_up
 ########################################################################################################################
 
 # user choices
-scint_path = 11
+scint_path = 12
 
 # target model levels.
 # 0 = closest level to obs median zf
 # 1 is one above
 # -1 is one bellow
-target_level = 1
+target_level = 0
 
 # target grid - primary or secondary grid for this site?
-target_grid = 'primary'
-# target_grid = 'secondary'
+# target_grid = 'primary'
+target_grid = 'secondary'
 
 
 ########################################################################################################################
