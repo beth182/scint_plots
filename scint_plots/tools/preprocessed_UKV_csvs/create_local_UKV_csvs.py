@@ -14,12 +14,16 @@ from scint_flux import look_up
 ########################################################################################################################
 
 # user choices
-scint_path = 15
-target_level = 1
+scint_path = 12
+target_level = 0
 # target model levels.
 # 0 = closest level to obs median zf
 # 1 is one above
 # -1 is one bellow
+# target grid - primary or secondary grid for this site?
+target_grid = 'primary'
+# target_grid = 'secondary'
+
 
 ########################################################################################################################
 
@@ -33,7 +37,18 @@ df_subset['DOY_string'] = df_subset.year.astype(str) + df_subset.DOY.astype(str)
 df_subset['DOY_string'] = df_subset['DOY_string'].astype(int)
 DOY_list = df_subset.DOY_string.to_list()
 
+# for testing
+DOY_list = DOY_list[:2]
+
 pair_id = look_up.scint_path_numbers[scint_path]
+
+# set the grid index
+if target_grid == 'primary':
+    grid_ind = 1
+else:
+    assert target_grid == 'secondary'
+    grid_ind = 2
+
 
 # set the target height
 if target_level == 0:  # exact model level
@@ -66,7 +81,7 @@ for DOY in DOY_list:
     run_details_BL_H = {'variable': 'BL_H',
                         'run_time': '21Z',
                         'scint_path': scint_path,
-                        'grid_number': UKV_lookup.scint_UKV_grid_choices[pair_id],
+                        'grid_number': UKV_lookup.scint_UKV_grid_choices[pair_id][grid_ind],
                         'target_height': target_height}
 
     ukv_data_dict_QH = retrieve_ukv_vars.retrieve_UKV(run_choices=run_details_BL_H, DOYstart=DOY, DOYstop=DOY)
