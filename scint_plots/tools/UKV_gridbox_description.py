@@ -36,7 +36,8 @@ if __name__ == '__main__':
 
     # dict of urban fractions in eacg gridbox
     # from Table in SM
-    furb_dict = {1: 0.9282, 2: 0.8959, 3: 0.7891}
+    # furb_dict = {1: 0.9282, 2: 0.8959, 3: 0.7891}
+    furb_dict = {1: 0.8959, 2: 0.9282, 3: 0.9381, 4: 0.7891, 5: 0.7897, 6: 0.6908}
 
     for gridbox in furb_dict.keys():
         MORUSES_dict = get_MORUSES_params(furb=furb_dict[gridbox])
