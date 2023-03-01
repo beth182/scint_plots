@@ -10,8 +10,8 @@ variable = 'QH'
 # variable = 'kdown'
 
 # average = 15
-average = 60
-# average = 10
+# average = 60
+average = 10
 
 # 11, 13, 15
 # not 12 - this is always included
