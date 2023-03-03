@@ -73,18 +73,28 @@ df = df[np.abs(df['QH_ratio']) < 5]
 
 print('end')
 
-# colour by absolute error
-"""
+# """
 plt.figure(figsize=(10,7))
+
+# what to colour by
+# colourbar = 'time'
+# colourbar = 'AE'
+colourbar = 'wind_direction'
 
 cm = plt.cm.get_cmap('gist_rainbow')
 
 plt.hlines(y=1, xmin=-10, xmax=10, linewidth=1, color='k')
 plt.vlines(x=1, ymin=-10, ymax=10, linewidth=1, color='k')
 
-ye = plt.scatter(df.QH_ratio, df.kdown_ratio, marker = '.', c=df.AE, cmap=cm)
+if colourbar == 'time':
+    ye = plt.scatter(df.QH_ratio, df.kdown_ratio, marker = '.', c=df.index.hour, cmap=cm)
+    cbar_lab = 'time of day (hour)'
+else:
+    ye = plt.scatter(df.QH_ratio, df.kdown_ratio, marker='.', c=df[colourbar], cmap=cm)
+    cbar_lab = colourbar
+
 cbar = plt.colorbar(ye)
-cbar.set_label('Absolute Error')
+cbar.set_label(cbar_lab)
 
 plt.ylabel('Kdn mod / Kdn obs')
 plt.xlabel('QH mod / QH obs')
@@ -98,9 +108,9 @@ plt.xlim(-1, 3.5)
 plt.tight_layout()
 
 # plt.show()
-plt.savefig(save_path + 'AE.png', dpi=300, bbox_inches='tight')
+plt.savefig(save_path + colourbar + '.png', dpi=300, bbox_inches='tight')
+# """
 
-"""
 
 # initial scatter plots with colours set for worst and best 10%
 """
