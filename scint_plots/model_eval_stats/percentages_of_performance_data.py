@@ -61,54 +61,86 @@ df = pd.concat([obs_df, df_UKV], axis=1).dropna()
 # take the absolute difference
 df['AE'] = np.abs(df['QH'] - df['UKV_QH'])
 
-# take values only above 0
-# df = df[np.abs(df['QH']) > 1]
-
-
 df['kdown_ratio'] = df['UKV_kdown'] / df['kdown']
 df['QH_ratio'] = df['UKV_QH'] / df['QH']
 
-df = df[np.abs(df['kdown_ratio']) < 5]
-df = df[np.abs(df['QH_ratio']) < 5]
+# df = df[np.abs(df['kdown_ratio']) < 5]
+# df = df[np.abs(df['QH_ratio']) < 5]
 
-print('end')
+
+# ToDo: is any of this actually going to be used in the analysis? if not - move somehwere else
+
+
 
 # """
-plt.figure(figsize=(10,7))
-
 # what to colour by
 # colourbar = 'time'
 # colourbar = 'AE'
 colourbar = 'wind_direction'
 
-cm = plt.cm.get_cmap('gist_rainbow')
+inner_definition = 0.3
 
-plt.hlines(y=1, xmin=-10, xmax=10, linewidth=1, color='k')
-plt.vlines(x=1, ymin=-10, ymax=10, linewidth=1, color='k')
+inners = df[df['QH_ratio'].between(1-inner_definition, 1+inner_definition, inclusive=True)][df['kdown_ratio'].between(1-inner_definition, 1+inner_definition, inclusive=True)]
 
-if colourbar == 'time':
-    ye = plt.scatter(df.QH_ratio, df.kdown_ratio, marker = '.', c=df.index.hour, cmap=cm)
-    cbar_lab = 'time of day (hour)'
-else:
-    ye = plt.scatter(df.QH_ratio, df.kdown_ratio, marker='.', c=df[colourbar], cmap=cm)
-    cbar_lab = colourbar
+# inners = df[np.abs(df['QH_ratio']) <= 0.8][np.abs(df['kdown_ratio']) <= 0.8]
+outers_QH = df[~df['QH_ratio'].between(1-inner_definition, 1+inner_definition, inclusive=True)]
+outers_Kdn = df[~df['kdown_ratio'].between(1-inner_definition, 1+inner_definition, inclusive=True)]
 
-cbar = plt.colorbar(ye)
-cbar.set_label(cbar_lab)
+outers = pd.concat([outers_QH, outers_Kdn]).drop_duplicates()
 
-plt.ylabel('Kdn mod / Kdn obs')
-plt.xlabel('QH mod / QH obs')
+assert len(outers) + len(inners) == len(df)
 
-# plt.ylim(df.kdown_ratio.min() - 0.2, df.kdown_ratio.max() +0.2)
-# plt.xlim(df.QH_ratio.min() - 0.2, df.QH_ratio.max() +0.2)
 
-plt.ylim(0, 4.5)
-plt.xlim(-1, 3.5)
+df_dict = {'outers':outers, 'inners':inners}
 
-plt.tight_layout()
+for key in df_dict.keys():
 
-# plt.show()
-plt.savefig(save_path + colourbar + '.png', dpi=300, bbox_inches='tight')
+    df = df_dict[key]
+
+    plt.figure(figsize=(10, 7))
+
+    cm = plt.cm.get_cmap('gist_rainbow')
+
+    plt.hlines(y=1, xmin=-10, xmax=10, linewidth=1, color='k')
+    plt.vlines(x=1, ymin=-10, ymax=10, linewidth=1, color='k')
+
+    if colourbar == 'time':
+        ye = plt.scatter(df.QH_ratio, df.kdown_ratio, marker='.', c=df.index.hour, cmap=cm)
+        cbar_lab = 'time of day (hour)'
+    elif colourbar == 'wind_direction':
+
+        bounds = np.linspace(0, 360, int(360/ 30)+1)
+        norm = mpl.colors.BoundaryNorm(bounds, cm.N)
+        ye = plt.scatter(df.QH_ratio, df.kdown_ratio, marker='.', c=df[colourbar], cmap=cm, norm=norm)
+        cbar_lab = colourbar
+
+    else:
+        ye = plt.scatter(df.QH_ratio, df.kdown_ratio, marker='.', c=df[colourbar], cmap=cm)
+        cbar_lab = colourbar
+
+    cbar = plt.colorbar(ye)
+    cbar.set_label(cbar_lab)
+
+    plt.ylabel('Kdn mod / Kdn obs')
+    plt.xlabel('QH mod / QH obs')
+
+    # plt.ylim(df.kdown_ratio.min() - 0.2, df.kdown_ratio.max() +0.2)
+    # plt.xlim(df.QH_ratio.min() - 0.2, df.QH_ratio.max() +0.2)
+
+    if key == 'outers':
+
+        plt.ylim(0, 4.5)
+        plt.xlim(-1, 3.5)
+    elif key == 'inners':
+        plt.ylim(1-inner_definition - 0.1, 1+inner_definition + 0.1)
+        plt.xlim(1-inner_definition - 0.1, 1+inner_definition + 0.1)
+
+    plt.text(0.02, 0.95, "N = " + str(len(df)), transform=plt.axes().transAxes)
+
+    plt.tight_layout()
+
+    # plt.show()
+    plt.savefig(save_path + colourbar + '_' + key + '.png', dpi=300, bbox_inches='tight')
 # """
 
 
