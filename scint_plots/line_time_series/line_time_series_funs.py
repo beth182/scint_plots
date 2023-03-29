@@ -23,7 +23,6 @@ def times_series_line_QH_KDOWN(df, pair_id, model_df=False):
     ax.plot(df['kdown'], label='$K_{\downarrow}$', linewidth=1)
 
     if type(model_df) == pd.core.frame.Series or type(model_df) == pd.core.frame.DataFrame:
-
         # push the index of kdown forward 15 min
         # ToDo: make sure that this is time adjustment is always just made for the pre-made dfs
         kdown_UKV_df = model_df.kdown_UKV.dropna()
@@ -45,18 +44,23 @@ def times_series_line_QH_KDOWN(df, pair_id, model_df=False):
     # plt.gcf().autofmt_xdate()
     ax.xaxis.set_major_formatter(DateFormatter('%H'))
 
-    if df.index[0].strftime('%j') == '126':
+    if df.index[0].strftime('%Y%j') == '2016126':
         plt.title('Clear')
         ax.set_ylim(0, 1000)
 
-    elif df.index[0].strftime('%j') == '123':
+    elif df.index[0].strftime('%Y%j') == '2016123':
         plt.title('Cloudy')
         ax.set_ylim(0, 1000)
 
+    else:
+        plt.title(df.index[0].strftime('%Y%j'))
 
     # save plot
     date_string = df['QH'].dropna().index[0].strftime('%Y%j')
 
+    # ToDo: a proper solution for here
+    dir_name = './'
+    """
     if type(model_df) == bool:
         if model_df == False:
             dir_name = './'
@@ -68,6 +72,7 @@ def times_series_line_QH_KDOWN(df, pair_id, model_df=False):
         dir_name = main_dir + date_string + '/'
         if not os.path.exists(dir_name):
             os.makedirs(dir_name)
+    """
 
     plt.savefig(dir_name + pair_id + '_' + date_string + '_line_plot.png', bbox_inches='tight', dpi=300)
 
