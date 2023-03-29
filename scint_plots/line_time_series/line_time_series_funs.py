@@ -23,8 +23,14 @@ def times_series_line_QH_KDOWN(df, pair_id, model_df=False):
     ax.plot(df['kdown'], label='$K_{\downarrow}$', linewidth=1)
 
     if type(model_df) == pd.core.frame.Series or type(model_df) == pd.core.frame.DataFrame:
+
+        # push the index of kdown forward 15 min
+        # ToDo: make sure that this is time adjustment is always just made for the pre-made dfs
+        kdown_UKV_df = model_df.kdown_UKV.dropna()
+        kdown_UKV_df.index = model_df.kdown_UKV.dropna().index + dt.timedelta(minutes=15)
+
         ax.plot(model_df.BL_H_UKV.dropna(), label='UKV $Q_{H}$')
-        ax.plot(model_df.kdown_UKV.dropna(), label='UKV $K_{\downarrow}$')
+        ax.plot(kdown_UKV_df, label='UKV $K_{\downarrow}$')
 
     ax.set_xlabel('Time (h, UTC)')
     ax.set_ylabel('Flux (W $m^{-2}$)')
