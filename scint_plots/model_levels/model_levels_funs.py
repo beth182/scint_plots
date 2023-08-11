@@ -126,12 +126,17 @@ def create_model_height_plot(model_times,
     :return:
     """
 
+    # included hours
+    # (start and end are included)
+    start_hour = 6
+    end_hour = 18
+
     # colours
     cmap = plt.cm.rainbow  # define the colormap
     # extract all colors from the .jet map
     cmaplist = [cmap(i) for i in range(cmap.N)]
 
-    list_len = len(model_times)
+    list_len = end_hour - start_hour + 1
 
     colour_len = len(cmaplist)
 
@@ -141,16 +146,27 @@ def create_model_height_plot(model_times,
 
     count = 0
     for i in model_times:
-        color_choice = cmaplist[count]
-        colour_list.append(color_choice)
-        count += colour_intervals
+
+        if start_hour <= i.hour <= end_hour:
+            color_choice = cmaplist[count]
+            colour_list.append(color_choice)
+            count += colour_intervals
 
     fig, ax = plt.subplots(figsize=(10, 10))
 
+    count = 0
     for i in range(len(model_times)):
-        qh_at_1_time = var_grid[i, :]
-        plt.plot(qh_at_1_time, model_heights, label=str(i), color=colour_list[i], marker='o', linestyle='dotted')
-        plt.scatter(var_surf_grid[i], 0, color=colour_list[i], marker='x')
+
+        # only use unstable hours in profile
+        assert model_times[i].hour == i
+        if start_hour <= i <= end_hour:
+
+            qh_at_1_time = var_grid[i, :]
+
+            plt.plot(qh_at_1_time, model_heights, label=str(i), color=colour_list[count], marker='o', linestyle='dotted')
+            plt.scatter(var_surf_grid[i], 0, color=colour_list[count], marker='x')
+
+            count += 1
 
     # get range of observation effective measurement height
     max_z_f = np.nanmax(obs_df)
@@ -159,8 +175,18 @@ def create_model_height_plot(model_times,
 
     plt.legend(loc='center left', bbox_to_anchor=(1, 0.5), prop={'size': 15})
 
+    # set title and minimum
+    if obs_df.index[0].strftime('%j') == '126':
+        title_string = 'Clear'
+        x_min = -20
+    else:
+        assert obs_df.index[0].strftime('%j') == '123'
+        title_string = 'Cloudy'
+        x_min = -10
+    plt.title(title_string)
+
     plt.ylim(-2, 150)
-    plt.xlim(-50, max(var_surf_grid) + 10)
+    plt.xlim(x_min, max(var_surf_grid) + 10)
     plt.ylabel("Height above $z_{ES}$ (m)")
     plt.xlabel('$Q_{H}$ (W m$^{-2}$)')
 
@@ -173,13 +199,7 @@ def create_model_height_plot(model_times,
 
     ax.set_yticklabels(labels)
 
-    # set title
-    if obs_df.index[0].strftime('%j') == '126':
-        title_string = 'Clear'
-    else:
-        assert obs_df.index[0].strftime('%j') == '123'
-        title_string = 'Cloudy'
-    plt.title(title_string)
+
 
     plt.tight_layout()
 
