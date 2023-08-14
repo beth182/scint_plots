@@ -5,6 +5,7 @@ from scint_flux import look_up
 
 from model_eval_tools.retrieve_UKV import retrieve_ukv_vars
 
+from scint_plots.tools.preprocessed_UKV_csvs import UKV_lookup
 from scint_plots.plot_wind import plot_wind_funs
 
 scint_path = 12
@@ -24,9 +25,18 @@ for DOY in DOY_list:
                                              var_list=var_list,
                                              time_res=time_res)
 
+
+
+    # get model wind
+    run_details_wind = {'variable': 'wind',
+                        'run_time': '21Z',
+                        'scint_path': scint_path,
+                        'grid_number': UKV_lookup.scint_UKV_grid_choices[pair_id][1],
+                        'target_height': np.nanmean(df['z_f']) - np.nanmean(df['z_0'])}
+
     # get model wind speed and direction
-    ukv_data_dict_wind = retrieve_ukv_vars.retrieve_UKV(scint_path, DOY, DOY, variable='wind',
-                                                        av_disheight=np.nanmean(df['z_f']) - np.nanmean(df['z_0']))
+    ukv_data_dict_wind = retrieve_ukv_vars.retrieve_UKV(run_choices=run_details_wind, DOYstart=DOY, DOYstop=DOY)
+
     UKV_df = retrieve_ukv_vars.UKV_df(ukv_data_dict_wind, wind=True)
     DOY_dict[DOY] = {time_res: df, 'UKV_wind': UKV_df, 'UKV_height': ukv_data_dict_wind['BL_H_z']}
 
