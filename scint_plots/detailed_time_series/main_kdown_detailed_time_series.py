@@ -3,11 +3,14 @@ from scint_flux import look_up
 
 from model_eval_tools.retrieve_UKV import retrieve_ukv_vars
 
+from scint_plots.tools.preprocessed_UKV_csvs import UKV_lookup
 from scint_plots.detailed_time_series import detailed_time_series_funs
 
+import numpy as np
+
 scint_path = 12
-DOY_list = [2016126, 2016123]
-var_list = ['kdown']
+DOY_list = [2016123, 2016126]
+var_list = ['kdown', 'z_0']
 time_res = '1min_sa10min'
 
 pair_id = look_up.scint_path_numbers[scint_path]
@@ -25,11 +28,14 @@ for DOY in DOY_list:
 
     # get model kdown
     # retrieve UKV data
-    ukv_data_dict_kdown = retrieve_ukv_vars.retrieve_UKV(scint_path, DOY, DOY, variable='kdown')
-    UKV_df_kdown_all_grids = retrieve_ukv_vars.UKV_df(ukv_data_dict_kdown['all_grids_kdown_dict'],
-                                                          time_key='model_grid_time_kdown_all',
-                                                          val_key='model_grid_vals_kdown_all')
 
+    run_details = {'variable': 'kdown',
+                   'run_time': '21Z',
+                   'scint_path': scint_path,
+                   'grid_number': UKV_lookup.scint_UKV_grid_choices[pair_id][1],
+                   'target_height': np.nan}
+
+    ukv_data_dict_kdown = retrieve_ukv_vars.retrieve_UKV(run_choices=run_details, DOYstart=DOY, DOYstop=DOY)
     UKV_df_kdown = retrieve_ukv_vars.UKV_df(ukv_data_dict_kdown)
 
     DOY_dict[DOY] = {'obs': df, 'UKV_kdown': UKV_df_kdown}
@@ -38,7 +44,6 @@ for DOY in DOY_list:
                                                    ukv_df=UKV_df_kdown,
                                                    model_site_dict=ukv_data_dict_kdown['model_site_dict'],
                                                    variable='kdown',
-                                                   ukv_df_all_grids=UKV_df_kdown_all_grids,
                                                    model_site_dict_all=ukv_data_dict_kdown['all_grids_kdown_dict'][
                                                        'model_site_dict_all'])
 
