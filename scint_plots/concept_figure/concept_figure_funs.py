@@ -235,7 +235,7 @@ def plot_concept_axis(in_dict, save_path):
     labs = [l.get_label() for l in lns]
 
     # ax.legend(lns, labs, loc='upper left', prop={'size': 10})
-    leg = ax.legend(lns, labs, loc='center left', bbox_to_anchor=(1, 0.5), title="Cross Sections",
+    leg = ax.legend(lns, labs, loc='center left', bbox_to_anchor=(1, 0.5), title="Transect",
                     labelcolor='linecolor')
 
     plt.gca().set_ylim(bottom=0)
