@@ -190,33 +190,6 @@ def handle_raster(file_list):
             'max_lat': max_lat}
 
 
-def multicolor_ylabel(ax, list_of_strings, list_of_colors, axis='x', anchorpad=0, **kw):
-    """this function creates axes labels with multiple colors
-    ax specifies the axes object where the labels should be drawn
-    list_of_strings is a list of all of the text items
-    list_if_colors is a corresponding list of colors for the strings
-    axis='x', 'y', or 'both' and specifies which label(s) should be drawn"""
-    from matplotlib.offsetbox import AnchoredOffsetbox, TextArea, HPacker, VPacker
-
-    # x-axis label
-    if axis == 'x' or axis == 'both':
-        boxes = [TextArea(text, textprops=dict(color=color, ha='left', va='bottom', **kw))
-                 for text, color in zip(list_of_strings, list_of_colors)]
-        xbox = HPacker(children=boxes, align="center", pad=0, sep=5)
-        anchored_xbox = AnchoredOffsetbox(loc=3, child=xbox, pad=anchorpad, frameon=False, bbox_to_anchor=(0.3, -0.3),
-                                          bbox_transform=ax.transAxes, borderpad=0.)
-        ax.add_artist(anchored_xbox)
-
-    # y-axis label
-    if axis == 'y' or axis == 'both':
-        boxes = [TextArea(text, textprops=dict(color=color, ha='left', va='bottom', rotation=90, **kw))
-                 for text, color in zip(list_of_strings[::-1], list_of_colors)]
-        ybox = VPacker(children=boxes, align="center", pad=0, sep=5)
-        anchored_ybox = AnchoredOffsetbox(loc=3, child=ybox, pad=anchorpad, frameon=False, bbox_to_anchor=(-0.10, 0.2),
-                                          bbox_transform=ax.transAxes, borderpad=0.)
-        ax.add_artist(anchored_ybox)
-
-
 def plot_concept_axis(in_dict, save_path):
     """
 
@@ -285,13 +258,12 @@ def plot_concept_axis(in_dict, save_path):
     # ax.set_ylabel('% of max SA Weight')
     # ax.set_ylim(0,1)
 
+    ax.set_xlabel('Spatial Dimension (m)')
+
     ax.set_xlim(0, max_lon - min_lon)
     ax2.set_xlim(0, max_lat - min_lat)
 
     plt.setp(ax2.get_xticklabels(), visible=False)
-
-    multicolor_ylabel(ax, ('Latitudinal', 'and', 'Longitudinal', 'Distance (m)'), ('green', 'k', 'magenta', 'k'),
-                      axis='x', size=15)
 
     # plt.show()
 
