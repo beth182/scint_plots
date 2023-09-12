@@ -98,24 +98,49 @@ def detailed_time_series(obs_df,
 
     obs_df = obs_df.dropna()
 
-    five_min = obs_df.resample('5T', closed='right', label='right').mean()
-    ten_min = obs_df.resample('10T', closed='right', label='right').mean()
-    sixty_min = obs_df.resample('60T', closed='right', label='right').mean()
+    if variable == 'H':
+        five_min = obs_df.resample('5T', closed='right', label='right').mean()
+        ten_min = obs_df.resample('10T', closed='right', label='right').mean()
+        sixty_min = obs_df.resample('60T', closed='right', label='right').mean()
 
-    # if variable == 'kdown':
-    #     sixty_min.index = sixty_min.index - dt.timedelta(minutes=45)
-    #     ten_min.index = ten_min.index + dt.timedelta(minutes=5)
-    #
-    #     minute_match = 15
-    # else:
-    #     minute_match = 0
+        minute_match = 0
 
-    minute_match = 0
+    else:
+
+        # as-is
+        '''
+        five_min = obs_df.resample('5T', closed='right', label='right').mean()
+        ten_min = obs_df.resample('10T', closed='right', label='right').mean()
+        sixty_min = obs_df.resample('60T', closed='right', label='right').mean()
+    
+        # if variable == 'kdown':
+        #     sixty_min.index = sixty_min.index - dt.timedelta(minutes=45)
+        #     ten_min.index = ten_min.index + dt.timedelta(minutes=5)
+        #
+        #     minute_match = 15
+        # else:
+        #     minute_match = 0
+    
+        minute_match = 0
+        '''
+        # OR
+        # shifted averages
+        # '''
+        five_min = obs_df.resample('5T', closed='right', label='right').mean()
+        ten_min = obs_df.resample('10T', closed='right', label='right', offset='5T').mean()
+        sixty_min = obs_df.resample('60T', closed='right', label='right', offset = '15T').mean()
+
+        minute_match = 15
+
+        # '''
+
+
 
     hour_1min = obs_df[df_col][np.where([i.minute == minute_match for i in obs_df.index])[0]]
     hour_5min = five_min[df_col][np.where([i.minute == minute_match for i in five_min.index])[0]]
     hour_10min = ten_min[df_col][np.where([i.minute == minute_match for i in ten_min.index])[0]]
     hour_60min = sixty_min[df_col][np.where([i.minute == minute_match for i in sixty_min.index])[0]]
+
 
     obs_N = len(obs_df)
 
