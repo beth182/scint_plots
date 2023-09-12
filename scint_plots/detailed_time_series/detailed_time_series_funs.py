@@ -102,13 +102,15 @@ def detailed_time_series(obs_df,
     ten_min = obs_df.resample('10T', closed='right', label='right').mean()
     sixty_min = obs_df.resample('60T', closed='right', label='right').mean()
 
-    if variable == 'kdown':
-        sixty_min.index = sixty_min.index - dt.timedelta(minutes=45)
-        ten_min.index = ten_min.index + dt.timedelta(minutes=5)
+    # if variable == 'kdown':
+    #     sixty_min.index = sixty_min.index - dt.timedelta(minutes=45)
+    #     ten_min.index = ten_min.index + dt.timedelta(minutes=5)
+    #
+    #     minute_match = 15
+    # else:
+    #     minute_match = 0
 
-        minute_match = 15
-    else:
-        minute_match = 0
+    minute_match = 0
 
     hour_1min = obs_df[df_col][np.where([i.minute == minute_match for i in obs_df.index])[0]]
     hour_5min = five_min[df_col][np.where([i.minute == minute_match for i in five_min.index])[0]]
@@ -117,16 +119,16 @@ def detailed_time_series(obs_df,
 
     obs_N = len(obs_df)
 
-    if variable == 'kdown':
-        if type(ukv_df_all_grids) == pd.core.frame.DataFrame:
-            max_grid_vals_all, min_grid_vals_all, n_grids_all = variation_in_grids(ukv_df_all_grids,
-                                                                                   model_site_dict_all)
-
-            ax1.fill_between(ukv_df_all_grids.index, max_grid_vals_all, min_grid_vals_all,
-                             color='paleturquoise',
-                             alpha=0.6, label='UKV grid-box range: 42 grid-boxes')
-        else:
-            pass
+    # if variable == 'kdown':
+    #     if type(ukv_df_all_grids) == pd.core.frame.DataFrame:
+    #         max_grid_vals_all, min_grid_vals_all, n_grids_all = variation_in_grids(ukv_df_all_grids,
+    #                                                                                model_site_dict_all)
+    #
+    #         ax1.fill_between(ukv_df_all_grids.index, max_grid_vals_all, min_grid_vals_all,
+    #                          color='paleturquoise',
+    #                          alpha=0.6, label='UKV grid-box range: 42 grid-boxes')
+    #     else:
+    #         pass
 
     max_grid_vals, min_grid_vals, n_grids = variation_in_grids(ukv_df, model_site_dict)
 
