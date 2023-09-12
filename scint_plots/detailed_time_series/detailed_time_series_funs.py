@@ -132,36 +132,41 @@ def detailed_time_series(obs_df,
 
     max_grid_vals, min_grid_vals, n_grids = variation_in_grids(ukv_df, model_site_dict)
 
+
+
     ax1.fill_between(ukv_df.index, max_grid_vals, min_grid_vals, color='pink',
                      alpha=0.8, label='UKV grid-box range in SA analysis')
 
-    ax1.plot(ukv_df.index, ukv_df['WAverage'], label='Weighted UKV-flux @ surface', color='blue',
+    ax1.plot(ukv_df.index, ukv_df['WAverage'], label='UKV grid-box average with LAS-SA weighting @ surface', color='blue',
              marker='.')
 
+    if variable == 'kdown':
+        grid_box_letter = 'E'  # where KSSW is
+    if variable == 'H':
+        grid_box_letter = 'B'  # where the centre coord of the path is
+
     ax1.plot(ukv_df.index, ukv_df[13],
-             label='Centre grid-box UKV-flux @ surface', color='green',
-             marker='.')
+             label='UKV @ surface: grid-box ' + grid_box_letter, color='green', marker='.')
 
     # if I am including the BL_H grid
     try:
-        ax1.plot(ukv_df.index, ukv_df['BL_H_13'],
-                 label='Centre grid-box UKV-flux @ ' + str(BL_H_z) + ' m', color='red', marker='.')
+        ukv_level = ax1.plot(ukv_df.index, ukv_df['BL_H_13'], label='UKV @ ' + str(BL_H_z) + ' m agl: grid-box ' + grid_box_letter, color='red', marker='.')
     except KeyError:
         pass
 
-    ax1.plot(obs_df.index, obs_df[df_col], linestyle='None', marker='.', color='grey', alpha=0.5,
+    obs_all = ax1.plot(obs_df.index, obs_df[df_col], linestyle='None', marker='.', color='grey', alpha=0.5,
              label="1 min obs")
 
-    ax1.plot(hour_1min.index, hour_1min.values, linestyle='None', marker='o', color='k', markersize=8,
+    obs_1 = ax1.plot(hour_1min.index, hour_1min.values, linestyle='None', marker='o', color='k', markersize=8,
              label="1 min obs on hour")
 
-    ax1.plot(hour_5min.index, hour_5min.values, linestyle='None', marker='o', color='green', markersize=8,
+    obs_5 = ax1.plot(hour_5min.index, hour_5min.values, linestyle='None', marker='o', color='green', markersize=8,
              label="5 min obs on hour")
 
-    ax1.plot(hour_10min.index, hour_10min.values, linestyle='None', marker='^', color='red', markersize=8,
+    obs_10 = ax1.plot(hour_10min.index, hour_10min.values, linestyle='None', marker='^', color='red', markersize=8,
              label="10 min obs on hour")
 
-    ax1.plot(hour_60min.index, hour_60min.values, linestyle='None', marker='x', color='purple', markersize=8,
+    obs_60 = ax1.plot(hour_60min.index, hour_60min.values, linestyle='None', marker='x', color='purple', markersize=8,
              label="60 min obs")
 
     ax1.set_ylabel(label_string)
@@ -189,10 +194,22 @@ def detailed_time_series(obs_df,
     # add legend to plot
     # ax1.legend([handles[idx] for idx in order], [labels[idx] for idx in order], loc='center left', bbox_to_anchor=(1, 0.5))
 
-    # add legend if kdown clear day
+
+    # legend for obs on panel (a) - kdown cloudy day
+    if variable == 'kdown':
+        if obs_df.index[0].strftime('%Y%j') == '2016123':
+
+            ax1.legend([handles[idx] for idx in order][3:], [labels[idx] for idx in order][3:], fontsize=15)  # [3:] just obs handles
+
+
+
+    # legend for model kdown on panel (b) - kdown clear day
     if variable == 'kdown':
         if obs_df.index[0].strftime('%Y%j') == '2016126':
-            ax1.legend(fontsize=15, loc=(0.16, 0.05))
+
+            ax1.legend([handles[idx] for idx in order][:3], [labels[idx] for idx in order][:3], fontsize=15)  # [:3] just model handles
+
+            # ax1.legend(fontsize=15, loc=(0.16, 0.05))
 
     # add legend if H cloudy day
     if variable == 'H':

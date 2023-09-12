@@ -9,7 +9,7 @@ from scint_plots.detailed_time_series import detailed_time_series_funs
 import numpy as np
 
 scint_path = 12
-DOY_list = [2016123, 2016126]
+DOY_list = [2016126, 2016123]
 var_list = ['kdown', 'z_0']
 time_res = '1min_sa10min'
 
