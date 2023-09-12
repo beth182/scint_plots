@@ -150,7 +150,7 @@ def detailed_time_series(obs_df,
 
     # if I am including the BL_H grid
     try:
-        ukv_level = ax1.plot(ukv_df.index, ukv_df['BL_H_13'], label='UKV @ ' + str(BL_H_z) + ' m agl: grid-box ' + grid_box_letter, color='red', marker='.')
+        ukv_level = ax1.plot(ukv_df.index, ukv_df['BL_H'], label='UKV @ ' + str(int(BL_H_z)) + ' m agl: grid-box ' + grid_box_letter, color='red', marker='.')
     except KeyError:
         pass
 
@@ -215,15 +215,18 @@ def detailed_time_series(obs_df,
     if variable == 'H':
         if obs_df.index[0].strftime('%Y%j') == '2016123':
 
-            # Fix legend
-            hand, labl = ax1.get_legend_handles_labels()
-            handout = []
-            lablout = []
-            for h, l in zip(hand, labl):
-                if l == 'Centre grid-box UKV-flux @ ' + str(BL_H_z) + ' m':
-                    lablout.append(l)
-                    handout.append(h)
-            ax1.legend(handout, lablout, fontsize=15)
+
+            ax1.legend([handles[idx] for idx in order][:-5], [labels[idx] for idx in order][:-5],fontsize=15)  # [:-5] just model handles
+
+            # # Fix legend
+            # hand, labl = ax1.get_legend_handles_labels()
+            # handout = []
+            # lablout = []
+            # for h, l in zip(hand, labl):
+            #     if l == 'Centre grid-box UKV-flux @ ' + str(BL_H_z) + ' m':
+            #         lablout.append(l)
+            #         handout.append(h)
+            # ax1.legend(handout, lablout, fontsize=15)
 
 
     if number_grids_axes == True:
