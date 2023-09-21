@@ -32,7 +32,7 @@ for DOY in DOY_list:
     run_details = {'variable': 'H',
                    'run_time': '21Z',
                    'scint_path': scint_path,
-                   'grid_number': UKV_lookup.scint_UKV_grid_choices[pair_id][1],
+                   'grid_number': UKV_lookup.scint_UKV_grid_choices[pair_id][1],  # this is only used if sa_analysis is set to False
                    'target_height': df.z_f.mean()}
 
     ukv_data_dict_QH = retrieve_ukv_vars.retrieve_UKV(run_choices=run_details, DOYstart=DOY, DOYstop=DOY)

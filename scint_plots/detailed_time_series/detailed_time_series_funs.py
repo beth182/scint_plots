@@ -108,7 +108,7 @@ def detailed_time_series(obs_df,
     else:
 
         # as-is
-        '''
+        # '''
         five_min = obs_df.resample('5T', closed='right', label='right').mean()
         ten_min = obs_df.resample('10T', closed='right', label='right').mean()
         sixty_min = obs_df.resample('60T', closed='right', label='right').mean()
@@ -122,17 +122,17 @@ def detailed_time_series(obs_df,
         #     minute_match = 0
     
         minute_match = 0
-        '''
+        # '''
         # OR
         # shifted averages
-        # '''
+        '''
         five_min = obs_df.resample('5T', closed='right', label='right').mean()
         ten_min = obs_df.resample('10T', closed='right', label='right', offset='5T').mean()
         sixty_min = obs_df.resample('60T', closed='right', label='right', offset = '15T').mean()
 
         minute_match = 15
 
-        # '''
+        '''
 
 
 
