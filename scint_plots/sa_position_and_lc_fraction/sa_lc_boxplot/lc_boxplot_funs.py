@@ -2,6 +2,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 import matplotlib as mpl
+import os
 
 mpl.rcParams.update({'font.size': 15})
 
@@ -28,8 +29,10 @@ def lc_in_sa_stacked_bar(sas_df_in, save_path):
 
     # reading model weighted lc fraction csv file
     # made from scint_eval ukv_landuse functions file
-    csv_path = 'C:/Users/beths/OneDrive - University of Reading/local_runs_data/weighted_lc_ukv_' + sas_df.index[0].strftime('%Y') + sas_df.index[
-        0].strftime('%j') + '.csv'
+
+    csv_path = os.getcwd().replace('\\', '/') + '/' '../../built_fraction/weighted_lc_ukv_' + sas_df.index[0].strftime('%Y') + sas_df.index[0].strftime('%j') + '.csv'
+    # csv_path = 'C:/Users/beths/OneDrive - University of Reading/local_runs_data/weighted_lc_ukv_' + sas_df.index[0].strftime('%Y') + sas_df.index[0].strftime('%j') + '.csv'
+
     ukv_df = pd.read_csv(csv_path)
 
     ukv_df['Unnamed: 0'] = pd.to_datetime(ukv_df['Unnamed: 0'], format='%y%m%d%H')

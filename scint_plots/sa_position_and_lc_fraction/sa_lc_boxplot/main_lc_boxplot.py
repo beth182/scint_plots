@@ -4,7 +4,7 @@ import glob
 from scint_plots.sa_position_and_lc_fraction.sa_lc_boxplot import lc_boxplot_funs, create_sa_lc_csv
 
 # CHOICES
-doy_choice = 126
+doy_choice = 123
 av_period = '10_mins'
 
 save_path = os.getcwd().replace('\\', '/') + '/'
