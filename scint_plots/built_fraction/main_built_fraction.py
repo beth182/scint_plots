@@ -1,7 +1,9 @@
 import os
+import numpy as np
 
 from scint_flux.functions import read_calculated_fluxes
 from scint_flux import look_up
+from scint_plots.tools.preprocessed_UKV_csvs import UKV_lookup
 
 from model_eval_tools.retrieve_UKV import retrieve_ukv_vars
 from model_eval_tools.sa_analysis_grids import retrieve_weighted_ukv_lc
@@ -30,12 +32,24 @@ for DOY in DOY_list:
     DOY_dict[DOY] = {'obs': df}
 
     # get model sensible heat
-    ukv_data_dict_QH = retrieve_ukv_vars.retrieve_UKV(scint_path, DOY, DOY, variable='H')
+    run_details_H = {'variable': 'H',
+                   'run_time': '21Z',
+                   'scint_path': scint_path,
+                   'grid_number': UKV_lookup.scint_UKV_grid_choices[pair_id][1],  # this is only used if sa_analysis is set to False
+                   'target_height': df.z_f.mean()}
+
+    ukv_data_dict_QH = retrieve_ukv_vars.retrieve_UKV(run_choices=run_details_H, DOYstart=DOY, DOYstop=DOY)
     UKV_df_QH = retrieve_ukv_vars.UKV_df(ukv_data_dict_QH)
     DOY_dict[DOY]['UKV_QH'] = UKV_df_QH
 
     # get model kdown
-    ukv_data_dict_kdown = retrieve_ukv_vars.retrieve_UKV(scint_path, DOY, DOY, variable='kdown')
+    run_details_kdown = {'variable': 'kdown',
+                   'run_time': '21Z',
+                   'scint_path': scint_path,
+                   'grid_number': UKV_lookup.scint_UKV_grid_choices[pair_id][1],
+                   'target_height': np.nan}
+
+    ukv_data_dict_kdown = retrieve_ukv_vars.retrieve_UKV(run_choices=run_details_kdown, DOYstart=DOY, DOYstop=DOY)
     UKV_df_kdown = retrieve_ukv_vars.UKV_df(ukv_data_dict_kdown)
     DOY_dict[DOY]['UKV_kdown'] = UKV_df_kdown
 
