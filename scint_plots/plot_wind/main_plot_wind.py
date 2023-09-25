@@ -17,6 +17,15 @@ pair_id = look_up.scint_path_numbers[scint_path]
 
 DOY_dict = {}
 
+# This plot has since been removed from SM:
+# the figure caption used to read:
+"""
+Figure SM.2: a cloudy (a,c) and clear (b,d) day’s wind speed (a,b) and direction (c,d). Observations (markers), 
+with symbol/ colour denoting averaging period. Hourly averages calculated using 60-min SAs. All other averages use 
+the 10-min SAs. UKV model prognostic wind direction and wind speed (blue line, hourly samples) at the model level 
+closest to the observation height (zf – z0).
+"""
+
 # read the 10-min SA vars
 for DOY in DOY_list:
     # read the observations
