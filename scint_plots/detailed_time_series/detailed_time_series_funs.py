@@ -166,9 +166,9 @@ def detailed_time_series(obs_df,
              marker='.')
 
     if variable == 'kdown':
-        grid_box_letter = 'E'  # where KSSW is
+        grid_box_letter = 'D'  # where KSSW is
     if variable == 'H':
-        grid_box_letter = 'B'  # where the centre coord of the path is
+        grid_box_letter = 'A'  # where the centre coord of the path is
 
     ax1.plot(ukv_df.index, ukv_df[13],
              label='UKV @ surface: grid-box ' + grid_box_letter, color='green', marker='.')
