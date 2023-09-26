@@ -235,4 +235,32 @@ def stats_of_model(df, UKV_df_QH, UKV_df_kdown):
     print('KDOWN MAE 10 min: ', compare_10_kdown.abs_diff.mean())
     print('KDOWN MAE 60 min: ', compare_60_kdown.abs_diff.mean())
 
+    # MAE between model surface and model level closest to zf
+    print(' ')
+    print('MAE between model surface and model level closest to zf')
+    UKV_df_QH['AE'] = np.abs(UKV_df_QH.WAverage - UKV_df_QH.BL_H)
+    print(UKV_df_QH.AE.mean())
+
+    print(' ')
+    print('max MAE between model surface and model level closest to zf')
+    print(UKV_df_QH.AE.max(), ' at ', UKV_df_QH.iloc[np.where(UKV_df_QH.AE == UKV_df_QH.AE.max())[0]].index[0])
+
+    print(' ')
+    print('min MAE between model surface and model level closest to zf')
+    print(UKV_df_QH.AE.min(), ' at ', UKV_df_QH.iloc[np.where(UKV_df_QH.AE == UKV_df_QH.AE.min())[0]].index[0])
+
+    # MAE between the model surface SA anal and surface centre gridbox
+    print(' ')
+    print('MAE between the model surface SA anal and surface centre gridbox')
+    UKV_df_QH['AE_surf'] = np.abs(UKV_df_QH.WAverage - UKV_df_QH[13])
+    print(UKV_df_QH.AE_surf.mean())
+
+    print(' ')
+    print('max MAE between the model surface SA anal and surface centre gridbox')
+    print(UKV_df_QH.AE_surf.max(), ' at ', UKV_df_QH.iloc[np.where(UKV_df_QH.AE_surf == UKV_df_QH.AE_surf.max())[0]].index[0])
+
+    print(' ')
+    print('min MAE between the model surface SA anal and surface centre gridbox')
+    print(UKV_df_QH.AE_surf.min(), ' at ', UKV_df_QH.iloc[np.where(UKV_df_QH.AE_surf == UKV_df_QH.AE_surf.min())[0]].index[0])
+
     print('end')
