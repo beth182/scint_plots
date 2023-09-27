@@ -101,7 +101,13 @@ def stats_of_model(df, UKV_df_QH, UKV_df_kdown):
     # Average the obs
     # time average the obs
     QH_avs = read_calculated_fluxes.time_averages_of_obs(df, 'QH', on_hour=True)
-    kdown_avs = read_calculated_fluxes.time_averages_of_obs(df, 'kdown')
+
+    # kdown_avs = read_calculated_fluxes.time_averages_of_obs(df, 'kdown')
+    # average kdown: seperate, as I am shifting avs for 60 and 10 min to match model output
+    kdown = df.kdown.dropna()
+    kdown_5 = df.kdown.dropna().resample('5T', closed='right', label='right').mean()
+    kdown_10 = df.kdown.dropna().resample('10T', closed='right', label='right', offset='5T').mean()
+    kdown_60 = df.kdown.dropna().resample('60T', closed='right', label='right', offset='15T').mean()
 
     print(' ')
     print('UKV mean')
@@ -115,23 +121,19 @@ def stats_of_model(df, UKV_df_QH, UKV_df_kdown):
     compare_10_QH = pd.concat([QH_avs.obs_10, UKV_df_QH.WAverage], axis=1).dropna()
     compare_60_QH = pd.concat([QH_avs.obs_60, UKV_df_QH.WAverage], axis=1).dropna()
 
-    kdown_60 = kdown_avs.obs_60.dropna()
-    kdown_60.index = kdown_60.index - dt.timedelta(minutes=45)
-    kdown_10 = kdown_avs.obs_10.dropna()
-    kdown_10.index = kdown_10.index + dt.timedelta(minutes=5)
-    kdown_5 = kdown_avs.obs_5.dropna()
-    kdown = kdown_avs.obs_1.dropna()
+    # kdown_60 = kdown_avs.obs_60.dropna()
+    # kdown_60.index = kdown_60.index - dt.timedelta(minutes=45)
+    # kdown_10 = kdown_avs.obs_10.dropna()
+    # kdown_10.index = kdown_10.index + dt.timedelta(minutes=5)
+    # kdown_5 = kdown_avs.obs_5.dropna()
+    # kdown = kdown_avs.obs_1.dropna()
 
     # find common times - can't do this within the built function - as for the model eval purposes, kdown averages are
     # different
-    compare_1_kdown = pd.concat([kdown.iloc[np.where([i.minute == 15 for i in kdown.index])[0]], UKV_df_kdown.WAverage],
-                                axis=1).dropna()
-    compare_5_kdown = pd.concat(
-        [kdown_5.iloc[np.where([i.minute == 15 for i in kdown_5.index])[0]], UKV_df_kdown.WAverage], axis=1).dropna()
-    compare_10_kdown = pd.concat(
-        [kdown_10.iloc[np.where([i.minute == 15 for i in kdown_10.index])[0]], UKV_df_kdown.WAverage], axis=1).dropna()
-    compare_60_kdown = pd.concat(
-        [kdown_60.iloc[np.where([i.minute == 15 for i in kdown_60.index])[0]], UKV_df_kdown.WAverage], axis=1).dropna()
+    compare_1_kdown = pd.concat([kdown.iloc[np.where([i.minute == 15 for i in kdown.index])[0]], UKV_df_kdown.WAverage],axis=1).dropna()
+    compare_5_kdown = pd.concat([kdown_5.iloc[np.where([i.minute == 15 for i in kdown_5.index])[0]], UKV_df_kdown.WAverage], axis=1).dropna()
+    compare_10_kdown = pd.concat([kdown_10.iloc[np.where([i.minute == 15 for i in kdown_10.index])[0]], UKV_df_kdown.WAverage], axis=1).dropna()
+    compare_60_kdown = pd.concat([kdown_60.iloc[np.where([i.minute == 15 for i in kdown_60.index])[0]], UKV_df_kdown.WAverage], axis=1).dropna()
 
     # absolute difference
     compare_1_QH['abs_diff'] = np.abs(compare_1_QH.obs_1 - compare_1_QH.WAverage)
@@ -139,10 +141,10 @@ def stats_of_model(df, UKV_df_QH, UKV_df_kdown):
     compare_10_QH['abs_diff'] = np.abs(compare_10_QH.obs_10 - compare_10_QH.WAverage)
     compare_60_QH['abs_diff'] = np.abs(compare_60_QH.obs_60 - compare_60_QH.WAverage)
 
-    compare_1_kdown['abs_diff'] = np.abs(compare_1_kdown.obs_1 - compare_1_kdown.WAverage)
-    compare_5_kdown['abs_diff'] = np.abs(compare_5_kdown.obs_5 - compare_5_kdown.WAverage)
-    compare_10_kdown['abs_diff'] = np.abs(compare_10_kdown.obs_10 - compare_10_kdown.WAverage)
-    compare_60_kdown['abs_diff'] = np.abs(compare_60_kdown.obs_60 - compare_60_kdown.WAverage)
+    compare_1_kdown['abs_diff'] = np.abs(compare_1_kdown.kdown - compare_1_kdown.WAverage)
+    compare_5_kdown['abs_diff'] = np.abs(compare_5_kdown.kdown - compare_5_kdown.WAverage)
+    compare_10_kdown['abs_diff'] = np.abs(compare_10_kdown.kdown - compare_10_kdown.WAverage)
+    compare_60_kdown['abs_diff'] = np.abs(compare_60_kdown.kdown - compare_60_kdown.WAverage)
 
     # difference
     compare_1_QH['difference'] = compare_1_QH.obs_1 - compare_1_QH.WAverage
@@ -150,10 +152,10 @@ def stats_of_model(df, UKV_df_QH, UKV_df_kdown):
     compare_10_QH['difference'] = compare_10_QH.obs_10 - compare_10_QH.WAverage
     compare_60_QH['difference'] = compare_60_QH.obs_60 - compare_60_QH.WAverage
 
-    compare_1_kdown['difference'] = compare_1_kdown.obs_1 - compare_1_kdown.WAverage
-    compare_5_kdown['difference'] = compare_5_kdown.obs_5 - compare_5_kdown.WAverage
-    compare_10_kdown['difference'] = compare_10_kdown.obs_10 - compare_10_kdown.WAverage
-    compare_60_kdown['difference'] = compare_60_kdown.obs_60 - compare_60_kdown.WAverage
+    compare_1_kdown['difference'] = compare_1_kdown.kdown - compare_1_kdown.WAverage
+    compare_5_kdown['difference'] = compare_5_kdown.kdown - compare_5_kdown.WAverage
+    compare_10_kdown['difference'] = compare_10_kdown.kdown - compare_10_kdown.WAverage
+    compare_60_kdown['difference'] = compare_60_kdown.kdown - compare_60_kdown.WAverage
 
     # Mean Bias error
     MBE_QH_1 = compare_1_QH.difference.mean()

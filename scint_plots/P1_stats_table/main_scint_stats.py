@@ -11,7 +11,7 @@ from model_eval_tools.retrieve_UKV import retrieve_ukv_vars
 # main script for running stat functions of P1: Results table
 
 scint_path = 12
-DOY_list = [2016126]
+DOY_list = [2016123]
 
 var_list = ['QH', 'kdown', 'z_f']
 
@@ -28,13 +28,13 @@ for DOY in DOY_list:
                                              time_res=time_res)
 
     # stats of observations
-    # """
+    """
     scint_stat_funs.stats_of_the_obs_fluxes(df)
     print('end')
-    # """
+    """
 
     # stats of model
-    """
+    # """
     # retrieve UKV data
     run_details_H = {'variable': 'H',
                    'run_time': '21Z',
@@ -57,4 +57,4 @@ for DOY in DOY_list:
     scint_stat_funs.stats_of_model(df, UKV_df_QH, UKV_df_kdown)
     print('end')
 
-    """
+    # """
