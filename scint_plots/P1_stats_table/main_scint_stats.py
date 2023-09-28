@@ -68,22 +68,26 @@ for DOY in DOY_list:
 
 print('end')
 
-"""
+
+
+
+# Looking at % difference in model fluxes
+# """
+
 # constrain times to be just within analysis period
 DOY_dict[2016126]['UKV_QH'] = DOY_dict[2016126]['UKV_QH'].dropna()
 DOY_dict[2016123]['UKV_QH'] = DOY_dict[2016123]['UKV_QH'].dropna()
 
+# Looking at % difference in fluxes between centre and weighted boxes at surface
 DOY_dict[2016126]['UKV_QH']['surf_centre_diff'] = ((DOY_dict[2016126]['UKV_QH'][13] - DOY_dict[2016126]['UKV_QH'][
     'WAverage']) / DOY_dict[2016126]['UKV_QH'][13]) * 100
 DOY_dict[2016123]['UKV_QH']['surf_centre_diff'] = ((DOY_dict[2016123]['UKV_QH'][13] - DOY_dict[2016123]['UKV_QH'][
     'WAverage']) / DOY_dict[2016123]['UKV_QH'][13]) * 100
-
 # mean percentage difference
 print(' ')
 print('MEAN % DIFFERENCE')
 print(126, ': ', DOY_dict[2016126]['UKV_QH']['surf_centre_diff'].mean())
 print(123, ': ', DOY_dict[2016123]['UKV_QH']['surf_centre_diff'].mean())
-
 # max
 print(' ')
 print('MAX % DIFFERENCE')
@@ -102,4 +106,24 @@ print(126, ': ', DOY_dict[2016126]['UKV_QH']['surf_centre_diff'].iloc[
 print(123, ': ', DOY_dict[2016123]['UKV_QH']['surf_centre_diff'].iloc[
     np.where(DOY_dict[2016123]['UKV_QH']['surf_centre_diff'] == DOY_dict[2016123]['UKV_QH']['surf_centre_diff'].min())[
         0]])
-"""
+
+
+# Looking at % difference in fluxes at two heights
+DOY_dict[2016126]['UKV_QH']['surf_lev_diff'] = ((DOY_dict[2016126]['UKV_QH'][13] - DOY_dict[2016126]['UKV_QH']['BL_H']) / DOY_dict[2016126]['UKV_QH'][13])*100
+DOY_dict[2016123]['UKV_QH']['surf_lev_diff'] = ((DOY_dict[2016123]['UKV_QH'][13] - DOY_dict[2016123]['UKV_QH']['BL_H']) / DOY_dict[2016123]['UKV_QH'][13])*100
+# mean percentage difference
+print(' ')
+print('MEAN % DIFFERENCE')
+print(126, ': ', DOY_dict[2016126]['UKV_QH']['surf_lev_diff'].mean())
+print(123, ': ', DOY_dict[2016123]['UKV_QH']['surf_lev_diff'].mean())
+# max
+print(' ')
+print('MAX % DIFFERENCE')
+print(126, ': ', DOY_dict[2016126]['UKV_QH']['surf_lev_diff'].iloc[np.where(DOY_dict[2016126]['UKV_QH']['surf_lev_diff'] == DOY_dict[2016126]['UKV_QH']['surf_lev_diff'].max())[0]])
+print(123, ': ', DOY_dict[2016123]['UKV_QH']['surf_lev_diff'].iloc[np.where(DOY_dict[2016123]['UKV_QH']['surf_lev_diff'] == DOY_dict[2016123]['UKV_QH']['surf_lev_diff'].max())[0]])
+# min
+print(' ')
+print('MIN % DIFFERENCE')
+print(126, ': ', DOY_dict[2016126]['UKV_QH']['surf_lev_diff'].iloc[np.where(DOY_dict[2016126]['UKV_QH']['surf_lev_diff'] == DOY_dict[2016126]['UKV_QH']['surf_lev_diff'].min())[0]])
+print(123, ': ', DOY_dict[2016123]['UKV_QH']['surf_lev_diff'].iloc[np.where(DOY_dict[2016123]['UKV_QH']['surf_lev_diff'] == DOY_dict[2016123]['UKV_QH']['surf_lev_diff'].min())[0]])
+# """
