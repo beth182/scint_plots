@@ -8,7 +8,6 @@ import os
 
 mpl.rcParams.update({'font.size': 15})
 
-
 def times_series_line_QH_KDOWN(df, pair_id, model_df=False):
     """
     TIME SERIES OF Q AND KDOWN LINE PLOT
@@ -39,7 +38,9 @@ def times_series_line_QH_KDOWN(df, pair_id, model_df=False):
 
     ax.set_xlim(min(df_not_nan.index) - dt.timedelta(minutes=10), max(df_not_nan.index) + dt.timedelta(minutes=10))
 
-    plt.legend()
+
+    # plt.legend()
+    plt.legend(loc='upper left',)
 
     # plt.gcf().autofmt_xdate()
     ax.xaxis.set_major_formatter(DateFormatter('%H'))
@@ -75,5 +76,102 @@ def times_series_line_QH_KDOWN(df, pair_id, model_df=False):
     """
 
     plt.savefig(dir_name + pair_id + '_' + date_string + '_line_plot.png', bbox_inches='tight', dpi=300)
+
+    print('end')
+
+def times_series_line_QH_KDOWN_UM100(df, pair_id, UM_100=False):
+    """
+    TIME SERIES OF Q AND KDOWN LINE PLOT
+    :return:
+    """
+    plt.close('all')
+
+    fig = plt.figure(figsize=(8, 7))
+    ax = plt.subplot(1, 1, 1)
+
+    ax.plot(df['QH'], label='$Q_{H}$', linewidth=1, alpha=0.5, color='orange')
+
+
+
+    # label='UKV $Q_{H}$'
+
+    ax.set_xlabel('Time (h, UTC)')
+    ax.set_ylabel('Flux (W $m^{-2}$)')
+
+    # where QH is not nan
+    df_not_nan = df.iloc[np.where(np.isnan(df.QH) == False)[0]]
+
+    ax.set_xlim(min(df_not_nan.index) - dt.timedelta(minutes=10), max(df_not_nan.index) + dt.timedelta(minutes=10))
+
+    if UM_100:
+        # read the premade csv
+        UM100_csv_path = 'D:/Documents/scint_UM100/scint_UM100/data_retreval/BCT_IMU_134_UM100_QH_100m.csv'
+        UM_100_df = pd.read_csv(UM100_csv_path)
+
+        UM_100_df.index = UM_100_df.hour.astype('timedelta64[h]') + df.index[0]
+
+        ax.plot(UM_100_df.weighted_av_a.dropna(), label='W UM100 $Q_{H}$', color='red')
+        ax.plot(UM_100_df.av_a.dropna(), label='NW UM100 $Q_{H}$', color='red', linestyle='--')
+
+
+        # UM300
+
+        # read the premade csv
+        UM300_csv_path = 'D:/Documents/scint_UM100/scint_UM100/data_retreval/BCT_IMU_134_UM100_QH_300m.csv'
+        UM_300_df = pd.read_csv(UM300_csv_path)
+
+        UM_300_df.index = UM_300_df.hour.astype('timedelta64[h]') + df.index[0]
+
+        ax.plot(UM_300_df.weighted_av_a.dropna(), label='W UM300 $Q_{H}$', color='purple')
+        ax.plot(UM_300_df.av_a.dropna(), label='NW UM300 $Q_{H}$', color='purple', linestyle='--')
+
+        # UKV
+        # read the premade csv
+        UMukv_csv_path = 'D:/Documents/scint_UM100/scint_UM100/data_retreval/BCT_IMU_134_UM100_QH_ukv.csv'
+        UM_ukv_df = pd.read_csv(UMukv_csv_path)
+
+        UM_ukv_df.index = UM_ukv_df.hour.astype('timedelta64[h]') + df.index[0]
+
+        ax.plot(UM_ukv_df.weighted_av_a.dropna(), label='W UKV $Q_{H}$', color='blue')
+        ax.plot(UM_ukv_df.av_a.dropna(), label='NW UKV $Q_{H}$', color='blue', linestyle='--')
+
+
+    # plt.legend()
+    plt.legend(loc='center left', bbox_to_anchor=(1, 0.5))
+
+    # plt.gcf().autofmt_xdate()
+    ax.xaxis.set_major_formatter(DateFormatter('%H'))
+
+    if df.index[0].strftime('%Y%j') == '2016126':
+        plt.title('Clear')
+        ax.set_ylim(0, 1000)
+
+    elif df.index[0].strftime('%Y%j') == '2016123':
+        plt.title('Cloudy')
+        ax.set_ylim(0, 1000)
+
+    else:
+        plt.title(df.index[0].strftime('%Y%j'))
+
+    # save plot
+    date_string = df['QH'].dropna().index[0].strftime('%Y%j')
+
+    # ToDo: a proper solution for here
+    dir_name = './'
+    """
+    if type(model_df) == bool:
+        if model_df == False:
+            dir_name = './'
+        else:
+            raise ValueError('Type of model df has gone wrong.')
+
+    else:
+        main_dir = 'C:/Users/beths/OneDrive - University of Reading/Paper 2/FLUX_PLOTS/'
+        dir_name = main_dir + date_string + '/'
+        if not os.path.exists(dir_name):
+            os.makedirs(dir_name)
+    """
+
+    plt.savefig(dir_name + pair_id + '_' + date_string + '_UM100_line_plot.png', bbox_inches='tight', dpi=300)
 
     print('end')
