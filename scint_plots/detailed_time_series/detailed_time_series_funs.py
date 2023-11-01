@@ -158,11 +158,21 @@ def detailed_time_series(obs_df,
     max_grid_vals, min_grid_vals, n_grids = variation_in_grids(ukv_df, model_site_dict)
 
 
+    # boxplot takes hour value as position, i.e., 6am will be taken as position 6
+    # so adjust this based on the hour - the first hour in the observations + 1
+    ukv_hour_positions = ukv_df.index.hour - list(set(obs_df.index.hour))[0] + 1
 
-    ax1.fill_between(ukv_df.index, max_grid_vals, min_grid_vals, color='pink',
+    # obs positions
+    obs_1min_positions = hour_1min.index.hour - list(set(obs_df.index.hour))[0] + (hour_1min.index.hour[0] - list(set(obs_df.index.hour))[0])
+    obs_5min_positions = hour_5min.index.hour - list(set(obs_df.index.hour))[0] + (hour_5min.index.hour[0] - list(set(obs_df.index.hour))[0])
+    obs_10min_positions = hour_10min.index.hour - list(set(obs_df.index.hour))[0] + (hour_10min.index.hour[0] - list(set(obs_df.index.hour))[0])
+    obs_60min_positions = hour_60min.index.hour - list(set(obs_df.index.hour))[0] + (hour_60min.index.hour[0] - list(set(obs_df.index.hour))[0])
+
+
+    ax1.fill_between(ukv_hour_positions, max_grid_vals, min_grid_vals, color='pink',
                      alpha=0.8, label='UKV grid-box range in SA analysis')
 
-    ax1.plot(ukv_df.index, ukv_df['WAverage'], label='UKV grid-box average with LAS-SA weighting @ surface', color='blue',
+    ax1.plot(ukv_hour_positions, ukv_df['WAverage'], label='UKV grid-box average with LAS-SA weighting @ surface', color='blue',
              marker='.')
 
     if variable == 'kdown':
@@ -170,29 +180,42 @@ def detailed_time_series(obs_df,
     if variable == 'H':
         grid_box_letter = 'A'  # where the centre coord of the path is
 
-    ax1.plot(ukv_df.index, ukv_df[13],
+
+
+    ax1.plot(ukv_hour_positions, ukv_df[13],
              label='UKV @ surface: grid-box ' + grid_box_letter, color='green', marker='.')
 
     # if I am including the BL_H grid
     try:
-        ukv_level = ax1.plot(ukv_df.index, ukv_df['BL_H'], label='UKV @ ' + str(int(BL_H_z)) + ' m agl: grid-box ' + grid_box_letter, color='red', marker='.')
+        ukv_level = ax1.plot(ukv_hour_positions, ukv_df['BL_H'], label='UKV @ ' + str(int(BL_H_z)) + ' m agl: grid-box ' + grid_box_letter, color='red', marker='.')
     except KeyError:
         pass
 
-    obs_all = ax1.plot(obs_df.index, obs_df[df_col], linestyle='None', marker='.', color='grey', alpha=0.5,
-             label="1 min obs")
 
-    obs_1 = ax1.plot(hour_1min.index, hour_1min.values, linestyle='None', marker='o', color='k', markersize=8,
-             label="1 min obs on hour")
+    groups = obs_df.groupby(pd.Grouper(freq='H'))
 
-    obs_5 = ax1.plot(hour_5min.index, hour_5min.values, linestyle='None', marker='o', color='green', markersize=8,
-             label="5 min obs on hour")
+    hours = pd.concat([pd.DataFrame(x[1].QH) for x in groups], axis=1)
+    hours.columns = list(set(obs_df.index.hour))
+    meanprops = dict(color="grey")
+    flierprops = {'marker': '.', 'markerfacecolor': 'grey', 'markeredgecolor': 'grey'}
+    hours.boxplot(zorder=1, showmeans=True, meanline=True, color='grey', meanprops=meanprops, flierprops=flierprops)
 
-    obs_10 = ax1.plot(hour_10min.index, hour_10min.values, linestyle='None', marker='^', color='red', markersize=8,
-             label="10 min obs on hour")
+    # obs_all = ax1.plot(obs_df.index, obs_df[df_col], linestyle='None', marker='.', color='grey', alpha=0.5,
+    #          label="1 min obs")
 
-    obs_60 = ax1.plot(hour_60min.index, hour_60min.values, linestyle='None', marker='x', color='purple', markersize=8,
-             label="60 min obs")
+    obs_1 = ax1.plot(obs_1min_positions, hour_1min.values, linestyle='None', marker='o', color='k', markersize=8,
+             label="1 min obs on hour", zorder=7)
+
+    obs_5 = ax1.plot(obs_5min_positions, hour_5min.values, linestyle='None', marker='o', color='green', markersize=8,
+             label="5 min obs on hour", zorder=8)
+
+    obs_10 = ax1.plot(obs_10min_positions, hour_10min.values, linestyle='None', marker='^', color='red', markersize=8,
+             label="10 min obs on hour", zorder=9)
+
+    obs_60 = ax1.plot(obs_60min_positions, hour_60min.values, linestyle='None', marker='x', color='purple', markersize=8,
+             label="60 min obs", zorder=10)
+
+    plt.grid(False)
 
     ax1.set_ylabel(label_string)
 
@@ -200,7 +223,8 @@ def detailed_time_series(obs_df,
         ax1.set_xlim([ukv_df.index[0] - dt.timedelta(minutes=30), ukv_df.index[-1]])
         ax1.set_ylim(0, 1000)
     else:
-        ax1.set_xlim([ukv_df.index[0] - dt.timedelta(minutes=15), ukv_df.index[-1] + dt.timedelta(minutes=15)])
+        # ax1.set_xlim([ukv_df.index[0] - dt.timedelta(minutes=15), ukv_df.index[-1] + dt.timedelta(minutes=15)])
+        ax1.set_xlim([ukv_hour_positions[0] - 0.3, ukv_hour_positions[-1] + 0.3])
         ax1.set_ylim(0, 600)
 
     # get handles and labels
@@ -208,7 +232,7 @@ def detailed_time_series(obs_df,
 
     # specify order of items in legend
     if variable == 'H':
-        order = [0, 1, 2, 8, 3, 4, 5, 6, 7]
+        order = [0, 1, 2, 7, 3, 4, 5, 6]
 
     elif variable == 'kdown':
         if type(ukv_df_all_grids) == pd.core.frame.DataFrame:
@@ -241,7 +265,7 @@ def detailed_time_series(obs_df,
         if obs_df.index[0].strftime('%Y%j') == '2016123':
 
 
-            ax1.legend([handles[idx] for idx in order][:-5], [labels[idx] for idx in order][:-5],fontsize=15)  # [:-5] just model handles
+            ax1.legend([handles[idx] for idx in order][:-4], [labels[idx] for idx in order][:-4],fontsize=15)  # [:-5] just model handles
 
             # # Fix legend
             # hand, labl = ax1.get_legend_handles_labels()
@@ -269,7 +293,7 @@ def detailed_time_series(obs_df,
         # plt.gcf().autofmt_xdate()
 
     else:
-        ax1.xaxis.set_major_formatter(DateFormatter('%H'))
+        # ax1.xaxis.set_major_formatter(DateFormatter('%H'))
         ax1.set_xlabel('Time (h, UTC)')
         # plt.gcf().autofmt_xdate()
 

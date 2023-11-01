@@ -9,7 +9,7 @@ from scint_plots.tools.preprocessed_UKV_csvs import UKV_lookup
 from scint_plots.detailed_time_series import detailed_time_series_funs
 
 scint_path = 12
-DOY_list = [2016123, 2016126]
+DOY_list = [2016126, 2016123]
 var_list = ['QH', 'z_f']
 time_res = '1min_sa10min'
 
