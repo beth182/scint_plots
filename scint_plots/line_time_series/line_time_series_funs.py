@@ -36,14 +36,22 @@ def times_series_line_QH_KDOWN(df, pair_id, model_df=False):
     # where QH is not nan
     df_not_nan = df.iloc[np.where(np.isnan(df.QH) == False)[0]]
 
-    ax.set_xlim(min(df_not_nan.index) - dt.timedelta(minutes=10), max(df_not_nan.index) + dt.timedelta(minutes=10))
+
+    # CHANGE HERE
+    # ax.set_xlim(min(df_not_nan.index) - dt.timedelta(minutes=10), max(df_not_nan.index) + dt.timedelta(minutes=10))
+
+    ax.set_xlim(df_not_nan.iloc[np.where(np.logical_and(df_not_nan.index.hour>=13, df_not_nan.index.hour<=15))[0]].index[0],
+                df_not_nan.iloc[np.where(np.logical_and(df_not_nan.index.hour>=13, df_not_nan.index.hour<=15))[0]].index[-1])
 
 
     # plt.legend()
     plt.legend(loc='upper left',)
 
     # plt.gcf().autofmt_xdate()
-    ax.xaxis.set_major_formatter(DateFormatter('%H'))
+
+    # CHANGE HERE
+    # ax.xaxis.set_major_formatter(DateFormatter('%H'))
+    ax.xaxis.set_major_formatter(DateFormatter('%H:%M'))
 
     if df.index[0].strftime('%Y%j') == '2016126':
         plt.title('Clear')
