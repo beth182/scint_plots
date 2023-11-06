@@ -10,8 +10,8 @@ save_path = os.getcwd().replace('\\', '/') + '/'
 # panel_number = 1
 # panel_number = 2
 # panel_number = 3
-# panel_number = 4
-panel_number = 5
+panel_number = 4
+# panel_number = 5
 
 sa_demonstration_funs.run_panel_figs_cartoons(panel_number=panel_number, save_path=save_path)
 # """

@@ -397,7 +397,7 @@ def panel_four_cartoon(file_list, save_path):
         # plot lines
         colour_here = 'green'
         rasterio.plot.show(bool_arr, transform=raster.transform, contour=True, contour_label_kws={}, ax=ax,
-                           colors=[colour_here])
+                           colors=[colour_here], linewidths=4)
 
     # plot path
     path_shp_file_path = save_path + '../sa_position_and_lc_fraction/scint_path_shp/'
