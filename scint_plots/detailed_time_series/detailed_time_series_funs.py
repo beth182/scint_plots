@@ -159,7 +159,7 @@ def detailed_time_series(obs_df,
 
     ax1.fill_between(ukv_df.index, max_grid_vals, min_grid_vals, color='pink', alpha=0.8, label='UKV grid-box range in SA analysis')
 
-    ax1.plot(ukv_df.index, ukv_df['WAverage'], label='UKV grid-box average with LAS-SA weighting @ surface', color='blue', marker='.')
+    ax1.plot(ukv_df.index, ukv_df['WAverage'], label='UKV grid-box average with LAS-SA weighting @ surface', color='red', marker='.')
 
     if variable == 'kdown':
         grid_box_letter = 'D'  # where KSSW is
@@ -172,7 +172,7 @@ def detailed_time_series(obs_df,
 
     # if I am including the BL_H grid
     try:
-        ukv_level = ax1.plot(ukv_df.index, ukv_df['BL_H'], label='UKV @ ' + str(int(BL_H_z)) + ' m agl: grid-box ' + grid_box_letter, color='red', marker='.')
+        ukv_level = ax1.plot(ukv_df.index, ukv_df['BL_H'], label='UKV @ ' + str(int(BL_H_z)) + ' m agl: grid-box ' + grid_box_letter, color='blue', marker='.')
     except KeyError:
         pass
 
