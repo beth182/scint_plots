@@ -213,20 +213,18 @@ def plot_concept_axis(in_dict, save_path):
 
     # east to west
     las_lat = ax.plot(df_las_lat.index - min_lat, df_las_lat.x_crosssec_to1_path, label='LAS cross-wind',
-                      color='red',
-                      linestyle='-')
+                      color='red', linestyle='-.', linewidth=3)
 
-    ec_lat = ax.plot(df_ec_lat.index - min_lat, df_ec_lat.x_crosssec_to1_point, label='EC cross-wind', color='blue',
-                     linestyle='-')
+    ec_lat = ax.plot(df_ec_lat.index - min_lat, df_ec_lat.x_crosssec_to1_point, label='EC cross-wind',
+                     color='blue', linestyle='-.', linewidth=3)
 
     # ax2.set_xlabel('Latitudinal Distance (m)')
 
     # north to south
     las_lon = ax.plot(df_las_lon.index - min_lon, df_las_lon.y_crosssec_to1_path, label='LAS along-wind',
-                      color='red',
-                      linestyle='--')
-    ec_lon = ax.plot(df_ec_lon.index - min_lon, df_ec_lon.y_crosssec_to1_point, label='EC along-wind', color='blue',
-                     linestyle='--')
+                      color='red', linestyle=':', linewidth=3)
+    ec_lon = ax.plot(df_ec_lon.index - min_lon, df_ec_lon.y_crosssec_to1_point, label='EC along-wind',
+                     color='blue', linestyle=':', linewidth=3)
 
     # ax.set_xlabel('Longitudinal Distance (m)')
 
