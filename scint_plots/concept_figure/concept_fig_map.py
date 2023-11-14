@@ -5,6 +5,9 @@ import glob
 import os
 import geopandas as gpd
 import matplotlib.colors as colors
+import matplotlib as mpl
+
+mpl.rcParams.update({'font.size': 20})
 
 save_path = os.getcwd().replace('\\', '/') + '/'
 
@@ -16,7 +19,6 @@ os.chdir(sa_dir)
 for file in glob.glob("*.tif"):
     file_list.append(sa_dir + file)
 
-raster0 = rasterio.open(file_list[0])
 fig, ax = plt.subplots(figsize=(10, 10))
 
 # plot lancover map
@@ -30,10 +32,10 @@ cmap_lc = colors.ListedColormap(color_list_lc)
 bounds_lc = [0, 1, 2, 3, 4, 5, 6, 7, 8]
 norm_lc = colors.BoundaryNorm(bounds_lc, cmap_lc.N)
 
-rasterio.plot.show(landcover_raster, ax=ax, cmap=cmap_lc, norm=norm_lc, interpolation='nearest', alpha=0.5)
+rasterio.plot.show(landcover_raster, ax=ax, cmap=cmap_lc, norm=norm_lc, interpolation='nearest', alpha=0.35)
 
-ax.set_xlim(280664.2382130053, 287345.2889264111)
-ax.set_ylim(5707707.90450454, 5713269.294785313)
+ax.set_xlim(280765, 287176)
+ax.set_ylim(5708459, 5712690)
 
 # POINT
 raster_point = rasterio.open(file_list[1])
@@ -51,12 +53,12 @@ max_coords_point = raster_point.xy(ind_max_2d_point[0], ind_max_2d_point[1])
 
 # plot
 rasterio.plot.show(bool_arr_point, transform=raster_point.transform, contour=True, contour_label_kws={}, ax=ax,
-                   colors=['blue'])
+                   colors=['blue'], linewidths=4)
 
 ax.scatter(max_coords_point[0], max_coords_point[1], color='blue', marker='o', s=30)
 # cross section lines
-plt.axhline(y=max_coords_point[1], color='blue', linestyle='-.')
-plt.axvline(x=max_coords_point[0], color='blue', linestyle=':')
+plt.axhline(y=max_coords_point[1], color='blue', linestyle='-.', linewidth=4)
+plt.axvline(x=max_coords_point[0], color='blue', linestyle=':', linewidth=4)
 
 # PATH
 raster_path = rasterio.open(file_list[0])
@@ -73,22 +75,28 @@ ind_max_2d_path = np.unravel_index(np.nanargmax(raster_array_path), raster_array
 max_coords_path = raster_path.xy(ind_max_2d_path[0], ind_max_2d_path[1])
 # plot
 rasterio.plot.show(bool_arr_path, transform=raster_path.transform, contour=True, contour_label_kws={}, ax=ax,
-                   colors=['red'])
+                   colors=['red'], linewidths=4)
 ax.scatter(max_coords_path[0], max_coords_path[1], color='red', marker='o', s=30)
 # cross section lines
-plt.axhline(y=max_coords_path[1], color='red', linestyle='-.')
-plt.axvline(x=max_coords_path[0], color='red', linestyle=':')
+plt.axhline(y=max_coords_path[1], color='red', linestyle='-.', linewidth=4)
+plt.axvline(x=max_coords_path[0], color='red', linestyle=':', linewidth=4)
 
 # plot path
 df = gpd.read_file(sa_dir + 'fake_path3.shp')
-df.plot(edgecolor='red', ax=ax, linewidth=4.0, linestyle='-', label='LAS')
+df.plot(edgecolor='red', ax=ax, linewidth=4.0, linestyle='-', label='LAS', linewidths=4)
 # plot EC
-ax.scatter(283940.6056, 5712253.017, color='blue', marker='X', s=100, zorder=10, label='EC')
-# ticks
-ax.ticklabel_format(style='plain')
-plt.legend(loc='upper left')
-plt.yticks(rotation=90, va="center")
+ax.scatter(283940.6056, 5712253.017, color='blue', marker='X', s=150, zorder=10, label='EC')
 
-# plt.savefig(save_path + 'concept_fig_map.png', bbox_inches='tight')
+
+# ticks
+# ax.ticklabel_format(style='plain')
+# plt.yticks(rotation=90, va="center")
+# rm ticks
+ax.axes.get_xaxis().set_visible(False)
+ax.axes.get_yaxis().set_visible(False)
+
+plt.legend(loc='upper left')
+
+plt.savefig(save_path + 'concept_fig_map.png', bbox_inches='tight', dpi=300)
 
 print('end')
