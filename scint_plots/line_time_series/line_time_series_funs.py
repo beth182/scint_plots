@@ -185,13 +185,10 @@ def times_series_line_QH_KDOWN_REVIEW_EXAMPLE(DOY_dict, pair_id, model_df=False)
     fig = plt.figure(figsize=(8, 7))
     ax = plt.subplot(1, 1, 1)
 
-
-
     ax.plot(DOY_dict[2016126]['1']['QH'], label='$Q_{H}$ 1min', linewidth=1, alpha=0.5)
     ax.plot(DOY_dict[2016126]['1']['kdown'], label='$K_{\downarrow}$', linewidth=1)
 
-
-    ax.scatter(DOY_dict[2016126]['2'].index, DOY_dict[2016126]['2']['QH'], label='2min', marker= '.', color='green')
+    ax.scatter(DOY_dict[2016126]['2'].index, DOY_dict[2016126]['2']['QH'], label='2min', marker='.', color='green')
 
     ax.scatter(DOY_dict[2016126]['3'].index, DOY_dict[2016126]['3']['QH'], label='3min', marker='+', color='purple')
 
@@ -199,8 +196,7 @@ def times_series_line_QH_KDOWN_REVIEW_EXAMPLE(DOY_dict, pair_id, model_df=False)
 
     ax.scatter(DOY_dict[2016126]['10'].index, DOY_dict[2016126]['10']['QH'], label='10min', marker='o', color='red')
 
-
-    ax.scatter(DOY_dict[2016126]['2'].index, DOY_dict[2016126]['2']['kdown'], marker= '.', color='green')
+    ax.scatter(DOY_dict[2016126]['2'].index, DOY_dict[2016126]['2']['kdown'], marker='.', color='green')
 
     ax.scatter(DOY_dict[2016126]['3'].index, DOY_dict[2016126]['3']['kdown'], marker='+', color='purple')
 
@@ -208,23 +204,17 @@ def times_series_line_QH_KDOWN_REVIEW_EXAMPLE(DOY_dict, pair_id, model_df=False)
 
     ax.scatter(DOY_dict[2016126]['10'].index, DOY_dict[2016126]['10']['kdown'], marker='o', color='red')
 
-
-
-
-
-
-
-
     ax.set_xlabel('Time')
     ax.set_ylabel('Flux (W $m^{-2}$)')
-
-
 
     # CHANGE HERE
     # ax.set_xlim(min(DOY_dict[2016126]['1'].index) - dt.timedelta(minutes=10), max(DOY_dict[2016126]['1'].index) + dt.timedelta(minutes=10))
 
-    ax.set_xlim(DOY_dict[2016126]['1'].iloc[np.where(np.logical_and(DOY_dict[2016126]['1'].index.hour>=13, DOY_dict[2016126]['1'].index.hour<=15))[0]].index[0],
-                DOY_dict[2016126]['1'].iloc[np.where(np.logical_and(DOY_dict[2016126]['1'].index.hour>=13, DOY_dict[2016126]['1'].index.hour<=15))[0]].index[-1])
+    ax.set_xlim(DOY_dict[2016126]['1'].iloc[np.where(
+        np.logical_and(DOY_dict[2016126]['1'].index.hour >= 13, DOY_dict[2016126]['1'].index.hour <= 15))[0]].index[0],
+                DOY_dict[2016126]['1'].iloc[np.where(
+                    np.logical_and(DOY_dict[2016126]['1'].index.hour >= 13, DOY_dict[2016126]['1'].index.hour <= 15))[
+                    0]].index[-1])
 
     # plt.legend()
     plt.legend(loc='best')
@@ -235,10 +225,8 @@ def times_series_line_QH_KDOWN_REVIEW_EXAMPLE(DOY_dict, pair_id, model_df=False)
     # ax.xaxis.set_major_formatter(DateFormatter('%H'))
     ax.xaxis.set_major_formatter(DateFormatter('%H:%M'))
 
-
     plt.title('Clear')
     ax.set_ylim(0, 1000)
-
 
     # save plot
     date_string = DOY_dict[2016126]['1']['QH'].dropna().index[0].strftime('%Y%j')
@@ -259,8 +247,6 @@ def times_series_line_QH_KDOWN_REVIEW_EXAMPLE(DOY_dict, pair_id, model_df=False)
             os.makedirs(dir_name)
     """
 
-    plt.show()
-
-    plt.savefig(dir_name + pair_id + '_' + date_string + '_line_plot.png', bbox_inches='tight', dpi=300)
+    plt.savefig(dir_name + pair_id + '_' + date_string + '_line_plot_REVIEW_EXAMPLE.png', bbox_inches='tight', dpi=300)
 
     print('end')
