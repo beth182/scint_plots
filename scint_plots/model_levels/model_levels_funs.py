@@ -154,6 +154,9 @@ def create_model_height_plot(model_times,
 
     fig, ax = plt.subplots(figsize=(10, 10))
 
+    height_QH_diff = []
+    hour = []
+
     count = 0
     for i in range(len(model_times)):
 
@@ -163,10 +166,17 @@ def create_model_height_plot(model_times,
 
             qh_at_1_time = var_grid[i, :]
 
+            print((np.abs(qh_at_1_time[:6].max() - qh_at_1_time[:6].min())))
+            height_QH_diff.append((np.abs(qh_at_1_time[:6].max() - qh_at_1_time[:6].min())))
+            hour.append(i)
+
             plt.plot(qh_at_1_time, model_heights, label=str(i), color=colour_list[count], marker='o', linestyle='dotted')
             plt.scatter(var_surf_grid[i], 0, color=colour_list[count], marker='x')
 
             count += 1
+
+    print('min % diff = ', min(height_QH_diff))
+    print('max % diff = ', max(height_QH_diff))
 
     # get range of observation effective measurement height
     max_z_f = np.nanmax(obs_df)
