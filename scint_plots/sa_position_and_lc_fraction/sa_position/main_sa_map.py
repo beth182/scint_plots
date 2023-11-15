@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 
 import scint_fp.functions.plot_functions.plot_sa_lines.sa_lines_funs as sa_lines
 
-doy_choice = 123
+doy_choice = 126
 # ToDo: move these
 sa_dir = 'C:/Users/beths/OneDrive - University of Reading/local_runs_data/fp_output/' + str(doy_choice) + '/hourly/'
 
