@@ -187,18 +187,18 @@ def create_model_height_plot(model_times,
 
     # set title and minimum
     if obs_df.index[0].strftime('%j') == '126':
-        title_string = 'Clear'
+        title_string = 'IOP-2'
         x_min = -20
     else:
         assert obs_df.index[0].strftime('%j') == '123'
-        title_string = 'Cloudy'
+        title_string = 'IOP-1'
         x_min = -10
     plt.title(title_string)
 
     plt.ylim(-2, 150)
     plt.xlim(x_min, max(var_surf_grid) + 10)
     plt.ylabel("Height above $z_{ES}$ (m)")
-    plt.xlabel('$Q_{H}$ (W m$^{-2}$)')
+    plt.xlabel('$Q_{H,UKV}$ (W m$^{-2}$)')
 
     # manually set the first x tick
     # We need to draw the canvas, otherwise the labels won't be positioned and won't have values yet.
