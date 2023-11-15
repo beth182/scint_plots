@@ -127,11 +127,11 @@ def transect_plot(pt, save_path, pw_fun=None):
             path_weight_df["path_weight"], color="blue", linestyle='--',
             label='Path weighting function')
 
-        ax.spines['right'].set_color('grey')
-        ax2.spines['right'].set_color('grey')
+        ax.spines['right'].set_color('blue')
+        ax2.spines['right'].set_color('blue')
         ax2.set_ylabel("Path Weighting")
-        ax2.yaxis.label.set_color('grey')
-        ax2.tick_params(axis='y', colors='grey')
+        ax2.yaxis.label.set_color('blue')
+        ax2.tick_params(axis='y', colors='blue')
 
     bld_line = ax.plot(pt.gdf.index * pt.point_res, pt.gdf["z_asl_max_bdsm"], color='dimgrey', label='Building heights')
     ground_line = ax.plot(pt.gdf.index * pt.point_res, pt.gdf["z_asl_max_dem"], color='sienna', label='Ground height')
