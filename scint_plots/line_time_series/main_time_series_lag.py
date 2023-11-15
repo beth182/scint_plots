@@ -46,8 +46,8 @@ for DOY in DOY_list:
 index_126 = np.where(DOY_dict[2016126]['r_list'] == max(DOY_dict[2016126]['r_list']))[0][0]
 index_123 = np.where(DOY_dict[2016123]['r_list'] == max(DOY_dict[2016123]['r_list']))[0][0]
 
-plt.plot(DOY_dict[2016123]['displace_list'], DOY_dict[2016123]['r_list'], label='Cloudy: ' + str(DOY_dict[2016123]['displace_list'][index_123]), color='blue')
-plt.plot(DOY_dict[2016126]['displace_list'], DOY_dict[2016126]['r_list'], label='Clear: ' + str(DOY_dict[2016126]['displace_list'][index_126]), color='orange')
+plt.plot(DOY_dict[2016123]['displace_list'], DOY_dict[2016123]['r_list'], label='IOP-1: ' + str(DOY_dict[2016123]['displace_list'][index_123]), color='blue')
+plt.plot(DOY_dict[2016126]['displace_list'], DOY_dict[2016126]['r_list'], label='IOP-2: ' + str(DOY_dict[2016126]['displace_list'][index_126]), color='orange')
 
 plt.scatter(DOY_dict[2016123]['displace_list'][index_123], DOY_dict[2016123]['r_list'][index_123], color='blue')
 plt.scatter(DOY_dict[2016126]['displace_list'][index_126], DOY_dict[2016126]['r_list'][index_126], color='orange')
@@ -56,7 +56,7 @@ plt.legend()
 
 
 plt.ylabel('r')
-plt.xlabel('# minutes QH shifted')
+plt.xlabel('# minutes $Q_{H,LAS}$ shifted')
 
 dir_name = './'
 plt.savefig(dir_name + pair_id + '_lag' + '.png', bbox_inches='tight', dpi=300)
