@@ -58,4 +58,7 @@ plt.legend()
 plt.ylabel('r')
 plt.xlabel('# minutes QH shifted')
 
+dir_name = './'
+plt.savefig(dir_name + pair_id + '_lag' + '.png', bbox_inches='tight', dpi=300)
+
 print('end')
