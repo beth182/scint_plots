@@ -137,11 +137,6 @@ def stability_and_sa(df_dict):
         index_list_126_60.append(datetime_object)
     df_126_60.index = index_list_126_60
 
-
-
-
-
-
     format_index_123_ukv = df_123_ukv.index.strftime('%H:%M')
     index_list_123_ukv = []
     for i in format_index_123_ukv:
@@ -149,23 +144,12 @@ def stability_and_sa(df_dict):
         index_list_123_ukv.append(datetime_object)
     df_123_ukv.index = index_list_123_ukv
 
-
     format_index_126_ukv = df_126_ukv.index.strftime('%H:%M')
     index_list_126_ukv = []
     for i in format_index_126_ukv:
         datetime_object = dt.datetime.strptime(i, '%H:%M')
         index_list_126_ukv.append(datetime_object)
     df_126_ukv.index = index_list_126_ukv
-
-
-
-
-
-
-
-
-
-
 
     # Resample sig v to 60 min averages
     sig_v_123_60 = df_123_10.sig_v_123.resample('60T', closed='right', label='right').mean()
@@ -214,8 +198,9 @@ def stability_and_sa(df_dict):
     ax3.plot(df_126_10.index, df_126_10.stab_param * -1, color='blue', alpha=0.3, linewidth=0.5, marker='.')
     ax3.plot(df_123_10.index, df_123_10.stab_param * -1, color='red', alpha=0.3, linewidth=0.5, marker='.')
     # hour
-    ax3.plot(df_126_60.index, df_126_60.stab_param * -1, color='blue', marker='o', label='Clear')
-    ax3.plot(df_123_60.index, df_123_60.stab_param * -1, color='red', marker='o', label='Cloudy')
+    ax3.plot(df_123_60.index, df_123_60.stab_param * -1, color='red', marker='o', label='IOP-1')
+    ax3.plot(df_126_60.index, df_126_60.stab_param * -1, color='blue', marker='o', label='IOP-2')
+
 
     ax3.set_ylabel('- z$_{f}$/L', labelpad=-5)
     ax3.set_yscale('log')
@@ -250,14 +235,12 @@ def stability_and_sa(df_dict):
     ax6.plot(df_126_60.index, df_126_60.sa_area_km2, color='blue', marker='o')
     ax6.plot(df_123_60.index, df_123_60.sa_area_km2, color='red', marker='o')
 
-
     ax6.plot([], [], color='black', marker='o', label='60 min')
     ax6.plot([], [], color='black', alpha=0.3, linewidth=0.5, marker='.', label='10 min')
 
     ax6.legend()
 
-
-    ax6.set_ylabel('SA area (km$^{2}$)')
+    ax6.set_ylabel('$SA_{LAS}$ area (km$^{2}$)')
 
     # wind speed
     # 10 min
@@ -286,10 +269,8 @@ def stability_and_sa(df_dict):
     ax8.plot(df_126_ukv.index, df_126_ukv.wind_direction, color='blue', linestyle='--')
     ax8.plot(df_123_ukv.index, df_123_ukv.wind_direction, color='red', linestyle='--')
 
-
     ax8.plot([], [], color='black', linestyle='--', label='UKV at ' + '{0:.0f}'.format(UKV_123_z) + ' m')
     ax8.legend()
-
 
     ax8.set_ylabel('Wind Direction ($^{\circ}$)')
 
