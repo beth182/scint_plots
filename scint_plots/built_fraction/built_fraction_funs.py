@@ -255,14 +255,14 @@ def plot_function_built_fraction(output_dict):
                                      c='white', marker="$\u25cf$", s=80, zorder=2)
 
             s = ax.scatter(x_vals_select, y_vals_select,
-                           c=mean_kdown_select, marker="$\u25cb$", cmap=cmap, norm=norm, label='Clear Obs', s=80,
+                           c=mean_kdown_select, marker="$\u25cb$", cmap=cmap, norm=norm, label='IOP-2 Obs', s=80,
                            zorder=3)
 
             white_block_UKV = ax.scatter(mod_select.Urban * 100, mod_select.QH / mod_select.kdown,
                                          c='white', marker="$\u25A0$", s=80, zorder=2)
 
             ax.scatter(mod_select.Urban * 100, mod_select.QH / mod_select.kdown,
-                       c=mod_select.kdown, marker="$\u25A1$", cmap=cmap, norm=norm, label='Clear UKV', s=80,
+                       c=mod_select.kdown, marker="$\u25A1$", cmap=cmap, norm=norm, label='IOP-2 UKV', s=80,
                        zorder=3)
 
 
@@ -270,10 +270,10 @@ def plot_function_built_fraction(output_dict):
             assert obs_df.index[0].strftime('%j') == '123'
 
             s = ax.scatter(x_vals_select, y_vals_select, c=mean_kdown_select, marker='$\u25cf$', cmap=cmap, norm=norm,
-                           edgecolor='k', label='Cloudy Obs', s=80)
+                           edgecolor='k', label='IOP-1 Obs', s=80)
 
             ax.scatter(mod_select.Urban * 100, mod_select.QH / mod_select.kdown, c=mod_select.kdown, marker='s',
-                       cmap=cmap, norm=norm, edgecolor='k', label='Cloudy UKV', s=80)
+                       cmap=cmap, norm=norm, edgecolor='k', label='IOP-1 UKV', s=80)
 
     plt.legend()
 
