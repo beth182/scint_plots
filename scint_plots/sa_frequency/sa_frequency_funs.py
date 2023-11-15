@@ -171,12 +171,12 @@ def plot_sa_freq(DOY_df_dict):
     # cloudy
     s = ax.scatter(DOY_df_dict[2016123]['x_vals'], DOY_df_dict[2016123]['y_vals'],
                    c=mdates.date2num(DOY_df_dict[2016123]['start_times']), marker='$\u25cf$', cmap=cmap, norm=norm,
-                   edgecolor='k', label='Cloudy', s=80, zorder=3)
+                   edgecolor='k', label='IOP-1', s=80, zorder=3)
 
     # clear
     s2 = ax.scatter(DOY_df_dict[2016126]['x_vals'], DOY_df_dict[2016126]['y_vals'],
                     c=mdates.date2num(DOY_df_dict[2016126]['start_times']), marker='$\u25cb$', cmap=cmap, norm=norm,
-                    label='Clear', zorder=5, s=80)
+                    label='IOP-2', zorder=5, s=80)
 
     # use white scatter marks - so lines don't appear through marker
     # facecolor didn't work...
@@ -206,7 +206,7 @@ def plot_sa_freq(DOY_df_dict):
         [mdates.num2date(i).strftime('%H') for i in cbar.get_ticks()])  # set ticks of your format
     cbar.set_label('Time (h, UTC)')
 
-    ax.set_ylabel('($Q_{H}^{10min}$ - $Q_{H}^{hour}$) / $Q_{H}^{hour}$')
+    ax.set_ylabel('($Q_{H,LAS}^{10min}$ - $Q_{H,LAS}^{hour}$) / $Q_{H,LAS}^{hour}$')
     ax.set_xlabel('($z_{f}^{10min}$ - $z_{f}^{hour}$) / $z_{f}^{hour}$')
 
     leg = ax.legend(frameon=False, fontsize='medium')
