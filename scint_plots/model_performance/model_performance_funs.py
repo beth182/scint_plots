@@ -66,15 +66,15 @@ def plot_difference(DOY_dict):
     # plt.gcf().autofmt_xdate()
     # ax.xaxis.set_major_formatter(DateFormatter('%H'))
 
-    plt.ylabel('(UKV-$Q_{H}^{surf}$ - LAS-$Q_{H}$) / LAS-$Q_{H}$')
+    plt.ylabel('($Q_{H,UKV}^{surf}$ - $Q_{H,LAS}$) / $Q_{H,LAS}$')
     plt.xlabel('Time (h, UTC)')
 
     plt.axhline(y=0, color='k', linestyle='-', linewidth=0.8)
 
     # construct legend manually
     handles, labels = plt.gca().get_legend_handles_labels()
-    cloudy_line = Line2D([0], [0], label='Cloudy', color='black', linestyle='dotted', marker='x')
-    clear_line = Line2D([0], [0], label='Clear', color='black', marker='o')
+    cloudy_line = Line2D([0], [0], label='IOP-1', color='black', linestyle='dotted', marker='x')
+    clear_line = Line2D([0], [0], label='IOP-2', color='black', marker='o')
     av1_line = Line2D([0], [0], label='1 min', color='blue')
     av5_line = Line2D([0], [0], label='5 min', color='green')
     av10_line = Line2D([0], [0], label='10 min', color='red')
