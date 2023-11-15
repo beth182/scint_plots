@@ -19,7 +19,7 @@ def times_series_line_QH_KDOWN(df, pair_id, model_df=False):
     fig = plt.figure(figsize=(8, 7))
     ax = plt.subplot(1, 1, 1)
 
-    ax.plot(df['QH'], label='$Q_{H}$', linewidth=1)
+    ax.plot(df['QH'], label='$Q_{H,LAS}$', linewidth=1)
     ax.plot(df['kdown'], label='$K_{\downarrow}$', linewidth=1)
 
     if type(model_df) == pd.core.frame.Series or type(model_df) == pd.core.frame.DataFrame:
@@ -47,11 +47,11 @@ def times_series_line_QH_KDOWN(df, pair_id, model_df=False):
     ax.xaxis.set_major_formatter(DateFormatter('%H'))
 
     if df.index[0].strftime('%Y%j') == '2016126':
-        plt.title('Clear')
+        plt.title('IOP-2')
         ax.set_ylim(0, 1000)
 
     elif df.index[0].strftime('%Y%j') == '2016123':
-        plt.title('Cloudy')
+        plt.title('IOP-1')
         ax.set_ylim(0, 1000)
 
     else:
