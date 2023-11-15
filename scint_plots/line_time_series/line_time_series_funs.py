@@ -185,16 +185,16 @@ def times_series_line_QH_KDOWN_REVIEW_EXAMPLE(DOY_dict, pair_id, model_df=False)
     fig = plt.figure(figsize=(8, 7))
     ax = plt.subplot(1, 1, 1)
 
-    ax.plot(DOY_dict[2016126]['1']['QH'], label='$Q_{H}$ 1min', linewidth=1, alpha=0.5)
+    ax.plot(DOY_dict[2016126]['1']['QH'], label='$Q_{H,LAS}$ 1-min', linewidth=1, alpha=0.5)
     ax.plot(DOY_dict[2016126]['1']['kdown'], label='$K_{\downarrow}$', linewidth=1)
 
-    ax.scatter(DOY_dict[2016126]['2'].index, DOY_dict[2016126]['2']['QH'], label='2min', marker='.', color='green')
+    ax.scatter(DOY_dict[2016126]['2'].index, DOY_dict[2016126]['2']['QH'], label='2-min', marker='.', color='green')
 
-    ax.scatter(DOY_dict[2016126]['3'].index, DOY_dict[2016126]['3']['QH'], label='3min', marker='+', color='purple')
+    ax.scatter(DOY_dict[2016126]['3'].index, DOY_dict[2016126]['3']['QH'], label='3-min', marker='+', color='purple')
 
-    ax.scatter(DOY_dict[2016126]['5'].index, DOY_dict[2016126]['5']['QH'], label='5min', marker='x', color='darkblue')
+    ax.scatter(DOY_dict[2016126]['5'].index, DOY_dict[2016126]['5']['QH'], label='5-min', marker='x', color='darkblue')
 
-    ax.scatter(DOY_dict[2016126]['10'].index, DOY_dict[2016126]['10']['QH'], label='10min', marker='o', color='red')
+    ax.scatter(DOY_dict[2016126]['10'].index, DOY_dict[2016126]['10']['QH'], label='10-min', marker='o', color='red')
 
     ax.scatter(DOY_dict[2016126]['2'].index, DOY_dict[2016126]['2']['kdown'], marker='.', color='green')
 
@@ -225,7 +225,7 @@ def times_series_line_QH_KDOWN_REVIEW_EXAMPLE(DOY_dict, pair_id, model_df=False)
     # ax.xaxis.set_major_formatter(DateFormatter('%H'))
     ax.xaxis.set_major_formatter(DateFormatter('%H:%M'))
 
-    plt.title('Clear')
+    plt.title('IOP-2')
     ax.set_ylim(0, 1000)
 
     # save plot
