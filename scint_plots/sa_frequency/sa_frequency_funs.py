@@ -164,7 +164,7 @@ def plot_sa_freq(DOY_df_dict):
     ax.scatter(np.asarray(DOY_df_dict[2016123]['x_vals'])[DOY_df_dict[2016123]['bellow_75_index']],
                np.asarray(DOY_df_dict[2016123]['y_vals'])[DOY_df_dict[2016123]['bellow_75_index']],
                facecolors='none', edgecolors='k', marker='$\u25cf$', zorder=2, s=300, alpha=0.7,
-               label='$\overline{Q_{H}^{10 min}}$ < 75 $W$ $m^{-2}$')
+               label='$\overline{Q_{H,LAS}^{10 min}}$ < 75 $W$ $m^{-2}$')
 
 
     # markers
