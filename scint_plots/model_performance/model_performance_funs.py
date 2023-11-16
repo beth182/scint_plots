@@ -21,10 +21,10 @@ def plot_difference(DOY_dict):
         UKV = DOY_dict[DOY]['UKV_QH'].WAverage
 
         # time average the observations
-        obs_av = read_calculated_fluxes.time_averages_of_obs(obs, 'QH', on_hour=True)
+        # obs_av = read_calculated_fluxes.time_averages_of_obs(obs, 'QH', on_hour=True)
 
         # combine obs and model
-        df = pd.concat([obs_av, UKV.rename('UKV')], axis=1).dropna()
+        df = pd.concat([obs, UKV.rename('UKV')], axis=1).dropna()
 
         # take differences
         df['diff_1'] = (df.UKV - df.obs_1) / np.abs(df.obs_1)
@@ -52,7 +52,8 @@ def plot_difference(DOY_dict):
     plt.plot(DOY_df_dict[2016126].index.hour, DOY_df_dict[2016126].diff_1, marker='o', color='blue')
 
     # 5 mins
-    plt.plot(DOY_df_dict[2016123].index.hour, DOY_df_dict[2016123].diff_5, marker='x', color='green', linestyle='dotted')
+    plt.plot(DOY_df_dict[2016123].index.hour, DOY_df_dict[2016123].diff_5, marker='x', color='green',
+             linestyle='dotted')
     plt.plot(DOY_df_dict[2016126].index.hour, DOY_df_dict[2016126].diff_5, marker='o', color='green')
 
     # 10 mins
@@ -60,7 +61,8 @@ def plot_difference(DOY_dict):
     plt.plot(DOY_df_dict[2016126].index.hour, DOY_df_dict[2016126].diff_10, marker='o', color='red')
 
     # 60 mins
-    plt.plot(DOY_df_dict[2016123].index.hour, DOY_df_dict[2016123].diff_60, marker='x', color='purple', linestyle='dotted')
+    plt.plot(DOY_df_dict[2016123].index.hour, DOY_df_dict[2016123].diff_60, marker='x', color='purple',
+             linestyle='dotted')
     plt.plot(DOY_df_dict[2016126].index.hour, DOY_df_dict[2016126].diff_60, marker='o', color='purple')
 
     # plt.gcf().autofmt_xdate()
