@@ -9,7 +9,7 @@ from scint_plots.line_time_series import time_series_lag_funs
 scint_path = 12
 DOY_list = [2016126, 2016123]
 var_list = ['QH', 'kdown']
-time_res = '1min_sa10min'
+time_res = '1min_sa10min' + '_PERIOD_VAR_' + str(1)
 
 pair_id = look_up.scint_path_numbers[scint_path]
 
