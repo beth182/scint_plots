@@ -18,6 +18,6 @@ def combine(df_list, on_hour=True):
 
         new_df_list.append(df_QH)
 
-    combine_df = pd.concat(new_df_list, axis=1).dropna()
+    combine_df = pd.concat(new_df_list, axis=1)
 
     return combine_df

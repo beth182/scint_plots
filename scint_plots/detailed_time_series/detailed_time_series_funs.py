@@ -72,10 +72,8 @@ def detailed_time_series(obs_df,
     ukv_df = ukv_df.dropna()
 
     if variable == 'H':
-        df_col = 'QH'
         label_string = '$Q_{H}$ (W m$^{-2})$'
     elif variable == 'kdown':
-        df_col = 'kdown'
         label_string = '$K_{\downarrow}$ (W m$^{-2}$)'
     else:
         raise ValueError('variable chosen not an option')
@@ -96,32 +94,33 @@ def detailed_time_series(obs_df,
 
     ax1 = fig.add_subplot(spec[0])
 
-    obs_df = obs_df.dropna()
+    # obs_df = obs_df.dropna()
 
     if variable == 'H':
-        five_min = obs_df.resample('5T', closed='right', label='right').mean()
-        ten_min = obs_df.resample('10T', closed='right', label='right').mean()
-        sixty_min = obs_df.resample('60T', closed='right', label='right').mean()
+        # five_min = obs_df.resample('5T', closed='right', label='right').mean()
+        # ten_min = obs_df.resample('10T', closed='right', label='right').mean()
+        # sixty_min = obs_df.resample('60T', closed='right', label='right').mean()
 
         minute_match = 0
 
     else:
 
-        # as-is
-        # '''
-        five_min = obs_df.resample('5T', closed='right', label='right').mean()
-        ten_min = obs_df.resample('10T', closed='right', label='right').mean()
-        sixty_min = obs_df.resample('60T', closed='right', label='right').mean()
-    
-        # if variable == 'kdown':
-        #     sixty_min.index = sixty_min.index - dt.timedelta(minutes=45)
-        #     ten_min.index = ten_min.index + dt.timedelta(minutes=5)
+        # # as-is
+        # # '''
+        # five_min = obs_df.resample('5T', closed='right', label='right').mean()
+        # ten_min = obs_df.resample('10T', closed='right', label='right').mean()
+        # sixty_min = obs_df.resample('60T', closed='right', label='right').mean()
         #
-        #     minute_match = 15
-        # else:
-        #     minute_match = 0
-    
+        # # if variable == 'kdown':
+        # #     sixty_min.index = sixty_min.index - dt.timedelta(minutes=45)
+        # #     ten_min.index = ten_min.index + dt.timedelta(minutes=5)
+        # #
+        # #     minute_match = 15
+        # # else:
+        # #     minute_match = 0
+
         minute_match = 0
+
         # '''
         # OR
         # shifted averages
@@ -134,15 +133,15 @@ def detailed_time_series(obs_df,
 
         '''
 
+    hour_1min = obs_df['obs_1'][np.where([i.minute == minute_match for i in obs_df.index])[0]]
+    hour_5min = obs_df['obs_5'][np.where([i.minute == minute_match for i in obs_df.index])[0]]
+    hour_10min = obs_df['obs_10'][np.where([i.minute == minute_match for i in obs_df.index])[0]]
+    hour_60min = obs_df['obs_60'][np.where([i.minute == minute_match for i in obs_df.index])[0]]
 
-
-    hour_1min = obs_df[df_col][np.where([i.minute == minute_match for i in obs_df.index])[0]]
-    hour_5min = five_min[df_col][np.where([i.minute == minute_match for i in five_min.index])[0]]
-    hour_10min = ten_min[df_col][np.where([i.minute == minute_match for i in ten_min.index])[0]]
-    hour_60min = sixty_min[df_col][np.where([i.minute == minute_match for i in sixty_min.index])[0]]
-
-
-    obs_N = len(obs_df)
+    # hour_1min = obs_df[df_col][np.where([i.minute == minute_match for i in obs_df.index])[0]]
+    # hour_5min = five_min[df_col][np.where([i.minute == minute_match for i in five_min.index])[0]]
+    # hour_10min = ten_min[df_col][np.where([i.minute == minute_match for i in ten_min.index])[0]]
+    # hour_60min = sixty_min[df_col][np.where([i.minute == minute_match for i in sixty_min.index])[0]]
 
     # if variable == 'kdown':
     #     if type(ukv_df_all_grids) == pd.core.frame.DataFrame:
@@ -183,7 +182,7 @@ def detailed_time_series(obs_df,
     except KeyError:
         pass
 
-    obs_all = ax1.plot(obs_df.index, obs_df[df_col], linestyle='None', marker='.', color='grey', alpha=0.5,
+    obs_all = ax1.plot(obs_df.index, obs_df['obs_1'], linestyle='None', marker='.', color='grey', alpha=0.5,
              label="1 min obs")
 
     obs_1 = ax1.plot(hour_1min.index, hour_1min.values, linestyle='None', marker='o', color='k', markersize=8,
