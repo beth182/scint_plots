@@ -16,8 +16,10 @@ def stats_of_the_obs_fluxes(df):
 
     """
 
-    QH_avs = read_calculated_fluxes.time_averages_of_obs(df, 'QH')
-    kdown_avs = read_calculated_fluxes.time_averages_of_obs(df, 'kdown')
+    # QH_avs = read_calculated_fluxes.time_averages_of_obs(df, 'QH')
+    # kdown_avs = read_calculated_fluxes.time_averages_of_obs(df, 'kdown')
+
+    print('end')
 
     # PERIOD ANALYZED
     # get start and end time by reading off the beigining and end index of QH, kdown dfs,
@@ -26,30 +28,32 @@ def stats_of_the_obs_fluxes(df):
     # QH_avs.obs_1.dropna()
     # and take the first and last minute
     print('PERIOD ANALYSED')
-    print(QH_avs.obs_1.dropna().index[0], QH_avs.obs_1.dropna().index[-1])
+    print(df.QH_obs_1.dropna().index[0], df.QH_obs_1.dropna().index[-1])
 
     # NUMBER
     # get lengths of all df here by doing len(df) etc.
     print(' ')
     print('NUMBER QH')
-    print(len(QH_avs.obs_1.dropna()))
-    print(len(QH_avs.obs_5.dropna()))
-    print(len(QH_avs.obs_10.dropna()))
-    print(len(QH_avs.obs_60.dropna()))
+    print(len(df.QH_obs_1.dropna()))
+    print(len(df.QH_obs_5.dropna()))
+    print(len(df.QH_obs_10.dropna()))
+    print(len(df.QH_obs_60.dropna()))
 
     # constrict kdown to be the same start/ end time as obs
-    kdown = kdown_avs.obs_1.dropna()
-    QH = QH_avs.obs_1.dropna()
+    kdown = df.kdown_obs_1.dropna()
+    QH = df.QH_obs_1.dropna()
     kdown_time_match = kdown[(kdown.index >= QH.index[0]) & (kdown.index <= QH.index[-1])]
 
     # avs matching qh start and stop time
-    kdown_time_match_avs = kdown_avs[(kdown_avs.index >= QH.index[0]) & (kdown_avs.index <= QH.index[-1])]
+    kdown_df = df[['kdown_obs_1', 'kdown_obs_5', 'kdown_obs_10', 'kdown_obs_60']]
+    kdown_time_match_avs = kdown_df[(kdown_df.index >= QH.index[0]) & (kdown_df.index <= QH.index[-1])]
+
     # NUMBER
     print('NUMBER KDOWN')
-    print(len(kdown_time_match_avs.obs_1.dropna()))
-    print(len(kdown_time_match_avs.obs_5.dropna()))
-    print(len(kdown_time_match_avs.obs_10.dropna()))
-    print(len(kdown_time_match_avs.obs_60.dropna()))
+    print(len(kdown_time_match_avs.kdown_obs_1.dropna()))
+    print(len(kdown_time_match_avs.kdown_obs_5.dropna()))
+    print(len(kdown_time_match_avs.kdown_obs_10.dropna()))
+    print(len(kdown_time_match_avs.kdown_obs_60.dropna()))
 
     # MEAN LAS
     # overal 1 min mean
@@ -98,16 +102,14 @@ def stats_of_the_obs_fluxes(df):
 
 
 def stats_of_model(df, UKV_df_QH, UKV_df_kdown):
-    # Average the obs
-    # time average the obs
-    QH_avs = read_calculated_fluxes.time_averages_of_obs(df, 'QH', on_hour=True)
+    # QH_avs = read_calculated_fluxes.time_averages_of_obs(df, 'QH', on_hour=True)
 
     # kdown_avs = read_calculated_fluxes.time_averages_of_obs(df, 'kdown')
-    # average kdown: seperate, as I am shifting avs for 60 and 10 min to match model output
-    kdown = df.kdown.dropna()
-    kdown_5 = df.kdown.dropna().resample('5T', closed='right', label='right').mean()
-    kdown_10 = df.kdown.dropna().resample('10T', closed='right', label='right', offset='5T').mean()
-    kdown_60 = df.kdown.dropna().resample('60T', closed='right', label='right', offset='15T').mean()
+    # # average kdown: seperate, as I am shifting avs for 60 and 10 min to match model output
+    # kdown = df.kdown.dropna()
+    # kdown_5 = df.kdown.dropna().resample('5T', closed='right', label='right').mean()
+    # kdown_10 = df.kdown.dropna().resample('10T', closed='right', label='right', offset='5T').mean()
+    # kdown_60 = df.kdown.dropna().resample('60T', closed='right', label='right', offset='15T').mean()
 
     print(' ')
     print('UKV mean')
@@ -116,46 +118,51 @@ def stats_of_model(df, UKV_df_QH, UKV_df_kdown):
     print('KDOWN')
     print(UKV_df_kdown.WAverage.mean())
 
-    compare_1_QH = pd.concat([QH_avs.obs_1, UKV_df_QH.WAverage], axis=1).dropna()
-    compare_5_QH = pd.concat([QH_avs.obs_5, UKV_df_QH.WAverage], axis=1).dropna()
-    compare_10_QH = pd.concat([QH_avs.obs_10, UKV_df_QH.WAverage], axis=1).dropna()
-    compare_60_QH = pd.concat([QH_avs.obs_60, UKV_df_QH.WAverage], axis=1).dropna()
+    compare_1_QH = pd.concat([df.QH_obs_1, UKV_df_QH.WAverage], axis=1).dropna()
+    compare_5_QH = pd.concat([df.QH_obs_5, UKV_df_QH.WAverage], axis=1).dropna()
+    compare_10_QH = pd.concat([df.QH_obs_10, UKV_df_QH.WAverage], axis=1).dropna()
+    compare_60_QH = pd.concat([df.QH_obs_60, UKV_df_QH.WAverage], axis=1).dropna()
 
-    # kdown_60 = kdown_avs.obs_60.dropna()
-    # kdown_60.index = kdown_60.index - dt.timedelta(minutes=45)
-    # kdown_10 = kdown_avs.obs_10.dropna()
-    # kdown_10.index = kdown_10.index + dt.timedelta(minutes=5)
-    # kdown_5 = kdown_avs.obs_5.dropna()
-    # kdown = kdown_avs.obs_1.dropna()
+    # shift because of kdown timestep
+    kdown_60 = df.kdown_obs_60.dropna()
+    kdown_60.index = kdown_60.index + dt.timedelta(minutes=15)
+    kdown_10 = df.kdown_obs_10.dropna()
+    kdown_10.index = kdown_10.index + dt.timedelta(minutes=5)
 
     # find common times - can't do this within the built function - as for the model eval purposes, kdown averages are
     # different
-    compare_1_kdown = pd.concat([kdown.iloc[np.where([i.minute == 15 for i in kdown.index])[0]], UKV_df_kdown.WAverage],axis=1).dropna()
-    compare_5_kdown = pd.concat([kdown_5.iloc[np.where([i.minute == 15 for i in kdown_5.index])[0]], UKV_df_kdown.WAverage], axis=1).dropna()
-    compare_10_kdown = pd.concat([kdown_10.iloc[np.where([i.minute == 15 for i in kdown_10.index])[0]], UKV_df_kdown.WAverage], axis=1).dropna()
-    compare_60_kdown = pd.concat([kdown_60.iloc[np.where([i.minute == 15 for i in kdown_60.index])[0]], UKV_df_kdown.WAverage], axis=1).dropna()
+    compare_1_kdown = pd.concat(
+        [df.kdown_obs_1.iloc[np.where([i.minute == 15 for i in df.kdown_obs_1.index])[0]], UKV_df_kdown.WAverage],
+        axis=1).dropna()
+    compare_5_kdown = pd.concat(
+        [df.kdown_obs_5.iloc[np.where([i.minute == 15 for i in df.kdown_obs_5.index])[0]], UKV_df_kdown.WAverage],
+        axis=1).dropna()
+    compare_10_kdown = pd.concat(
+        [kdown_10.iloc[np.where([i.minute == 15 for i in kdown_10.index])[0]], UKV_df_kdown.WAverage], axis=1).dropna()
+    compare_60_kdown = pd.concat(
+        [kdown_60.iloc[np.where([i.minute == 15 for i in kdown_60.index])[0]], UKV_df_kdown.WAverage], axis=1).dropna()
 
     # absolute difference
-    compare_1_QH['abs_diff'] = np.abs(compare_1_QH.obs_1 - compare_1_QH.WAverage)
-    compare_5_QH['abs_diff'] = np.abs(compare_5_QH.obs_5 - compare_5_QH.WAverage)
-    compare_10_QH['abs_diff'] = np.abs(compare_10_QH.obs_10 - compare_10_QH.WAverage)
-    compare_60_QH['abs_diff'] = np.abs(compare_60_QH.obs_60 - compare_60_QH.WAverage)
+    compare_1_QH['abs_diff'] = np.abs(compare_1_QH.QH_obs_1 - compare_1_QH.WAverage)
+    compare_5_QH['abs_diff'] = np.abs(compare_5_QH.QH_obs_5 - compare_5_QH.WAverage)
+    compare_10_QH['abs_diff'] = np.abs(compare_10_QH.QH_obs_10 - compare_10_QH.WAverage)
+    compare_60_QH['abs_diff'] = np.abs(compare_60_QH.QH_obs_60 - compare_60_QH.WAverage)
 
-    compare_1_kdown['abs_diff'] = np.abs(compare_1_kdown.kdown - compare_1_kdown.WAverage)
-    compare_5_kdown['abs_diff'] = np.abs(compare_5_kdown.kdown - compare_5_kdown.WAverage)
-    compare_10_kdown['abs_diff'] = np.abs(compare_10_kdown.kdown - compare_10_kdown.WAverage)
-    compare_60_kdown['abs_diff'] = np.abs(compare_60_kdown.kdown - compare_60_kdown.WAverage)
+    compare_1_kdown['abs_diff'] = np.abs(compare_1_kdown.kdown_obs_1 - compare_1_kdown.WAverage)
+    compare_5_kdown['abs_diff'] = np.abs(compare_5_kdown.kdown_obs_5 - compare_5_kdown.WAverage)
+    compare_10_kdown['abs_diff'] = np.abs(compare_10_kdown.kdown_obs_10 - compare_10_kdown.WAverage)
+    compare_60_kdown['abs_diff'] = np.abs(compare_60_kdown.kdown_obs_60 - compare_60_kdown.WAverage)
 
     # difference
-    compare_1_QH['difference'] = compare_1_QH.obs_1 - compare_1_QH.WAverage
-    compare_5_QH['difference'] = compare_5_QH.obs_5 - compare_5_QH.WAverage
-    compare_10_QH['difference'] = compare_10_QH.obs_10 - compare_10_QH.WAverage
-    compare_60_QH['difference'] = compare_60_QH.obs_60 - compare_60_QH.WAverage
+    compare_1_QH['difference'] = compare_1_QH.QH_obs_1 - compare_1_QH.WAverage
+    compare_5_QH['difference'] = compare_5_QH.QH_obs_5 - compare_5_QH.WAverage
+    compare_10_QH['difference'] = compare_10_QH.QH_obs_10 - compare_10_QH.WAverage
+    compare_60_QH['difference'] = compare_60_QH.QH_obs_60 - compare_60_QH.WAverage
 
-    compare_1_kdown['difference'] = compare_1_kdown.kdown - compare_1_kdown.WAverage
-    compare_5_kdown['difference'] = compare_5_kdown.kdown - compare_5_kdown.WAverage
-    compare_10_kdown['difference'] = compare_10_kdown.kdown - compare_10_kdown.WAverage
-    compare_60_kdown['difference'] = compare_60_kdown.kdown - compare_60_kdown.WAverage
+    compare_1_kdown['difference'] = compare_1_kdown.kdown_obs_1 - compare_1_kdown.WAverage
+    compare_5_kdown['difference'] = compare_5_kdown.kdown_obs_5 - compare_5_kdown.WAverage
+    compare_10_kdown['difference'] = compare_10_kdown.kdown_obs_10 - compare_10_kdown.WAverage
+    compare_60_kdown['difference'] = compare_60_kdown.kdown_obs_60 - compare_60_kdown.WAverage
 
     # Mean Bias error
     MBE_QH_1 = compare_1_QH.difference.mean()
@@ -259,10 +266,12 @@ def stats_of_model(df, UKV_df_QH, UKV_df_kdown):
 
     print(' ')
     print('max MAE between the model surface SA anal and surface centre gridbox')
-    print(UKV_df_QH.AE_surf.max(), ' at ', UKV_df_QH.iloc[np.where(UKV_df_QH.AE_surf == UKV_df_QH.AE_surf.max())[0]].index[0])
+    print(UKV_df_QH.AE_surf.max(), ' at ',
+          UKV_df_QH.iloc[np.where(UKV_df_QH.AE_surf == UKV_df_QH.AE_surf.max())[0]].index[0])
 
     print(' ')
     print('min MAE between the model surface SA anal and surface centre gridbox')
-    print(UKV_df_QH.AE_surf.min(), ' at ', UKV_df_QH.iloc[np.where(UKV_df_QH.AE_surf == UKV_df_QH.AE_surf.min())[0]].index[0])
+    print(UKV_df_QH.AE_surf.min(), ' at ',
+          UKV_df_QH.iloc[np.where(UKV_df_QH.AE_surf == UKV_df_QH.AE_surf.min())[0]].index[0])
 
     print('end')
