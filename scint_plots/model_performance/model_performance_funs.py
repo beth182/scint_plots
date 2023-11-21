@@ -27,10 +27,10 @@ def plot_difference(DOY_dict):
         df = pd.concat([obs, UKV.rename('UKV')], axis=1).dropna()
 
         # take differences
-        df['diff_1'] = (df.UKV - df.obs_1) / np.abs(df.obs_1)
-        df['diff_5'] = (df.UKV - df.obs_5) / np.abs(df.obs_5)
-        df['diff_10'] = (df.UKV - df.obs_10) / np.abs(df.obs_10)
-        df['diff_60'] = (df.UKV - df.obs_60) / np.abs(df.obs_60)
+        df['diff_1'] = (df.UKV - df.QH_obs_1) / np.abs(df.QH_obs_1)
+        df['diff_5'] = (df.UKV - df.QH_obs_5) / np.abs(df.QH_obs_5)
+        df['diff_10'] = (df.UKV - df.QH_obs_10) / np.abs(df.QH_obs_10)
+        df['diff_60'] = (df.UKV - df.QH_obs_60) / np.abs(df.QH_obs_60)
 
         # print averages for reference
         print(' ')
