@@ -133,10 +133,10 @@ def detailed_time_series(obs_df,
 
         '''
 
-    hour_1min = obs_df['obs_1'][np.where([i.minute == minute_match for i in obs_df.index])[0]]
-    hour_5min = obs_df['obs_5'][np.where([i.minute == minute_match for i in obs_df.index])[0]]
-    hour_10min = obs_df['obs_10'][np.where([i.minute == minute_match for i in obs_df.index])[0]]
-    hour_60min = obs_df['obs_60'][np.where([i.minute == minute_match for i in obs_df.index])[0]]
+    hour_1min = obs_df['QH_obs_1'][np.where([i.minute == minute_match for i in obs_df.index])[0]]
+    hour_5min = obs_df['QH_obs_5'][np.where([i.minute == minute_match for i in obs_df.index])[0]]
+    hour_10min = obs_df['QH_obs_10'][np.where([i.minute == minute_match for i in obs_df.index])[0]]
+    hour_60min = obs_df['QH_obs_60'][np.where([i.minute == minute_match for i in obs_df.index])[0]]
 
     # hour_1min = obs_df[df_col][np.where([i.minute == minute_match for i in obs_df.index])[0]]
     # hour_5min = five_min[df_col][np.where([i.minute == minute_match for i in five_min.index])[0]]
@@ -182,7 +182,7 @@ def detailed_time_series(obs_df,
     except KeyError:
         pass
 
-    obs_all = ax1.plot(obs_df.index, obs_df['obs_1'], linestyle='None', marker='.', color='grey', alpha=0.5,
+    obs_all = ax1.plot(obs_df.index, obs_df['QH_obs_1'], linestyle='None', marker='.', color='grey', alpha=0.5,
              label="1 min obs")
 
     obs_1 = ax1.plot(hour_1min.index, hour_1min.values, linestyle='None', marker='o', color='k', markersize=8,
