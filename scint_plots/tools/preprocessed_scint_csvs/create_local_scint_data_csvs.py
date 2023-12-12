@@ -51,26 +51,31 @@ def save_df_to_csv(save_path='./',
 
         if row.P13 == 1:
             df_13 = read_calculated_fluxes.extract_data([int(row.DOY_string)], pair_id='IMU_BTT',
-                                                        var_list=list_of_vars, average=average, hour_ending=hour_ending,
-                                                        offset=offset)
+                                                        var_list=list_of_vars,
+                                                        time_res= '1min_sa10_mins_ending_PERIOD_VAR_' + str(average),
+                                                        hour_ending=hour_ending)
+
             df_dict['13'].append(df_13)
 
         if row.P11 == 1:
             df_11 = read_calculated_fluxes.extract_data([int(row.DOY_string)], pair_id='BTT_BCT',
-                                                        var_list=list_of_vars, average=average, hour_ending=hour_ending,
-                                                        offset=offset)
+                                                        var_list=list_of_vars,
+                                                        time_res='1min_sa10_mins_ending_PERIOD_VAR_' + str(average),
+                                                        hour_ending=hour_ending)
             df_dict['11'].append(df_11)
 
         if row.P12 == 1:
             df_12 = read_calculated_fluxes.extract_data([int(row.DOY_string)], pair_id='BCT_IMU',
-                                                        var_list=list_of_vars, average=average, hour_ending=hour_ending,
-                                                        offset=offset)
+                                                        var_list=list_of_vars,
+                                                        time_res='1min_sa10_mins_ending_PERIOD_VAR_' + str(average),
+                                                        hour_ending=hour_ending)
             df_dict['12'].append(df_12)
 
         if row.P15 == 1:
             df_15 = read_calculated_fluxes.extract_data([int(row.DOY_string)], pair_id='SCT_SWT',
-                                                        var_list=list_of_vars, average=average, hour_ending=hour_ending,
-                                                        offset=offset)
+                                                        var_list=list_of_vars,
+                                                        time_res='1min_sa10_mins_ending_PERIOD_VAR_' + str(average),
+                                                        hour_ending=hour_ending)
             df_dict['15'].append(df_15)
 
 
@@ -86,7 +91,7 @@ def save_df_to_csv(save_path='./',
             df_combine = pd.concat(df_dict[key])
 
             if offset == 0:
-                df_combine.to_csv(save_path + 'path_' + key + '_' + save_name + 'vals.csv')
+                df_combine.to_csv(save_path + 'path_' + key + '_' + save_name + '_vals.csv')
 
             else:
                 save_path_offset = save_path + 'offset_' + str(offset) + '/'
@@ -98,10 +103,13 @@ if __name__ == '__main__':
     save_path = os.getcwd().replace('\\', '/') + '/csv_files/'
 
     # all days data
-    """
-    save_df_to_csv(save_path, average=60)
-    save_df_to_csv(save_path, average=15, offset=15)
-    """
+    # """
+    # save_df_to_csv(save_path, average=60)
+    save_df_to_csv(save_path, average=10)
+    # save_df_to_csv(save_path, average=15, offset=15)
+
+    print('end')
+    # """
 
     # 1-min average data for high-resolution days
     """
