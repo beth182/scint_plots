@@ -11,7 +11,7 @@ from scint_plots.tools.preprocessed_UKV_csvs import read_UKV_csvs
 scint_path = 12
 DOY_list = [2016134]
 var_list = ['QH', 'kdown']
-time_res = '1min_sa10_mins_ending_PERIOD_VAR_1'
+time_res = '1min_sa10_mins_ending_PERIOD_VAR_10'
 
 pair_id = look_up.scint_path_numbers[scint_path]
 
