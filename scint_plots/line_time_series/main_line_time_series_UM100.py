@@ -25,8 +25,13 @@ for DOY in DOY_list:
                                              var_list=var_list,
                                              time_res=time_res)
 
+    df_1_min = read_calculated_fluxes.extract_data(doy_list=[DOY],
+                                             pair_id=pair_id,
+                                             var_list=var_list,
+                                             time_res='1min_sa10_mins_ending_PERIOD_VAR_1')
 
-    line_time_series_funs.times_series_line_QH_KDOWN_UM100(df, pair_id, UM_100=True)
+
+    line_time_series_funs.times_series_line_QH_KDOWN_UM100(df, pair_id, UM_100=True, df_1_min=df_1_min)
 
 
 print('end')

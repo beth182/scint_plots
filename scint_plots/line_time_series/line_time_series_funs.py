@@ -81,7 +81,7 @@ def times_series_line_QH_KDOWN(df, pair_id, model_df=False):
     print('end')
 
 
-def times_series_line_QH_KDOWN_UM100(df, pair_id, UM_100=False):
+def times_series_line_QH_KDOWN_UM100(df, pair_id, UM_100=False, df_1_min=False):
     """
     TIME SERIES OF Q AND KDOWN LINE PLOT
     :return:
@@ -91,9 +91,12 @@ def times_series_line_QH_KDOWN_UM100(df, pair_id, UM_100=False):
     fig = plt.figure(figsize=(8, 7))
     ax = plt.subplot(1, 1, 1)
 
-    ax.plot(df['QH'], label='$Q_{H}$', linewidth=1, alpha=0.5, color='orange')
+    if type(df_1_min) != bool:
+        ax.scatter(df_1_min.index, df_1_min['QH'], label='$Q_{H}$ (1min)', alpha=0.2, color='grey', marker='x', s=10)
 
-    # label='UKV $Q_{H}$'
+    ax.plot(df['QH'], label='$Q_{H}$ (10min)', linewidth=1, color='k', marker='.')
+
+
 
     ax.set_xlabel('Time (h, UTC)')
     ax.set_ylabel('Flux (W $m^{-2}$)')
@@ -110,8 +113,8 @@ def times_series_line_QH_KDOWN_UM100(df, pair_id, UM_100=False):
 
         UM_100_df.index = UM_100_df.hour.astype('timedelta64[h]') + df.index[0]
 
-        ax.plot(UM_100_df.weighted_av_a.dropna(), label='W UM100 $Q_{H}$', color='red')
-        ax.plot(UM_100_df.av_a.dropna(), label='NW UM100 $Q_{H}$', color='red', linestyle='--')
+        ax.plot(UM_100_df.weighted_av_a.dropna(), label='W UM100 $Q_{H}$', color='orange')
+        ax.plot(UM_100_df.av_a.dropna(), label='NW UM100 $Q_{H}$', color='orange', linestyle='--')
 
         # UM300
 
@@ -121,8 +124,8 @@ def times_series_line_QH_KDOWN_UM100(df, pair_id, UM_100=False):
 
         UM_300_df.index = UM_300_df.hour.astype('timedelta64[h]') + df.index[0]
 
-        ax.plot(UM_300_df.weighted_av_a.dropna(), label='W UM300 $Q_{H}$', color='purple')
-        ax.plot(UM_300_df.av_a.dropna(), label='NW UM300 $Q_{H}$', color='purple', linestyle='--')
+        ax.plot(UM_300_df.weighted_av_a.dropna(), label='W UM300 $Q_{H}$', color='blue')
+        ax.plot(UM_300_df.av_a.dropna(), label='NW UM300 $Q_{H}$', color='blue', linestyle='--')
 
         # UKV
         # read the premade csv
@@ -131,8 +134,8 @@ def times_series_line_QH_KDOWN_UM100(df, pair_id, UM_100=False):
 
         UM_ukv_df.index = UM_ukv_df.hour.astype('timedelta64[h]') + df.index[0]
 
-        ax.plot(UM_ukv_df.weighted_av_a.dropna(), label='W UKV $Q_{H}$', color='blue')
-        ax.plot(UM_ukv_df.av_a.dropna(), label='NW UKV $Q_{H}$', color='blue', linestyle='--')
+        ax.plot(UM_ukv_df.weighted_av_a.dropna(), label='W UKV $Q_{H}$', color='red')
+        ax.plot(UM_ukv_df.av_a.dropna(), label='NW UKV $Q_{H}$', color='red', linestyle='--')
 
     # plt.legend()
     plt.legend(loc='center left', bbox_to_anchor=(1, 0.5))
