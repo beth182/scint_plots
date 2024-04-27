@@ -75,7 +75,26 @@ def plot_windrose(df,
     # legend if it's windrose appearing first in the plot
     if path_name == 'IMU_BTT':
 
-        ax.legend(loc='center left', bbox_to_anchor=(-0.4, 0.1))
+        # need to manually change windrose legend a complicated way because the module doesn't allow
+        # you to set custom labels
+        new_labels = []
+        for i in range(0, len(bins_range)):
+
+            current_num = bins_range[i]
+
+            # last label
+            if i == len(bins_range) - 1:
+                label = '$\geq$' + str(current_num)
+
+            else:
+                next_num = bins_range[i + 1]
+                label = str(current_num) + ' : ' + str(next_num)
+
+            new_labels.append(label)
+
+        L = ax.legend(loc='center left', bbox_to_anchor=(-0.4, 0.1))
+        for i in range(0, len(new_labels)):
+            L.get_texts()[i].set_text(new_labels[i])
 
         ax.set_yticks(np.arange(5, 45, step=10))
         ax.set_yticklabels(np.arange(5, 45, step=10))
