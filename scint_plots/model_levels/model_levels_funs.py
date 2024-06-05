@@ -163,14 +163,16 @@ def create_model_height_plot(model_times,
         # only use unstable hours in profile
         assert model_times[i].hour == i
         if start_hour <= i <= end_hour:
-
             qh_at_1_time = var_grid[i, :]
 
-            print((np.abs(qh_at_1_time[:6].max() - qh_at_1_time[:6].min())))
-            height_QH_diff.append((np.abs(qh_at_1_time[:6].max() - qh_at_1_time[:6].min())))
+            # difference between surface and the model level closest to zf:
+            surf_level_diff = qh_at_1_time[0] - qh_at_1_time[3]
+            height_QH_diff.append(surf_level_diff)
+
             hour.append(i)
 
-            plt.plot(qh_at_1_time, model_heights, label=str(i), color=colour_list[count], marker='o', linestyle='dotted')
+            plt.plot(qh_at_1_time, model_heights, label=str(i), color=colour_list[count], marker='o',
+                     linestyle='dotted')
             plt.scatter(var_surf_grid[i], 0, color=colour_list[count], marker='x')
 
             count += 1
@@ -208,8 +210,6 @@ def create_model_height_plot(model_times,
     labels[1] = '$z_{ES}$'
 
     ax.set_yticklabels(labels)
-
-
 
     plt.tight_layout()
 
