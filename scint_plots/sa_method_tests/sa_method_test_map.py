@@ -18,7 +18,7 @@ custom_linetype = ['-', '--', '-', '--']
 
 custom_marker = ['x', 'o', 'x', 'o']
 
-custom_labels = ['IOP-1 EC-fp varying', 'IOP-1 EC-fp constant', 'IOP-2 EC-fp varying', 'IOP-2 EC-fp constant']
+custom_labels = ['IOP-1 $SA_{EC}$ varying', 'IOP-1 $SA_{EC}$ constant', 'IOP-2 $SA_{EC}$ varying', 'IOP-2 $SA_{EC}$ constant']
 
 sa_lines.plot_sa_lines(file_list=file_list, colour_list=colour_list, doy_choice=False, save_path=current_dir, custom_labels=custom_labels, custom_linetype=custom_linetype, custom_marker=custom_marker)
 
