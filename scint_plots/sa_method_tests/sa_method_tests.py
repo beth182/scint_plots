@@ -125,8 +125,8 @@ def plot_method_tests(df):
              linestyle=linestyles['varying'])
 
     ax2.plot([], [], color='black', marker=markers['constant'], linestyle=linestyles['constant'],
-             label='EC fp constant')
-    ax2.plot([], [], color='black', marker=markers['varying'], linestyle=linestyles['varying'], label='EC fp varying')
+             label='EC-fp constant')
+    ax2.plot([], [], color='black', marker=markers['varying'], linestyle=linestyles['varying'], label='EC-fp varying')
     ax2.legend()
 
     ax2.set_ylabel('z$_{0}$ (m)')
