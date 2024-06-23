@@ -4,6 +4,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib import gridspec
 import matplotlib as mpl
+import numpy as np
 
 mpl.rcParams.update({'font.size': 15})
 
@@ -139,8 +140,11 @@ def plot_method_tests(df):
     df['per_diff_z0_123'] = percentage_change(df['z_0_123_varying'], df['z_0_123_constant'])
     df['per_diff_z0_126'] = percentage_change(df['z_0_126_varying'], df['z_0_126_constant'])
 
-    # plot
+    print('zd range: ', min([np.abs(df['per_diff_zd_126']).min(), np.abs(df['per_diff_zd_123']).min()]), ' to ', max([np.abs(df['per_diff_zd_126']).max(), np.abs(df['per_diff_zd_123']).max()]))
+    print('z0 range: ', min([np.abs(df['per_diff_z0_126']).min(), np.abs(df['per_diff_z0_123']).min()]), ' to ', max([np.abs(df['per_diff_z0_126']).max(), np.abs(df['per_diff_z0_123']).max()]))
 
+
+    # plot
     # zd
     # I0P1
     ax3.plot(df.index.values, df.per_diff_zd_123.values, marker='D', color=colours['IOP1'])
