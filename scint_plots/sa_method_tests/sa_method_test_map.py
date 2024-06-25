@@ -14,13 +14,15 @@ file_list = sa_lines.find_SA_rasters(sa_main_dir=sa_test_dir)
 
 colour_list = ['red', 'red', 'blue', 'blue']
 
-custom_linetype = ['-', '--', '-', '--']
+custom_linetype = ['-', ':', '-', ':']
 
-custom_marker = ['x', 'o', 'x', 'o']
+custom_marker = ['o', 'o', 'o', 'o']
 
-custom_labels = ['IOP-1 $SA_{EC}$ varying', 'IOP-1 $SA_{EC}$ constant', 'IOP-2 $SA_{EC}$ varying', 'IOP-2 $SA_{EC}$ constant']
+custom_facecolours = ['red', 'white', 'blue', 'white']
 
-sa_lines.plot_sa_lines(file_list=file_list, colour_list=colour_list, doy_choice=False, save_path=current_dir, custom_labels=custom_labels, custom_linetype=custom_linetype, custom_marker=custom_marker)
+custom_labels = ['IOP-1 $SA_{LAS}^{new}$', 'IOP-1 $SA_{LAS}^{old}$', 'IOP-2 $SA_{LAS}^{new}$', 'IOP-2 $SA_{LAS}^{old}$']
+
+sa_lines.plot_sa_lines(file_list=file_list, colour_list=colour_list, doy_choice=False, save_path=current_dir, custom_labels=custom_labels, custom_linetype=custom_linetype, custom_marker=custom_marker, custom_facecolours=custom_facecolours)
 
 print('end')
 

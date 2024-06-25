@@ -5,8 +5,26 @@ import matplotlib.pyplot as plt
 from matplotlib import gridspec
 import matplotlib as mpl
 import numpy as np
+from scint_flux import run_function
 
 mpl.rcParams.update({'font.size': 15})
+
+
+def retrieve_z_fb(path='BCT_IMU'):
+    """
+
+    :return:
+    """
+
+    bdsm_path = 'D:/Documents/scintools/example_inputs/rasters/height_surface_4m.tif'
+    cdsm_path = 'D:/Documents/scintools/example_inputs/rasters/height_veg_4m.tif'
+    dem_path = 'D:/Documents/scintools/example_inputs/rasters/height_terrain_4m.tif'
+
+    scint_path_dict = run_function.construct_path(path, bdsm_path, cdsm_path, dem_path)
+
+    z_fb = scint_path_dict['z_fb']
+
+    return z_fb
 
 
 def percentage_change(col1, col2):
@@ -82,56 +100,6 @@ def plot_method_tests(df):
     :return:
     """
 
-    # plotting
-    fig = plt.figure(figsize=(15, 12))
-    spec = gridspec.GridSpec(ncols=2, nrows=2)
-
-    ax1 = plt.subplot(spec[0])
-    ax2 = plt.subplot(spec[1])
-    ax3 = plt.subplot(spec[2])
-    ax4 = plt.subplot(spec[3])
-
-    linestyles = {'constant': '--', 'varying': '-'}
-    markers = {'constant': 'o', 'varying': 'x'}
-    colours = {'IOP1': 'red', 'IOP2': 'blue'}
-
-    # zd
-    # IOP1
-    ax1.plot(df.index.values, df.z_d_123_constant.values, marker=markers['constant'], linestyle=linestyles['constant'],
-             color=colours['IOP1'])
-    ax1.plot(df.index.values, df.z_d_123_varying.values, marker=markers['varying'], color=colours['IOP1'],
-             linestyle=linestyles['varying'])
-    # IOP2
-    ax1.plot(df.index.values, df.z_d_126_constant.values, marker=markers['constant'], linestyle=linestyles['constant'],
-             color=colours['IOP2'])
-    ax1.plot(df.index.values, df.z_d_126_varying.values, marker=markers['varying'], color=colours['IOP2'],
-             linestyle=linestyles['varying'])
-
-    ax1.plot([], [], color=colours['IOP1'], label='IOP-1')
-    ax1.plot([], [], color=colours['IOP2'], label='IOP-1')
-    ax1.legend()
-
-    ax1.set_ylabel('z$_{d}$ (m)')
-
-    # z0
-    # IOP1
-    ax2.plot(df.index.values, df.z_0_123_constant.values, marker=markers['constant'], linestyle=linestyles['constant'],
-             color=colours['IOP1'])
-    ax2.plot(df.index.values, df.z_0_123_varying.values, marker=markers['varying'], color=colours['IOP1'],
-             linestyle=linestyles['varying'])
-    # IOP2
-    ax2.plot(df.index.values, df.z_0_126_constant.values, marker=markers['constant'], linestyle=linestyles['constant'],
-             color=colours['IOP2'])
-    ax2.plot(df.index.values, df.z_0_126_varying.values, marker=markers['varying'], color=colours['IOP2'],
-             linestyle=linestyles['varying'])
-
-    ax2.plot([], [], color='black', marker=markers['constant'], linestyle=linestyles['constant'],
-             label='$SA_{EC}$ constant')
-    ax2.plot([], [], color='black', marker=markers['varying'], linestyle=linestyles['varying'], label='$SA_{EC}$ varying')
-    ax2.legend()
-
-    ax2.set_ylabel('z$_{0}$ (m)')
-
     # percentage difference
 
     df['per_diff_zd_123'] = percentage_change(df['z_d_123_varying'], df['z_d_123_constant'])
@@ -140,30 +108,131 @@ def plot_method_tests(df):
     df['per_diff_z0_123'] = percentage_change(df['z_0_123_varying'], df['z_0_123_constant'])
     df['per_diff_z0_126'] = percentage_change(df['z_0_126_varying'], df['z_0_126_constant'])
 
-    print('zd range: ', min([np.abs(df['per_diff_zd_126']).min(), np.abs(df['per_diff_zd_123']).min()]), ' to ', max([np.abs(df['per_diff_zd_126']).max(), np.abs(df['per_diff_zd_123']).max()]))
-    print('z0 range: ', min([np.abs(df['per_diff_z0_126']).min(), np.abs(df['per_diff_z0_123']).min()]), ' to ', max([np.abs(df['per_diff_z0_126']).max(), np.abs(df['per_diff_z0_123']).max()]))
+    print('zd range: ', min([np.abs(df['per_diff_zd_126']).min(), np.abs(df['per_diff_zd_123']).min()]), ' to ',
+          max([np.abs(df['per_diff_zd_126']).max(), np.abs(df['per_diff_zd_123']).max()]))
+    print('z0 range: ', min([np.abs(df['per_diff_z0_126']).min(), np.abs(df['per_diff_z0_123']).min()]), ' to ',
+          max([np.abs(df['per_diff_z0_126']).max(), np.abs(df['per_diff_z0_123']).max()]))
 
+    stats_zd = pd.concat([df['per_diff_zd_126'], df['per_diff_zd_123']]).dropna()
+    over_10_zd = len(np.where(np.abs(stats_zd) > 10)[0])
+    print('zd ', over_10_zd, ' out of ', len(stats_zd))
 
-    # plot
-    # zd
-    # I0P1
-    ax3.plot(df.index.values, df.per_diff_zd_123.values, marker='D', color=colours['IOP1'])
+    stats_z0 = pd.concat([df['per_diff_z0_126'], df['per_diff_z0_123']]).dropna()
+    over_10_z0 = len(np.where(np.abs(stats_z0) > 10)[0])
+    print('z0 ', over_10_z0, ' out of ', len(stats_z0))
 
-    # IOP2
-    ax3.plot(df.index.values, df.per_diff_zd_126.values, marker='D', color=colours['IOP2'])
+    # get effective beam height
+    z_fb = retrieve_z_fb()
 
-    ax3.set_ylabel('% difference in z$_{d}$ (%)')
+    # adding these to the sa method test df
+    df['z_f_123_constant'] = z_fb - df.z_d_123_constant
+    df['z_f_126_constant'] = z_fb - df.z_d_126_constant
+
+    df['z_f_123_varying'] = z_fb - df.z_d_123_varying
+    df['z_f_126_varying'] = z_fb - df.z_d_126_varying
+
+    df['per_diff_zf_123'] = percentage_change(df['z_f_123_varying'], df['z_f_123_constant'])
+    df['per_diff_zf_126'] = percentage_change(df['z_f_126_varying'], df['z_f_126_constant'])
+
+    stats_zf = pd.concat([df['per_diff_zf_126'], df['per_diff_zf_123']]).dropna()
+
+    print('zf range: ', min(np.abs(stats_zf)), ' to ', max(np.abs(stats_zf)))
+
+    # plotting
+    fig = plt.figure(figsize=(15, 12))
+    spec = gridspec.GridSpec(ncols=2, nrows=3)
+
+    ax1 = plt.subplot(spec[0])
+    ax2 = plt.subplot(spec[1])
+    ax3 = plt.subplot(spec[2])
+    ax4 = plt.subplot(spec[3])
+    ax5 = plt.subplot(spec[4])
+    ax6 = plt.subplot(spec[5])
+
+    linestyles = {'constant': ':', 'varying': '-'}
+    markers = {'constant': 'o', 'varying': 'o'}
+    colours = {'IOP1': 'red', 'IOP2': 'blue'}
 
     # z0
-    # I0P1
-    ax4.plot(df.index.values, df.per_diff_z0_123.values, marker='D', color=colours['IOP1'])
+    # IOP1
+    ax1.plot(df.index.values, df.z_0_123_constant.values, marker=markers['constant'], linestyle=linestyles['constant'],
+             color=colours['IOP1'], markerfacecolor='white')
+    ax1.plot(df.index.values, df.z_0_123_varying.values, marker=markers['varying'], color=colours['IOP1'],
+             linestyle=linestyles['varying'])
     # IOP2
-    ax4.plot(df.index.values, df.per_diff_z0_126.values, marker='D', color=colours['IOP2'])
+    ax1.plot(df.index.values, df.z_0_126_constant.values, marker=markers['constant'], linestyle=linestyles['constant'],
+             color=colours['IOP2'],  markerfacecolor='white')
+    ax1.plot(df.index.values, df.z_0_126_varying.values, marker=markers['varying'], color=colours['IOP2'],
+             linestyle=linestyles['varying'])
 
-    ax4.set_ylabel('% difference in z$_{0}$ (%)')
+    ax1.plot([], [], color='black', marker=markers['constant'], linestyle=linestyles['constant'],  markerfacecolor='white',
+             label='$SA_{LAS}^{old}$')
+    ax1.plot([], [], color='black', marker=markers['varying'], linestyle=linestyles['varying'],
+             label='$SA_{LAS}^{new}$')
+    ax1.legend()
 
-    ax3.set_xlabel('Time (h, UTC)')
-    ax4.set_xlabel('Time (h, UTC)')
+    ax1.set_ylabel('z$_{0}$ (m)')
+
+    # z0 % diff
+    # I0P1
+    ax2.plot(df.index.values, df.per_diff_z0_123.values, marker='D', color=colours['IOP1'])
+    # IOP2
+    ax2.plot(df.index.values, df.per_diff_z0_126.values, marker='D', color=colours['IOP2'])
+
+    ax2.set_ylabel('Difference in z$_{0}$ (%)')
+
+    ax2.plot([], [], color=colours['IOP1'], label='IOP-1')
+    ax2.plot([], [], color=colours['IOP2'], label='IOP-2')
+    ax2.legend()
+
+    # zd
+    # IOP1
+    ax3.plot(df.index.values, df.z_d_123_constant.values, marker=markers['constant'], linestyle=linestyles['constant'],
+             color=colours['IOP1'], markerfacecolor='white')
+    ax3.plot(df.index.values, df.z_d_123_varying.values, marker=markers['varying'], color=colours['IOP1'],
+             linestyle=linestyles['varying'])
+    # IOP2
+    ax3.plot(df.index.values, df.z_d_126_constant.values, marker=markers['constant'], linestyle=linestyles['constant'],
+             color=colours['IOP2'],  markerfacecolor='white')
+    ax3.plot(df.index.values, df.z_d_126_varying.values, marker=markers['varying'], color=colours['IOP2'],
+             linestyle=linestyles['varying'])
+
+    ax3.set_ylabel('z$_{d}$ (m)')
+
+    # zd % diff
+    # I0P1
+    ax4.plot(df.index.values, df.per_diff_zd_123.values, marker='D', color=colours['IOP1'])
+
+    # IOP2
+    ax4.plot(df.index.values, df.per_diff_zd_126.values, marker='D', color=colours['IOP2'])
+
+    ax4.set_ylabel('Difference in z$_{d}$ (%)')
+
+    # zf
+    # IOP1
+    ax5.plot(df.index.values, df.z_f_123_constant.values, marker=markers['constant'], linestyle=linestyles['constant'],
+             color=colours['IOP1'],  markerfacecolor='white')
+    ax5.plot(df.index.values, df.z_f_123_varying.values, marker=markers['varying'], color=colours['IOP1'],
+             linestyle=linestyles['varying'])
+    # IOP2
+    ax5.plot(df.index.values, df.z_f_126_constant.values, marker=markers['constant'], linestyle=linestyles['constant'],
+             color=colours['IOP2'],  markerfacecolor='white')
+    ax5.plot(df.index.values, df.z_f_126_varying.values, marker=markers['varying'], color=colours['IOP2'],
+             linestyle=linestyles['varying'])
+
+    ax5.set_ylabel('z$_{f}$ (m)')
+
+    # zf % diff
+    # I0P1
+    ax6.plot(df.index.values, df.per_diff_zf_123.values, marker='D', color=colours['IOP1'])
+
+    # IOP2
+    ax6.plot(df.index.values, df.per_diff_zf_126.values, marker='D', color=colours['IOP2'])
+
+    ax6.set_ylabel('Difference in z$_{f}$ (%)')
+
+    ax5.set_xlabel('Time (h, UTC)')
+    ax6.set_xlabel('Time (h, UTC)')
 
     fig.subplots_adjust(wspace=0.28, hspace=0)
 
@@ -173,7 +242,6 @@ def plot_method_tests(df):
 
 
 if __name__ == '__main__':
-
     current_dir = os.getcwd().replace('\\', '/') + '/'
     sa_test_dir = current_dir + 'SA_constant/'
 

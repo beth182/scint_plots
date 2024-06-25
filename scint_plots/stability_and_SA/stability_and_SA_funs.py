@@ -6,26 +6,9 @@ from matplotlib.dates import DateFormatter
 import matplotlib as mpl
 
 from scint_fp.create_input_csvs import wx_u_v_components
-from scint_flux import run_function
+from scint_plots.sa_method_tests import sa_method_tests
 
 mpl.rcParams.update({'font.size': 15})
-
-
-def retrieve_z_fb(path='BCT_IMU'):
-    """
-
-    :return:
-    """
-
-    bdsm_path = 'D:/Documents/scintools/example_inputs/rasters/height_surface_4m.tif'
-    cdsm_path = 'D:/Documents/scintools/example_inputs/rasters/height_veg_4m.tif'
-    dem_path = 'D:/Documents/scintools/example_inputs/rasters/height_terrain_4m.tif'
-
-    scint_path_dict = run_function.construct_path(path, bdsm_path, cdsm_path, dem_path)
-
-    z_fb = scint_path_dict['z_fb']
-
-    return z_fb
 
 
 def stability_and_sa(df_dict, df_sa_constant):
@@ -178,7 +161,8 @@ def stability_and_sa(df_dict, df_sa_constant):
     max_time = max(df_123_10.index.max(), df_126_10.index.max(), df_126_60.index.max(), df_123_60.index.max())
 
     # get effective beam height
-    z_fb = retrieve_z_fb()
+    z_fb = sa_method_tests.retrieve_z_fb()
+
     # adding these to the sa method test df
     df_sa_constant['z_f_123_constant'] = z_fb - df_sa_constant.z_d_123_constant
     df_sa_constant['z_f_126_constant'] = z_fb - df_sa_constant.z_d_126_constant
@@ -270,7 +254,8 @@ def stability_and_sa(df_dict, df_sa_constant):
     ax5.plot(df_sa_constant.index.values, df_sa_constant.z_f_123_constant.values, color='red', marker='o',
              markerfacecolor='white', linestyle=':')
 
-    ax5.plot([], [], color='black', marker='o', markerfacecolor='white', linestyle=':', label='60 min SA test')
+    ax5.plot([], [], color='black', marker='o', markerfacecolor='white', linestyle=':', label='$SA_{LAS}^{old}$')
+    ax5.plot([], [], color='black', marker='o', label='$SA_{LAS}^{new}$')
     ax5.legend()
 
     ax5.set_ylabel('z$_{f}$ (m)')
