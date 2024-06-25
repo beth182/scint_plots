@@ -6,11 +6,29 @@ from matplotlib.dates import DateFormatter
 import matplotlib as mpl
 
 from scint_fp.create_input_csvs import wx_u_v_components
+from scint_flux import run_function
 
 mpl.rcParams.update({'font.size': 15})
 
 
-def stability_and_sa(df_dict):
+def retrieve_z_fb(path='BCT_IMU'):
+    """
+
+    :return:
+    """
+
+    bdsm_path = 'D:/Documents/scintools/example_inputs/rasters/height_surface_4m.tif'
+    cdsm_path = 'D:/Documents/scintools/example_inputs/rasters/height_veg_4m.tif'
+    dem_path = 'D:/Documents/scintools/example_inputs/rasters/height_terrain_4m.tif'
+
+    scint_path_dict = run_function.construct_path(path, bdsm_path, cdsm_path, dem_path)
+
+    z_fb = scint_path_dict['z_fb']
+
+    return z_fb
+
+
+def stability_and_sa(df_dict, df_sa_constant):
     """
 
     Returns
@@ -93,9 +111,9 @@ def stability_and_sa(df_dict):
         csv_df_126['Unnamed: 0'] = pd.to_datetime(csv_df_126['Unnamed: 0'], format='%d/%m/%Y %H:%M')
 
     csv_df_123.index = csv_df_123['Unnamed: 0']
-    csv_df_123 = csv_df_123.drop('Unnamed: 0', 1)
+    csv_df_123 = csv_df_123.drop(columns=['Unnamed: 0'])
     csv_df_126.index = csv_df_126['Unnamed: 0']
-    csv_df_126 = csv_df_126.drop('Unnamed: 0', 1)
+    csv_df_126 = csv_df_126.drop(columns=['Unnamed: 0'])
 
     csv_df_123 = csv_df_123[['sig_v']]
     csv_df_126 = csv_df_126[['sig_v']]
@@ -159,6 +177,15 @@ def stability_and_sa(df_dict):
     min_time = min(df_123_10.index.min(), df_126_10.index.min(), df_126_60.index.min(), df_123_60.index.min())
     max_time = max(df_123_10.index.max(), df_126_10.index.max(), df_126_60.index.max(), df_123_60.index.max())
 
+    # get effective beam height
+    z_fb = retrieve_z_fb()
+    # adding these to the sa method test df
+    df_sa_constant['z_f_123_constant'] = z_fb - df_sa_constant.z_d_123_constant
+    df_sa_constant['z_f_126_constant'] = z_fb - df_sa_constant.z_d_126_constant
+
+    dt_list = [dt.datetime.combine(df_123_10.index[0].date(), dt.time(i, 00)) for i in df_sa_constant.index]
+    df_sa_constant.index = dt_list
+
     # plotting
     fig = plt.figure(figsize=(15, 12))
     spec = gridspec.GridSpec(ncols=3, nrows=3)
@@ -175,32 +202,38 @@ def stability_and_sa(df_dict):
     ax9 = plt.subplot(spec[8])
 
     # sigv
-    ax1.plot(df_126_10.index, df_126_10.sig_v_126, marker='.', linewidth=0.5, color='blue', alpha=0.3)
-    ax1.plot(df_123_10.index, df_123_10.sig_v_123, marker='.', linewidth=0.5, color='red', alpha=0.3)
+    ax1.plot(df_126_10.index.values, df_126_10.sig_v_126.values, marker='.', linewidth=0.5, color='blue', alpha=0.3)
+    ax1.plot(df_123_10.index.values, df_123_10.sig_v_123.values, marker='.', linewidth=0.5, color='red', alpha=0.3)
 
-    ax1.plot(sig_v_126_60.index, sig_v_126_60, marker='o', color='blue')
-    ax1.plot(sig_v_123_60.index[:-1], sig_v_123_60[:-1], marker='o', color='red')
+    ax1.plot(sig_v_126_60.index.values, sig_v_126_60.values, marker='o', color='blue')
+    ax1.plot(sig_v_123_60.index[:-1].values, sig_v_123_60[:-1].values, marker='o', color='red')
+
+    ax1.plot([], [], color='black', marker='o', label='60 min')
+    ax1.plot([], [], color='black', alpha=0.3, linewidth=0.5, marker='.', label='10 min')
+
+    ax1.legend()
 
     ax1.set_ylabel('$\sigma_{v}$ (m s$^{-1}$)')
 
     # ustar
     # 10min
-    ax2.plot(df_126_10.index, df_126_10.ustar, color='blue', alpha=0.3, linewidth=0.5, marker='.')
-    ax2.plot(df_123_10.index, df_123_10.ustar, color='red', alpha=0.3, linewidth=0.5, marker='.')
+    ax2.plot(df_126_10.index.values, df_126_10.ustar.values, color='blue', alpha=0.3, linewidth=0.5, marker='.')
+    ax2.plot(df_123_10.index.values, df_123_10.ustar.values, color='red', alpha=0.3, linewidth=0.5, marker='.')
     # hour
-    ax2.plot(df_126_60.index, df_126_60.ustar, color='blue', marker='o')
-    ax2.plot(df_123_60.index, df_123_60.ustar, color='red', marker='o')
+    ax2.plot(df_126_60.index.values, df_126_60.ustar.values, color='blue', marker='o')
+    ax2.plot(df_123_60.index.values, df_123_60.ustar.values, color='red', marker='o')
 
     ax2.set_ylabel('u$_{*}$ (m s$^{-1}$)')
 
     # stab param
     # 10min
-    ax3.plot(df_126_10.index, df_126_10.stab_param * -1, color='blue', alpha=0.3, linewidth=0.5, marker='.')
-    ax3.plot(df_123_10.index, df_123_10.stab_param * -1, color='red', alpha=0.3, linewidth=0.5, marker='.')
+    ax3.plot(df_126_10.index.values, df_126_10.stab_param.values * -1, color='blue', alpha=0.3, linewidth=0.5,
+             marker='.')
+    ax3.plot(df_123_10.index.values, df_123_10.stab_param.values * -1, color='red', alpha=0.3, linewidth=0.5,
+             marker='.')
     # hour
-    ax3.plot(df_123_60.index, df_123_60.stab_param * -1, color='red', marker='o', label='IOP-1')
-    ax3.plot(df_126_60.index, df_126_60.stab_param * -1, color='blue', marker='o', label='IOP-2')
-
+    ax3.plot(df_123_60.index.values, df_123_60.stab_param.values * -1, color='red', marker='o', label='IOP-1')
+    ax3.plot(df_126_60.index.values, df_126_60.stab_param.values * -1, color='blue', marker='o', label='IOP-2')
 
     ax3.set_ylabel('- z$_{f}$/L', labelpad=-5)
     ax3.set_yscale('log')
@@ -209,50 +242,62 @@ def stability_and_sa(df_dict):
 
     # z0
     # 10min
-    ax4.plot(df_126_10.index, df_126_10.z_0, color='blue', alpha=0.3, linewidth=0.5, marker='.')
-    ax4.plot(df_123_10.index, df_123_10.z_0, color='red', alpha=0.3, linewidth=0.5, marker='.')
+    ax4.plot(df_126_10.index.values, df_126_10.z_0.values, color='blue', alpha=0.3, linewidth=0.5, marker='.')
+    ax4.plot(df_123_10.index.values, df_123_10.z_0.values, color='red', alpha=0.3, linewidth=0.5, marker='.')
     # hour
-    ax4.plot(df_126_60.index, df_126_60.z_0, color='blue', marker='o')
-    ax4.plot(df_123_60.index, df_123_60.z_0, color='red', marker='o')
+    ax4.plot(df_126_60.index.values, df_126_60.z_0.values, color='blue', marker='o')
+    ax4.plot(df_123_60.index.values, df_123_60.z_0.values, color='red', marker='o')
+
+    # plot the sa methods
+    ax4.plot(df_sa_constant.index.values, df_sa_constant.z_0_126_constant.values, color='blue', marker='o',
+             markerfacecolor='white', linestyle=':')
+    ax4.plot(df_sa_constant.index.values, df_sa_constant.z_0_123_constant.values, color='red', marker='o',
+             markerfacecolor='white', linestyle=':')
 
     ax4.set_ylabel('z$_{0}$ (m)')
 
     # zf
     # 10 min
-    ax5.plot(df_126_10.index, df_126_10.z_f, color='blue', alpha=0.3, linewidth=0.5, marker='.')
-    ax5.plot(df_123_10.index, df_123_10.z_f, color='red', alpha=0.3, linewidth=0.5, marker='.')
+    ax5.plot(df_126_10.index.values, df_126_10.z_f.values, color='blue', alpha=0.3, linewidth=0.5, marker='.')
+    ax5.plot(df_123_10.index.values, df_123_10.z_f.values, color='red', alpha=0.3, linewidth=0.5, marker='.')
     # hour
-    ax5.plot(df_126_60.index, df_126_60.z_f, color='blue', marker='o')
-    ax5.plot(df_123_60.index, df_123_60.z_f, color='red', marker='o')
+    ax5.plot(df_126_60.index.values, df_126_60.z_f.values, color='blue', marker='o')
+    ax5.plot(df_123_60.index.values, df_123_60.z_f.values, color='red', marker='o')
+
+    # plot the sa methods
+    ax5.plot(df_sa_constant.index.values, df_sa_constant.z_f_126_constant.values, color='blue', marker='o',
+             markerfacecolor='white', linestyle=':')
+    ax5.plot(df_sa_constant.index.values, df_sa_constant.z_f_123_constant.values, color='red', marker='o',
+             markerfacecolor='white', linestyle=':')
+
+    ax5.plot([], [], color='black', marker='o', markerfacecolor='white', linestyle=':', label='60 min SA test')
+    ax5.legend()
 
     ax5.set_ylabel('z$_{f}$ (m)')
 
     # sa area
     # 10 min
-    ax6.plot(df_126_10.index, df_126_10.sa_area_km2, color='blue', alpha=0.3, linewidth=0.5, marker='.')
-    ax6.plot(df_123_10.index, df_123_10.sa_area_km2, color='red', alpha=0.3, linewidth=0.5, marker='.')
+    ax6.plot(df_126_10.index.values, df_126_10.sa_area_km2.values, color='blue', alpha=0.3, linewidth=0.5, marker='.')
+    ax6.plot(df_123_10.index.values, df_123_10.sa_area_km2.values, color='red', alpha=0.3, linewidth=0.5, marker='.')
     # hour
-    ax6.plot(df_126_60.index, df_126_60.sa_area_km2, color='blue', marker='o')
-    ax6.plot(df_123_60.index, df_123_60.sa_area_km2, color='red', marker='o')
-
-    ax6.plot([], [], color='black', marker='o', label='60 min')
-    ax6.plot([], [], color='black', alpha=0.3, linewidth=0.5, marker='.', label='10 min')
-
-    ax6.legend()
+    ax6.plot(df_126_60.index.values, df_126_60.sa_area_km2.values, color='blue', marker='o')
+    ax6.plot(df_123_60.index.values, df_123_60.sa_area_km2.values, color='red', marker='o')
 
     ax6.set_ylabel('$SA_{LAS}$ area (km$^{2}$)')
 
     # wind speed
     # 10 min
-    ax7.plot(df_126_10.index, df_126_10.wind_speed_convert, color='blue', alpha=0.3, linewidth=0.5, marker='.')
-    ax7.plot(df_123_10.index, df_123_10.wind_speed_convert, color='red', alpha=0.3, linewidth=0.5, marker='.')
+    ax7.plot(df_126_10.index.values, df_126_10.wind_speed_convert.values, color='blue', alpha=0.3, linewidth=0.5,
+             marker='.')
+    ax7.plot(df_123_10.index.values, df_123_10.wind_speed_convert.values, color='red', alpha=0.3, linewidth=0.5,
+             marker='.')
     # hour
-    ax7.plot(df_126_60.index, df_126_60.wind_speed_convert, color='blue', marker='o')
-    ax7.plot(df_123_60.index, df_123_60.wind_speed_convert, color='red', marker='o')
+    ax7.plot(df_126_60.index.values, df_126_60.wind_speed_convert.values, color='blue', marker='o')
+    ax7.plot(df_123_60.index.values, df_123_60.wind_speed_convert.values, color='red', marker='o')
 
     # UKV
-    ax7.plot(df_126_ukv.index, df_126_ukv.wind_speed, color='blue', linestyle='--')
-    ax7.plot(df_123_ukv.index, df_123_ukv.wind_speed, color='red', linestyle='--')
+    ax7.plot(df_126_ukv.index.values, df_126_ukv.wind_speed.values, color='blue', linestyle='--')
+    ax7.plot(df_123_ukv.index.values, df_123_ukv.wind_speed.values, color='red', linestyle='--')
 
     ax7.set_ylabel('u (m s$^{-1}$)')
 
@@ -260,14 +305,16 @@ def stability_and_sa(df_dict):
 
     # wind direction
     # 10 min
-    ax8.plot(df_126_10.index, df_126_10.wind_direction_convert, color='blue', alpha=0.3, linewidth=0.5, marker='.')
-    ax8.plot(df_123_10.index, df_123_10.wind_direction_convert, color='red', alpha=0.3, linewidth=0.5, marker='.')
+    ax8.plot(df_126_10.index.values, df_126_10.wind_direction_convert.values, color='blue', alpha=0.3, linewidth=0.5,
+             marker='.')
+    ax8.plot(df_123_10.index.values, df_123_10.wind_direction_convert.values, color='red', alpha=0.3, linewidth=0.5,
+             marker='.')
     # hour
-    ax8.plot(df_126_60.index, df_126_60.wind_direction_convert, color='blue', marker='o')
-    ax8.plot(df_123_60.index, df_123_60.wind_direction_convert, color='red', marker='o')
+    ax8.plot(df_126_60.index.values, df_126_60.wind_direction_convert.values, color='blue', marker='o')
+    ax8.plot(df_123_60.index.values, df_123_60.wind_direction_convert.values, color='red', marker='o')
     # UKV
-    ax8.plot(df_126_ukv.index, df_126_ukv.wind_direction, color='blue', linestyle='--')
-    ax8.plot(df_123_ukv.index, df_123_ukv.wind_direction, color='red', linestyle='--')
+    ax8.plot(df_126_ukv.index.values, df_126_ukv.wind_direction.values, color='blue', linestyle='--')
+    ax8.plot(df_123_ukv.index.values, df_123_ukv.wind_direction.values, color='red', linestyle='--')
 
     ax8.plot([], [], color='black', linestyle='--', label='UKV at ' + '{0:.0f}'.format(UKV_123_z) + ' m')
     ax8.legend()

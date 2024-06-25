@@ -1,7 +1,10 @@
 import numpy as np
+import os
+import pandas as pd
 
 from scint_flux.functions import read_calculated_fluxes
 from scint_flux import look_up
+from scint_plots.sa_method_tests import sa_method_tests
 
 from scint_plots.stability_and_SA import stability_and_SA_funs
 from scint_plots.tools.preprocessed_UKV_csvs import UKV_lookup
@@ -16,6 +19,20 @@ time_res = '1min_sa10min'
 pair_id = look_up.scint_path_numbers[scint_path]
 
 DOY_dict = {}
+
+
+# the constant SA tests
+# read
+current_dir = os.getcwd().replace('\\', '/') + '/'
+sa_test_dir = current_dir + '../sa_method_tests/' + 'SA_constant/'
+
+file_list_test_123 = sa_method_tests.find_sas(sa_test_dir, 123)
+df_test_123 = sa_method_tests.read_roughness(sa_test_dir, file_list_test_123, 123, test=True)
+
+file_list_test_126 = sa_method_tests.find_sas(sa_test_dir, 126)
+df_test_126 = sa_method_tests.read_roughness(sa_test_dir, file_list_test_126, 126, test=True)
+
+df_sa_constant = pd.concat([df_test_123, df_test_126], axis=1)
 
 # read the 60-min SA vars
 for DOY in DOY_list:
@@ -52,5 +69,5 @@ for DOY in DOY_list:
     DOY_dict[DOY][time_res] = df
 
 # plot
-stability_and_SA_funs.stability_and_sa(DOY_dict)
+stability_and_SA_funs.stability_and_sa(DOY_dict, df_sa_constant)
 print('end')

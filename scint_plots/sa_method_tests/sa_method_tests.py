@@ -172,26 +172,28 @@ def plot_method_tests(df):
     print('end')
 
 
-current_dir = os.getcwd().replace('\\', '/') + '/'
-sa_test_dir = current_dir + 'SA_constant/'
+if __name__ == '__main__':
 
-file_list_test_123 = find_sas(sa_test_dir, 123)
-df_test_123 = read_roughness(sa_test_dir, file_list_test_123, 123, test=True)
+    current_dir = os.getcwd().replace('\\', '/') + '/'
+    sa_test_dir = current_dir + 'SA_constant/'
 
-file_list_test_126 = find_sas(sa_test_dir, 126)
-df_test_126 = read_roughness(sa_test_dir, file_list_test_126, 126, test=True)
+    file_list_test_123 = find_sas(sa_test_dir, 123)
+    df_test_123 = read_roughness(sa_test_dir, file_list_test_123, 123, test=True)
 
-sa_used_dir_123 = 'C:/Users/beths/OneDrive - University of Reading/local_runs_data/fp_output/hourly/2016' + '123' + '/'
-sa_used_dir_126 = 'C:/Users/beths/OneDrive - University of Reading/local_runs_data/fp_output/hourly/2016' + '126' + '/'
+    file_list_test_126 = find_sas(sa_test_dir, 126)
+    df_test_126 = read_roughness(sa_test_dir, file_list_test_126, 126, test=True)
 
-file_list_real_123 = find_sas(sa_used_dir_123, 123)
-file_list_real_126 = find_sas(sa_used_dir_126, 126)
+    sa_used_dir_123 = 'C:/Users/beths/OneDrive - University of Reading/local_runs_data/fp_output/hourly/2016' + '123' + '/'
+    sa_used_dir_126 = 'C:/Users/beths/OneDrive - University of Reading/local_runs_data/fp_output/hourly/2016' + '126' + '/'
 
-df_real_123 = read_roughness(sa_used_dir_123, file_list_real_123, 123, test=False)
-df_real_126 = read_roughness(sa_used_dir_126, file_list_real_126, 126, test=False)
+    file_list_real_123 = find_sas(sa_used_dir_123, 123)
+    file_list_real_126 = find_sas(sa_used_dir_126, 126)
 
-df = pd.concat([df_test_123, df_test_126, df_real_123, df_real_126], axis=1)
+    df_real_123 = read_roughness(sa_used_dir_123, file_list_real_123, 123, test=False)
+    df_real_126 = read_roughness(sa_used_dir_126, file_list_real_126, 126, test=False)
 
-plot_method_tests(df)
+    df = pd.concat([df_test_123, df_test_126, df_real_123, df_real_126], axis=1)
 
-print('end')
+    plot_method_tests(df)
+
+    print('end')
