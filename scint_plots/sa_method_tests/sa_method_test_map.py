@@ -20,7 +20,7 @@ custom_marker = ['o', 'o', 'o', 'o']
 
 custom_facecolours = ['red', 'white', 'blue', 'white']
 
-custom_labels = ['IOP-1 $SA_{LAS}^{new}$', 'IOP-1 $SA_{LAS}^{old}$', 'IOP-2 $SA_{LAS}^{new}$', 'IOP-2 $SA_{LAS}^{old}$']
+custom_labels = ['IOP-1 $SA_{LAS}$', 'IOP-1 $SA_{LAS}^{old}$', 'IOP-2 $SA_{LAS}$', 'IOP-2 $SA_{LAS}^{old}$']
 
 sa_lines.plot_sa_lines(file_list=file_list, colour_list=colour_list, doy_choice=False, save_path=current_dir, custom_labels=custom_labels, custom_linetype=custom_linetype, custom_marker=custom_marker, custom_facecolours=custom_facecolours)
 

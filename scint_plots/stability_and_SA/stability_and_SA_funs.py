@@ -254,8 +254,8 @@ def stability_and_sa(df_dict, df_sa_constant):
     ax5.plot(df_sa_constant.index.values, df_sa_constant.z_f_123_constant.values, color='red', marker='o',
              markerfacecolor='white', linestyle=':')
 
+    ax5.plot([], [], color='black', marker='o', label='$SA_{LAS}$')
     ax5.plot([], [], color='black', marker='o', markerfacecolor='white', linestyle=':', label='$SA_{LAS}^{old}$')
-    ax5.plot([], [], color='black', marker='o', label='$SA_{LAS}^{new}$')
     ax5.legend()
 
     ax5.set_ylabel('z$_{f}$ (m)')

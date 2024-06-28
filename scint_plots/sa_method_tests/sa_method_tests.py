@@ -168,7 +168,7 @@ def plot_method_tests(df):
     ax1.plot([], [], color='black', marker=markers['constant'], linestyle=linestyles['constant'],  markerfacecolor='white',
              label='$SA_{LAS}^{old}$')
     ax1.plot([], [], color='black', marker=markers['varying'], linestyle=linestyles['varying'],
-             label='$SA_{LAS}^{new}$')
+             label='$SA_{LAS}$')
     ax1.legend()
 
     ax1.set_ylabel('z$_{0}$ (m)')
