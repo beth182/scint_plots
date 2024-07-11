@@ -48,27 +48,27 @@ def plot_difference(DOY_dict):
     ax = plt.subplot(1, 1, 1)
 
     # 1 mins
-    plt.plot(DOY_df_dict[2016123].index.hour, DOY_df_dict[2016123].diff_1, marker='x', color='blue', linestyle='dotted')
-    plt.plot(DOY_df_dict[2016126].index.hour, DOY_df_dict[2016126].diff_1, marker='o', color='blue')
+    plt.plot(DOY_df_dict[2016123].index.hour.values, DOY_df_dict[2016123].diff_1.values, marker='x', color='blue', linestyle='dotted')
+    plt.plot(DOY_df_dict[2016126].index.hour.values, DOY_df_dict[2016126].diff_1.values, marker='o', color='blue')
 
     # 5 mins
-    plt.plot(DOY_df_dict[2016123].index.hour, DOY_df_dict[2016123].diff_5, marker='x', color='green',
+    plt.plot(DOY_df_dict[2016123].index.hour.values, DOY_df_dict[2016123].diff_5.values, marker='x', color='green',
              linestyle='dotted')
-    plt.plot(DOY_df_dict[2016126].index.hour, DOY_df_dict[2016126].diff_5, marker='o', color='green')
+    plt.plot(DOY_df_dict[2016126].index.hour.values, DOY_df_dict[2016126].diff_5.values, marker='o', color='green')
 
     # 10 mins
-    plt.plot(DOY_df_dict[2016123].index.hour, DOY_df_dict[2016123].diff_10, marker='x', color='red', linestyle='dotted')
-    plt.plot(DOY_df_dict[2016126].index.hour, DOY_df_dict[2016126].diff_10, marker='o', color='red')
+    plt.plot(DOY_df_dict[2016123].index.hour.values, DOY_df_dict[2016123].diff_10.values, marker='x', color='red', linestyle='dotted')
+    plt.plot(DOY_df_dict[2016126].index.hour.values, DOY_df_dict[2016126].diff_10.values, marker='o', color='red')
 
     # 60 mins
-    plt.plot(DOY_df_dict[2016123].index.hour, DOY_df_dict[2016123].diff_60, marker='x', color='purple',
+    plt.plot(DOY_df_dict[2016123].index.hour.values, DOY_df_dict[2016123].diff_60.values, marker='x', color='purple',
              linestyle='dotted')
-    plt.plot(DOY_df_dict[2016126].index.hour, DOY_df_dict[2016126].diff_60, marker='o', color='purple')
+    plt.plot(DOY_df_dict[2016126].index.hour.values, DOY_df_dict[2016126].diff_60.values, marker='o', color='purple')
 
     # plt.gcf().autofmt_xdate()
     # ax.xaxis.set_major_formatter(DateFormatter('%H'))
 
-    plt.ylabel('($Q_{H,UKV}^{surf}$ - $Q_{H,LAS}$) / $Q_{H,LAS}$')
+    plt.ylabel('($UKV_{surface}$ - $Q_{H,LAS}$) / $Q_{H,LAS}$')
     plt.xlabel('Time (h, UTC)')
 
     plt.axhline(y=0, color='k', linestyle='-', linewidth=0.8)
