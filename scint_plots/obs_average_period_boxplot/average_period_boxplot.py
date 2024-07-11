@@ -8,7 +8,7 @@ import matplotlib as mpl
 mpl.rcParams.update({'font.size': 15})
 
 scint_path = 12
-DOY_list = [2016126]
+DOY_list = [2016123]
 
 var_list = ['QH', 'kdown']
 
@@ -94,6 +94,7 @@ for DOY in DOY_list:
                     hue="Average",
                     data=cdf.sort_values(by='Average', key=lambda col: col.astype(int)).reset_index(drop=True),
                     width=1,
+                    palette="rainbow_r",
                     showmeans=True,
                     meanline=True,
                     meanprops=dict(color="white"),
@@ -112,7 +113,11 @@ for DOY in DOY_list:
         assert DOY == 2016126
         title_string = 'IOP-2'
 
-    plt.ylabel("$Q_{H,LAS}$ W m$^{-2}$")
+    plt.ylabel("$Q_{H,LAS}$ (W m$^{-2})$")
+
+    plt.xlabel('Time (h, UTC)')
+
+    plt.legend(title='Averaging period (min)')
 
     plt.title(title_string)
 
