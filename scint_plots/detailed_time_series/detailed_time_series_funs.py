@@ -163,12 +163,9 @@ def detailed_time_series(obs_df,
 
     max_grid_vals, min_grid_vals, n_grids = variation_in_grids(ukv_df, model_site_dict)
 
-    # ax1.fill_between(ukv_df.index, max_grid_vals, min_grid_vals, color='pink', alpha=0.8, label='UKV grid-box range in SA analysis')
     ax1.fill_between(ukv_df.index, max_grid_vals, min_grid_vals, color='pink', alpha=0.8, label='UKV grid-box range in $SA_{LAS}$')
 
-    # ax1.plot(ukv_df.index, ukv_df['WAverage'], label='UKV grid-box average with LAS-SA weighting @ surface', color='red', marker='.')
-
-    ax1.plot(ukv_df.index, ukv_df['WAverage'], label='UKV$_{surf}$: $SA_{LAS}$', color='red', marker='.')
+    ax1.plot(ukv_df.index.values, ukv_df['WAverage'].values, label='UKV$_{surface}$: $SA_{LAS}$', color='red', marker='.')
 
     if variable == 'kdown':
         grid_box_letter = 'D'  # where KSSW is
@@ -176,38 +173,34 @@ def detailed_time_series(obs_df,
         grid_box_letter = 'A'  # where the centre coord of the path is
 
 
-
-    # ax1.plot(ukv_df.index, ukv_df[13], label='UKV @ surface: grid-box ' + grid_box_letter, color='green', marker='.')
-    ax1.plot(ukv_df.index, ukv_df[13], label='UKV$_{surf}$: grid-box ' + grid_box_letter, color='green', marker='.')
+    ax1.plot(ukv_df.index.values, ukv_df[13].values, label='UKV$_{centre}$: grid-box ' + grid_box_letter, color='green', marker='.')
 
     # if I am including the BL_H grid
     try:
-        # ukv_level = ax1.plot(ukv_df.index, ukv_df['BL_H'], label='UKV @ ' + str(int(BL_H_z)) + ' m agl: grid-box ' + grid_box_letter, color='blue', marker='.')
-
-        ukv_level = ax1.plot(ukv_df.index, ukv_df['BL_H'], label='UKV$_{level}$ @ ' + str(int(BL_H_z)) + ' m agl: grid-box ' + grid_box_letter, color='blue', marker='.')
+        ukv_level = ax1.plot(ukv_df.index.values, ukv_df['BL_H'].values, label='UKV$_{level}$ @ ' + str(int(BL_H_z)) + ' m agl: grid-box ' + grid_box_letter, color='blue', marker='.')
 
     except KeyError:
         pass
 
-    if variable == 'QH':
+    if variable == 'H':
 
-        obs_all = ax1.plot(obs_df.index, obs_df['QH_obs_1'], linestyle='None', marker='.', color='grey', alpha=0.5,
+        obs_all = ax1.plot(obs_df.index.values, obs_df['QH_obs_1'].values, linestyle='None', marker='.', color='grey', alpha=0.5,
                  label="1 min obs")
 
     elif variable == 'kdown':
-        obs_all = ax1.plot(obs_df.index, obs_df['kdown_obs_1'], linestyle='None', marker='.', color='grey', alpha=0.5,
+        obs_all = ax1.plot(obs_df.index.values, obs_df['kdown_obs_1'].values, linestyle='None', marker='.', color='grey', alpha=0.5,
                            label="1 min obs")
 
-    obs_1 = ax1.plot(hour_1min.index, hour_1min.values, linestyle='None', marker='o', color='k', markersize=8,
+    obs_1 = ax1.plot(hour_1min.index.values, hour_1min.values, linestyle='None', marker='o', color='k', markersize=8,
                      label="1 min obs on hour")
 
-    obs_5 = ax1.plot(hour_5min.index, hour_5min.values, linestyle='None', marker='o', color='green', markersize=8,
+    obs_5 = ax1.plot(hour_5min.index.values, hour_5min.values, linestyle='None', marker='o', color='green', markersize=8,
                      label="5 min obs on hour")
 
-    obs_10 = ax1.plot(hour_10min.index, hour_10min.values, linestyle='None', marker='^', color='red', markersize=8,
+    obs_10 = ax1.plot(hour_10min.index.values, hour_10min.values, linestyle='None', marker='^', color='red', markersize=8,
                       label="10 min obs on hour")
 
-    obs_60 = ax1.plot(hour_60min.index, hour_60min.values, linestyle='None', marker='x', color='purple', markersize=8,
+    obs_60 = ax1.plot(hour_60min.index.values, hour_60min.values, linestyle='None', marker='x', color='purple', markersize=8,
                       label="60 min obs")
 
     plt.grid(False)
