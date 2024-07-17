@@ -23,8 +23,7 @@ DOY_dict = {}
 
 # the constant SA tests
 # read
-current_dir = os.getcwd().replace('\\', '/') + '/'
-sa_test_dir = current_dir + '../sa_method_tests/' + 'SA_constant/'
+sa_test_dir = 'C:/Users/beths/OneDrive - University of Reading/local_runs_data/SA_constant/'  # Path to SA constant folder
 
 file_list_test_123 = sa_method_tests.find_sas(sa_test_dir, 123)
 df_test_123 = sa_method_tests.read_roughness(sa_test_dir, file_list_test_123, 123, test=True)

@@ -242,8 +242,8 @@ def plot_method_tests(df):
 
 
 if __name__ == '__main__':
-    current_dir = os.getcwd().replace('\\', '/') + '/'
-    sa_test_dir = current_dir + 'SA_constant/'
+    sa_constant_dir = 'C:/Users/beths/OneDrive - University of Reading/local_runs_data/SA_constant/'  # Path to SA constant folder
+    sa_test_dir = sa_constant_dir + 'SA_constant/'
 
     file_list_test_123 = find_sas(sa_test_dir, 123)
     df_test_123 = read_roughness(sa_test_dir, file_list_test_123, 123, test=True)
