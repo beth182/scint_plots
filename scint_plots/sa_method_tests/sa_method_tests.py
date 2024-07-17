@@ -43,8 +43,10 @@ def find_sas(sa_test_dir, DOY):
     :return:
     """
 
+    sa_test_DOY_dir = sa_test_dir + '2016' + str(DOY) + '/'
+
     file_list = []
-    for file in os.listdir(sa_test_dir):
+    for file in os.listdir(sa_test_DOY_dir):
         if file.endswith(".tif"):
             if str(DOY) in file:
                 file_list.append(file[:-4])
@@ -58,12 +60,14 @@ def read_roughness(sa_test_dir, file_list, DOY, test):
     :return:
     """
 
+    sa_test_DOY_dir = sa_test_dir + '2016' + str(DOY) + '/'
+
     hours = []
     z_0_list = []
     z_d_list = []
 
     for file in file_list:
-        file_path = sa_test_dir + file
+        file_path = sa_test_DOY_dir + file
 
         # assert file exists
         assert os.path.isfile(file_path + '.tif')
@@ -242,8 +246,7 @@ def plot_method_tests(df):
 
 
 if __name__ == '__main__':
-    sa_constant_dir = 'C:/Users/beths/OneDrive - University of Reading/local_runs_data/SA_constant/'  # Path to SA constant folder
-    sa_test_dir = sa_constant_dir + 'SA_constant/'
+    sa_test_dir = 'C:/Users/beths/OneDrive - University of Reading/local_runs_data/SA_constant/'  # Path to SA constant folder
 
     file_list_test_123 = find_sas(sa_test_dir, 123)
     df_test_123 = read_roughness(sa_test_dir, file_list_test_123, 123, test=True)
@@ -251,8 +254,8 @@ if __name__ == '__main__':
     file_list_test_126 = find_sas(sa_test_dir, 126)
     df_test_126 = read_roughness(sa_test_dir, file_list_test_126, 126, test=True)
 
-    sa_used_dir_123 = 'C:/Users/beths/OneDrive - University of Reading/local_runs_data/fp_output/hourly/2016' + '123' + '/'
-    sa_used_dir_126 = 'C:/Users/beths/OneDrive - University of Reading/local_runs_data/fp_output/hourly/2016' + '126' + '/'
+    sa_used_dir_123 = 'C:/Users/beths/OneDrive - University of Reading/local_runs_data/fp_output/hourly/'
+    sa_used_dir_126 = 'C:/Users/beths/OneDrive - University of Reading/local_runs_data/fp_output/hourly/'
 
     file_list_real_123 = find_sas(sa_used_dir_123, 123)
     file_list_real_126 = find_sas(sa_used_dir_126, 126)
