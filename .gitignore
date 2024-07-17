@@ -130,13 +130,7 @@ dmypy.json
 
 .idea/
 
-/scint_flux/legacy_scripts/
-/scint_flux/DOY_in.csv
-/scint_flux/legacy/
-/scint_flux/beth_temp/
-
 /scint_plots/sa_position_and_lc_fraction/sa_lc_boxplot/output.tif
-/scint_plots/sa_demonstration/sa_files_used/
 /scint_plots/built_fraction_multiple/output.tif
 /scint_plots/built_fraction_multiple/LandUseMM_7classes_32631.tif
 /scint_plots/tools/preprocessed_scint_csvs/test_data.py
