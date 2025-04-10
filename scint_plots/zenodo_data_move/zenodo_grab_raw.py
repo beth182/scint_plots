@@ -16,7 +16,9 @@ bdsm_path = 'D:/Documents/scintools/example_inputs/rasters/height_surface_4m.tif
 cdsm_path = 'D:/Documents/scintools/example_inputs/rasters/height_veg_4m.tif'
 dem_path = 'D:/Documents/scintools/example_inputs/rasters/height_terrain_4m.tif'
 
-days_csv_path = 'D:/zenodo/P2 CASES/' + pair_id + '_days.csv'
+current_dir = os.getcwd().replace('\\', '/') + '/'
+
+days_csv_path = current_dir + pair_id + '_days.csv'
 
 # check csv exists
 
