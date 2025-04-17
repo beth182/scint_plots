@@ -18,8 +18,7 @@ grid_number = 21
 save_path = os.getcwd().replace('\\', '/') + '/'
 
 # existing csv file location
-# ToDo: move to here
-csv_dir = 'C:/Users/beths/OneDrive - University of Reading/landuse/site grids/10-tile landuse (Maggie_new)/landuse_csv_files/'
+csv_dir = 'C:/Users/beths/OneDrive - University of Reading/landuse/site grids/10-tile landuse (Maggie_new)/landuse_csv_files/'  # THIS HAS NOW BEEN MOVED TO THIS DIRECTORY IN THE REPO!
 
 # use lookup to know which grid number is which site and letter in CSV
 # ToDo: save site + letter to number reference locally
